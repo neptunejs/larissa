@@ -1,22 +1,11 @@
 import loadImage from './loadImage';
+import greyscale from './greyscale';
 
 export default function () {
     return {
         nodes: [
-            {
-                name: 'image-js-load',
-                inputs: [],
-                outputs: [
-                    {name: 'loaded', label: 'Loaded image'}
-                ],
-                options: {
-                    type: 'object',
-                    properties: {
-                        path: {type: 'string'}
-                    }
-                },
-                executor: loadImage
-            }
+            loadImage,
+            greyscale
         ]
     };
 }

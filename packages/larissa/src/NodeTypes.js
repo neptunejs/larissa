@@ -2,7 +2,7 @@ import schemaValidator from 'is-my-json-valid';
 
 const kNodes = Symbol('nodes');
 
-export default class Nodes {
+export default class NodeTypes {
     constructor() {
         this[kNodes] = new Map();
     }
@@ -14,7 +14,7 @@ export default class Nodes {
         if (this[kNodes].has(definition.name)) {
             throw new Error(`existing node with name ${definition.name}`);
         }
-        this[kNodes].set(definition.name, new Node(definition));
+        this[kNodes].set(definition.name, new NodeType(definition));
     }
 
     getNode(name) {
@@ -22,7 +22,7 @@ export default class Nodes {
     }
 }
 
-class Node {
+class NodeType {
     constructor(definition) {
         this.name = definition.name;
         this.inputs = [];

@@ -1,6 +1,11 @@
 root: true
-extends: eslint-config-cheminfo
+extends:
+  - eslint-config-cheminfo
+  - plugin:flowtype/recommended
 env:
   jest: true
 parserOptions:
   sourceType: module
+parser: babel-eslint
+plugins:
+  - flowtype

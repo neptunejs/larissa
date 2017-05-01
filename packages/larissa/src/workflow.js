@@ -1,7 +1,7 @@
 /*
     Experiment executing the workflow for image analysis
  */
-import Nodes from './nodes';
+import Nodes from './NodeTypes';
 
 import imageJsPlugin from 'larissa-plugin-nodes-image-js';
 
