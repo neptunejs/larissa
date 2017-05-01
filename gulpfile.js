@@ -1,0 +1,36 @@
+'use strict';
+
+// Inspired from the babel gulpfile: https://github.com/babel/babel/blob/685006433b0231dbf4b9d306e43c46ed7bcdacad/Gulpfile.js
+
+const path = require('path');
+
+const babel = require('gulp-babel');
+const gulp = require('gulp');
+const newer = require('gulp-newer');
+const through = require('through2');
+
+const base = path.join(__dirname, 'packages');
+const scripts = './packages/*/src/**/*.js';
+
+function swapSrcWithLib(srcPath) {
+    const parts = srcPath.split(path.sep);
+    parts[1] = 'lib';
+    return parts.join(path.sep);
+}
+
+gulp.task('default', ['build']);
+
+gulp.task('build', function () {
+    return gulp.src([scripts, '!./packages/*/src/**/__tests__/*'], {base})
+        .pipe(newer({
+            dest: base,
+            map: swapSrcWithLib
+        }))
+        .pipe(babel())
+        .pipe(through.obj(function (file, enc, callback) {
+            // Passing 'file.relative' because newer() above uses a relative path and this keeps it consistent.
+            file.path = path.resolve(file.base, swapSrcWithLib(file.relative));
+            callback(null, file);
+        }))
+        .pipe(gulp.dest(base))
+});

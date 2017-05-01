@@ -10,6 +10,7 @@
   "author": "Michaël Zasso",
   "license": "MIT",
   "dependencies": {
-    "graph.js": "^1.21.1"
+    "graph.js": "^1.21.1",
+    "larissa-plugin-nodes-image-js": "0.0.0"
   }
 }
