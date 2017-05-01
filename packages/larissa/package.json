@@ -8,5 +8,8 @@
   },
   "keywords": [],
   "author": "Michaël Zasso",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "graphlib": "^2.1.1"
+  }
 }
