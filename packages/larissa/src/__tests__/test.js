@@ -1,7 +1,7 @@
-import func from '..';
+import thetest from '../thetest';
 
 describe('test func', () => {
     it('test func', () => {
-        expect(func()).toEqual(42);
+        thetest();
     });
 });
