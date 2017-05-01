@@ -1,21 +1,27 @@
 // @flow
 
 import Node from './Node';
+import type Input from './Input';
+import type Output from './Output';
 
 export default class Pipeline {
-    addNode(type: string, options: Object): Node {
+    connect(output: Output, input: Input) {
+
+    }
+
+    addNode(type: string, options: ?Object): Node {
         return new Node();
     }
 
-    executeNode(node: Node) {
+    async executeNode(node: Node) {
 
     }
 
-    executeAll() {
+    async executeAll() {
 
     }
 
-    clean() {
+    reset(): void {
 
     }
 }

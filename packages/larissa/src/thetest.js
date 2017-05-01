@@ -1,6 +1,7 @@
+// @flow
 /* eslint-disable */
 /*
-    Experiment executing the workflow for image analysis
+ Experiment executing the workflow for image analysis
  */
 import NodeTypes from './NodeTypes';
 import Pipeline from './Pipeline';
@@ -29,19 +30,18 @@ async function createPipeline() {
     const node2 = pipeline.addNode('image-js-greyscale');
     pipeline.connect(node1.output('loaded'), node2.input('image'));
 
-    await pipeline.executeNode(node);
+    await pipeline.executeNode(node2);
     await pipeline.executeAll();
 
-    node.reset(); // clean internal data (must be recalculated)
+    node2.reset(); // clean internal data (must be recalculated)
 
     const output = node2.output('image');
-    output.hasValue()
+    output.hasValue();
     const value = output.getValue(); // throw if not present?
 
-    pipeline.clean();
+    pipeline.reset();
     return pipeline;
 }
-
 
 
 function test() {
