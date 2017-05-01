@@ -8,9 +8,10 @@ const babel = require('gulp-babel');
 const gulp = require('gulp');
 const newer = require('gulp-newer');
 const through = require('through2');
+const watch = require('gulp-watch');
 
 const base = path.join(__dirname, 'packages');
-const scripts = './packages/*/src/**/*.js';
+const scripts = ['./packages/*/src/**/*.js', '!./packages/*/src/**/__tests__/*'];
 
 function swapSrcWithLib(srcPath) {
     const parts = srcPath.split(path.sep);
@@ -21,7 +22,7 @@ function swapSrcWithLib(srcPath) {
 gulp.task('default', ['build']);
 
 gulp.task('build', function () {
-    return gulp.src([scripts, '!./packages/*/src/**/__tests__/*'], {base})
+    return gulp.src(scripts, {base})
         .pipe(newer({
             dest: base,
             map: swapSrcWithLib
@@ -33,4 +34,10 @@ gulp.task('build', function () {
             callback(null, file);
         }))
         .pipe(gulp.dest(base))
+});
+
+gulp.task('watch', ['build'], function () {
+    watch(scripts, {debounceDelay: 200}, function () {
+        gulp.start('build');
+    });
 });

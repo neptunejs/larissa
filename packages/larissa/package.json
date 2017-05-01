@@ -2,15 +2,14 @@
   "name": "larissa",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "jest"
-  },
+  "main": "lib/index.js",
+  "module": "src/index.js",
   "keywords": [],
   "author": "Michaël Zasso",
   "license": "MIT",
   "dependencies": {
     "graph.js": "^1.21.1",
+    "is-my-json-valid": "^2.16.0",
     "larissa-plugin-nodes-image-js": "0.0.0"
   }
 }
