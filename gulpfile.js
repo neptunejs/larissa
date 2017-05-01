@@ -1,4 +1,4 @@
-'use strict';
+'use strict'; //eslint-disable-line strict
 
 // Inspired from the babel gulpfile: https://github.com/babel/babel/blob/685006433b0231dbf4b9d306e43c46ed7bcdacad/Gulpfile.js
 
@@ -33,7 +33,7 @@ gulp.task('build', function () {
             file.path = path.resolve(file.base, swapSrcWithLib(file.relative));
             callback(null, file);
         }))
-        .pipe(gulp.dest(base))
+        .pipe(gulp.dest(base));
 });
 
 gulp.task('watch', ['build'], function () {

@@ -11,7 +11,9 @@ export default function () {
                 ],
                 options: {
                     type: 'object',
-                    properties: {}
+                    properties: {
+                        path: {type: 'string'}
+                    }
                 },
                 executor: loadImage
             }

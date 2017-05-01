@@ -18,8 +18,10 @@
   "scripts": {
     "build": "gulp build",
     "build-clean": "rimraf ./packages/*/lib/",
-    "eslint": "eslint . --cache",
-    "test": "jest",
+    "eslint": "eslint packages *.js --cache",
+    "eslint-fix": "npm run eslint -- --fix",
+    "test": "run-s testonly eslint",
+    "testonly": "jest",
     "watch": "gulp watch"
   },
   "jest": {}

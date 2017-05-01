@@ -16,7 +16,7 @@ export default class Nodes {
         }
         this[kNodes].set(definition.name, new Node(definition));
     }
-    
+
     getNode(name) {
         return this[kNodes].get(name);
     }
@@ -31,26 +31,26 @@ class Node {
             schema: null,
             validator: null
         };
-        
+
         if (typeof definition.executor !== 'function') {
             throw new TypeError('node executor must be a function');
         }
         this.executor = definition.executor;
-        
+
         if (definition.inputs) {
             if (!Array.isArray(definition.inputs)) {
                 throw new TypeError('node inputs must be an array');
             }
             this.inputs = definition.inputs.slice();
         }
-        
+
         if (definition.outputs) {
             if (!Array.isArray(definition.outputs)) {
                 throw new TypeError('node outputs must be an array');
             }
             this.outputs = definition.outputs.slice();
         }
-        
+
         if (definition.options) {
             this.options.schema = definition.options;
             this.options.validator = schemaValidator(definition.options);

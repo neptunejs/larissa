@@ -15,9 +15,8 @@ function workflow() {
         }
         plugin.nodes.forEach((node) => {
             nodes.addNode(node);
-        })
+        });
     }
-    console.log(nodes.getNode('image-js-load'));
 }
 
 export default workflow;
