@@ -1,5 +1,18 @@
 {
+  "private": true,
   "devDependencies": {
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+    "eslint": "^3.19.0",
+    "eslint-config-cheminfo": "^1.7.0",
+    "eslint-plugin-no-only-tests": "^1.1.0",
+    "jest": "^19.0.2",
     "lerna": "^2.0.0-rc.4"
+  },
+  "scripts": {
+    "eslint": "eslint . --cache",
+    "test": "jest"
+  },
+  "jest": {
+
   }
 }
