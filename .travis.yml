@@ -1,7 +1,6 @@
 language: node_js
 node_js:
   - node
-  - lts/boron
 before_script: yarn run bootstrap
 addons:
   apt:
