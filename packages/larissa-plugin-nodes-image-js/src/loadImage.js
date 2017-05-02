@@ -1,7 +1,7 @@
 import Image from 'image-js';
 
 export default {
-    name: 'image-js-load',
+    name: 'load',
     inputs: [],
     outputs: [
         {name: 'loaded', label: 'Loaded image'}
