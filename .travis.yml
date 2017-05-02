@@ -2,4 +2,4 @@ language: node_js
 node_js:
   - node
   - lts/boron
-before_script: npm run bootstrap
+before_script: yarn run bootstrap
