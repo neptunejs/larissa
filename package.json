@@ -20,12 +20,13 @@
     "through2": "^2.0.3"
   },
   "scripts": {
+    "bootstrap": "lerna bootstrap",
     "build": "gulp build",
     "build-clean": "rimraf ./packages/*/lib/",
     "eslint": "eslint packages *.js --cache",
     "eslint-fix": "npm run eslint -- --fix",
     "flow": "flow",
-    "test": "run-s testonly flow eslint",
+    "test": "run-s build testonly flow eslint",
     "testonly": "jest",
     "watch": "gulp watch"
   },
