@@ -23,11 +23,11 @@ function loadPlugin() {
 
 async function createPipeline() {
     const pipeline = new Pipeline();
-    const node1 = pipeline.addNode('image-js-load', {
+    const node1 = pipeline.addNode('image-js/load', {
         path: './image.png'
     });
 
-    const node2 = pipeline.addNode('image-js-greyscale');
+    const node2 = pipeline.addNode('image-js/greyscale');
     pipeline.connect(node1.output('loaded'), node2.input('image'));
 
     await pipeline.executeNode(node2);
@@ -44,9 +44,9 @@ async function createPipeline() {
 }
 
 
-function test() {
+async function test() {
     loadPlugin();
-
+    await createPipeline();
 }
 
 export default test;

@@ -1,5 +1,5 @@
 export default {
-    name: 'image-js-greyscale',
+    name: 'greyscale',
     inputs: [
         {name: 'image'}
     ],

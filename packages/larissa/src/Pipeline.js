@@ -1,18 +1,24 @@
 // @flow
+import Graph from 'graph.js/dist/graph.full';
+
 import Node from './Node';
-import type Input from './Input';
-import type Output from './Output';
 
 export default class Pipeline {
-    connect(output: Output, input: Input) {
+    graph: Graph;
+
+    constructor() {
+        this.graph = new Graph();
+    }
+
+    connect() {
 
     }
 
-    addNode(type: string, options: ?Object): Node {
+    addNode(): Node {
         return new Node();
     }
 
-    async executeNode(node: Node) {
+    async executeNode() {
 
     }
 

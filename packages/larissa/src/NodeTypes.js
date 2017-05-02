@@ -1,36 +1,42 @@
+// @flow
 import schemaValidator from 'is-my-json-valid';
 
-const kNodes = Symbol('nodes');
-
 export default class NodeTypes {
+    nodes: Map<string, NodeType>;
+
     constructor() {
-        this[kNodes] = new Map();
+        this.nodes = new Map();
     }
 
-    addNode(definition) {
+    addNode(definition: Object) {
         if (typeof definition.name !== 'string' || definition.name === '') {
             throw new TypeError('node name must be a string');
         }
-        if (this[kNodes].has(definition.name)) {
+        if (this.nodes.has(definition.name)) {
             throw new Error(`existing node with name ${definition.name}`);
         }
-        this[kNodes].set(definition.name, new NodeType(definition));
+        this.nodes.set(definition.name, new NodeType(definition));
     }
 
-    getNode(name) {
-        return this[kNodes].get(name);
+    getNode(name: string) {
+        return this.nodes.get(name);
     }
 }
 
 class NodeType {
-    constructor(definition) {
+    name: string;
+    inputs: Array<Object>;
+    outputs: Array<Object>;
+    schema: Object | null;
+    validator: Function | null;
+    executor: Function;
+
+    constructor(definition: Object) {
         this.name = definition.name;
         this.inputs = [];
         this.outputs = [];
-        this.options = {
-            schema: null,
-            validator: null
-        };
+        this.schema = null;
+        this.validator = null;
 
         if (typeof definition.executor !== 'function') {
             throw new TypeError('node executor must be a function');
@@ -52,8 +58,8 @@ class NodeType {
         }
 
         if (definition.options) {
-            this.options.schema = definition.options;
-            this.options.validator = schemaValidator(definition.options);
+            this.schema = definition.options;
+            this.validator = schemaValidator(definition.options);
         }
     }
 }
