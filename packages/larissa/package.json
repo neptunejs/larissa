@@ -1,10 +1,10 @@
 {
   "name": "larissa",
   "version": "0.0.0",
-  "description": "",
+  "description": "JavaScript engine for dataflow programming",
   "main": "lib/index.js",
   "module": "src/index.js",
-  "keywords": [],
+  "keywords": ["dataflow", "pipeline", "knime"],
   "author": "Michaël Zasso",
   "license": "MIT",
   "dependencies": {
