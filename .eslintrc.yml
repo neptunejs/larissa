@@ -9,3 +9,7 @@ parserOptions:
 parser: babel-eslint
 plugins:
   - flowtype
+rules:
+  flowtype/no-weak-types:
+    - error
+    - Object: false

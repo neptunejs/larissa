@@ -10,7 +10,7 @@ export default class Output extends Port {
         return true;
     }
 
-    getValue(): any {
+    getValue(): mixed {
         return null;
     }
 }

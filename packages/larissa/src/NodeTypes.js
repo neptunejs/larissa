@@ -27,9 +27,9 @@ class NodeType {
     name: string;
     inputs: Array<Object>;
     outputs: Array<Object>;
-    schema: Object | null;
-    validator: Function | null;
-    executor: Function;
+    schema: ?Object;
+    validator: ?(Object) => void;
+    executor: (Object) => Promise<mixed>;
 
     constructor(definition: Object) {
         this.name = definition.name;
