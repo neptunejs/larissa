@@ -22,7 +22,7 @@ import {Pipeline} from 'larissa';
 
 [npm-image]: https://img.shields.io/npm/v/larissa.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/larissa
-[travis-image]: https://img.shields.io/travis/neptunjs/larissa/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/neptunjs/larissa
+[travis-image]: https://img.shields.io/travis/neptunejs/larissa/master.svg?style=flat-square
+[travis-url]: https://travis-ci.org/neptunejs/larissa
 [download-image]: https://img.shields.io/npm/dm/larissa.svg?style=flat-square
 [download-url]: https://npmjs.org/package/larissa
