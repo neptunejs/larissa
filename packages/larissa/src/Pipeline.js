@@ -1,5 +1,4 @@
 // @flow
-
 import Node from './Node';
 import type Input from './Input';
 import type Output from './Output';
