@@ -1,6 +1,8 @@
 // @flow
 import BlockTypes from './BlockTypes';
 
+import type {BlockType} from './BlockTypes';
+
 export default class Plugin {
     name: string;
     blockTypes: BlockTypes;
@@ -22,5 +24,13 @@ export default class Plugin {
                 this.blockTypes.addBlock(block);
             });
         }
+    }
+
+    getBlockType(name: string): BlockType {
+        const blockType = this.blockTypes.getBlock(name);
+        if (blockType === undefined) {
+            throw new Error(`block type "${name}" does not exist in plugin ${this.name}`);
+        }
+        return blockType;
     }
 }

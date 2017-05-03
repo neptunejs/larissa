@@ -9,7 +9,7 @@ export default class Environment {
         this.plugins = new Map();
     }
 
-    loadPlugin(pluginDef: Object) {
+    loadPlugin(pluginDef: Object): void {
         if (this.plugins.has(pluginDef.name)) {
             throw new Error(`a plugin with name "${pluginDef.name}" is already loaded`);
         }
@@ -17,7 +17,15 @@ export default class Environment {
         this.plugins.set(plugin.name, new Plugin(pluginDef));
     }
 
-    newPipeline() {
+    getPlugin(name: string): Plugin {
+        const plugin = this.plugins.get(name);
+        if (plugin === undefined) {
+            throw new Error(`plugin "${name}" is not loaded`);
+        }
+        return plugin;
+    }
+
+    newPipeline(): Pipeline {
         return new Pipeline(this);
     }
 }

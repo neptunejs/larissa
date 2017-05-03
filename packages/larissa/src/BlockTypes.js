@@ -63,3 +63,5 @@ class BlockType {
         }
     }
 }
+
+export type {BlockType};
