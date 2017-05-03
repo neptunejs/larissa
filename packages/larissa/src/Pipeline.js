@@ -15,8 +15,14 @@ export default class Pipeline {
         this.graph = new Graph();
     }
 
-    connect() {
-
+    connect(node1: Node, node2: Node) {
+        this.graph.addEdge(node1.id, node2.id, {
+            edge: 'test'
+        });
+        if (this.graph.hasCycle()) {
+            this.graph.removeEdge(node1.id, node2.id);
+            throw new Error(`cannot connect nodes ${node1.id} and ${node2.id} because of cycle`);
+        }
     }
 
     newNode(identifier: string, options?: Object): Node {
@@ -31,7 +37,9 @@ export default class Pipeline {
         } else {
             // TODO grab blockType from built-ins
         }
-        return new Block(blockType, options);
+        const node = new Block(blockType, options);
+        this.graph.addVertex(node.id, node);
+        return node;
     }
 
     async runNode() {
