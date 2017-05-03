@@ -14,15 +14,15 @@ export default class Pipeline {
 
     }
 
-    addNode(): Node {
+    newNode(): Node {
         return new Node();
     }
 
-    async executeNode() {
+    async runNode() {
 
     }
 
-    async executeAll() {
+    async run() {
 
     }
 
