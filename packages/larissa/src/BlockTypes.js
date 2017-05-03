@@ -1,29 +1,29 @@
 // @flow
 import schemaValidator from 'is-my-json-valid';
 
-export default class NodeTypes {
-    nodes: Map<string, NodeType>;
+export default class BlockTypes {
+    blocks: Map<string, BlockType>;
 
     constructor() {
-        this.nodes = new Map();
+        this.blocks = new Map();
     }
 
-    addNode(definition: Object) {
+    addBlock(definition: Object) {
         if (typeof definition.name !== 'string' || definition.name === '') {
-            throw new TypeError('node name must be a string');
+            throw new TypeError('block name must be a string');
         }
-        if (this.nodes.has(definition.name)) {
-            throw new Error(`existing node with name ${definition.name}`);
+        if (this.blocks.has(definition.name)) {
+            throw new Error(`existing block with name ${definition.name}`);
         }
-        this.nodes.set(definition.name, new NodeType(definition));
+        this.blocks.set(definition.name, new BlockType(definition));
     }
 
-    getNode(name: string) {
-        return this.nodes.get(name);
+    getBlock(name: string) {
+        return this.blocks.get(name);
     }
 }
 
-class NodeType {
+class BlockType {
     name: string;
     inputs: Array<Object>;
     outputs: Array<Object>;
@@ -39,20 +39,20 @@ class NodeType {
         this.validator = null;
 
         if (typeof definition.executor !== 'function') {
-            throw new TypeError('node executor must be a function');
+            throw new TypeError('block executor must be a function');
         }
         this.executor = definition.executor;
 
         if (definition.inputs) {
             if (!Array.isArray(definition.inputs)) {
-                throw new TypeError('node inputs must be an array');
+                throw new TypeError('block inputs must be an array if present');
             }
             this.inputs = definition.inputs.slice();
         }
 
         if (definition.outputs) {
             if (!Array.isArray(definition.outputs)) {
-                throw new TypeError('node outputs must be an array');
+                throw new TypeError('block outputs must be an array if present');
             }
             this.outputs = definition.outputs.slice();
         }

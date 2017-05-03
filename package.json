@@ -26,8 +26,9 @@
     "eslint": "eslint packages *.js --cache",
     "eslint-fix": "npm run eslint -- --fix",
     "flow": "flow",
-    "test": "run-s build testonly flow eslint",
-    "testonly": "jest",
+    "test": "run-s build test-only flow eslint",
+    "test-only": "jest",
+    "test-watch": "jest --watch",
     "watch": "gulp watch"
   },
   "jest": {}

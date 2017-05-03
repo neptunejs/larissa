@@ -1,3 +1,2 @@
-export default function myFunc() {
-    return 42;
-}
+// @flow
+export {default as Environment} from './Environment';

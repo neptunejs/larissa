@@ -1,5 +1,4 @@
 // @flow
-
 import Input from './Input';
 import Output from './Output';
 

@@ -3,7 +3,7 @@
 /*
  Experiment executing the workflow for image analysis
  */
-import NodeTypes from './NodeTypes';
+import NodeTypes from './BlockTypes';
 import Pipeline from './Pipeline';
 import imageJsPlugin from 'larissa-plugin-nodes-image-js';
 
@@ -13,10 +13,10 @@ function loadPlugin() {
     const plugin = imageJsPlugin();
     if (plugin.nodes) {
         if (!Array.isArray(plugin.nodes)) {
-            throw new TypeError('plugin.nodes must be an array');
+            throw new TypeError('plugin.blocks must be an array');
         }
         plugin.nodes.forEach((node) => {
-            nodes.addNode(node);
+            nodes.addBlock(node);
         });
     }
 }
