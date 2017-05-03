@@ -9,7 +9,8 @@
   "license": "MIT",
   "dependencies": {
     "graph.js": "^1.21.1",
-    "is-my-json-valid": "^2.16.0"
+    "is-my-json-valid": "^2.16.0",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
     "larissa-plugin-nodes-image-js": "0.0.0"
