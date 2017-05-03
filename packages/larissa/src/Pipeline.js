@@ -2,7 +2,7 @@
 import Graph from 'graph.js/dist/graph.full';
 
 import Block from './Block';
-import Node, {RUNNING} from './Node';
+import Node, {FINISHED, RUNNING} from './Node';
 
 import type Environment from './Environment';
 
@@ -49,6 +49,7 @@ export default class Pipeline extends Node {
 
     async run() {
         this.runCheck();
+        if (this.status === FINISHED) return;
         const self = this;
         const endNodes: Array<Node> = Array.from(this.graph.sinks()).map(a => a[1]); // grab endNodes
         const nodesToRun = endNodes.slice();
@@ -72,8 +73,10 @@ export default class Pipeline extends Node {
     async schedule(nodeList: Array<Node>) {
         this.status = RUNNING;
         for (const node of nodeList) {
+            if (node.status === FINISHED) {
+                continue;
+            }
             await node.run();
         }
     }
 }
-
