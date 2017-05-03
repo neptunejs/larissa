@@ -76,6 +76,8 @@ export default class Pipeline extends Node {
             if (node.status === FINISHED) {
                 continue;
             }
+            // TODO get incoming nodes and their output values
+            // then pass the values to run
             await node.run();
         }
     }

@@ -2,15 +2,21 @@
 import Port from './Port';
 
 export default class Output extends Port {
+    value: mixed;
+
     constructor(options: Object) {
         super(options);
     }
 
     hasValue(): boolean {
-        return true;
+        return this.value !== undefined;
     }
 
     getValue(): mixed {
-        return null;
+        return this.value;
+    }
+
+    setValue(value: mixed) {
+        this.value = value;
     }
 }

@@ -29,7 +29,7 @@ async function test() {
     const env = new Environment();
     env.loadPlugin(imageJsPlugin());
     const pipeline = env.newPipeline();
-    const node1 = pipeline.newNode('image-js/load', {path: './image.png'});
+    const node1 = pipeline.newNode('image-js/load', {path: './test/image.png'});
     const node2 = pipeline.newNode('image-js/greyscale');
     pipeline.connect(node1, node2);
     await pipeline.run();
