@@ -6,11 +6,12 @@ import Node from './Node';
 
 import type Environment from './Environment';
 
-export default class Pipeline {
+export default class Pipeline extends Node {
     env: Environment;
     graph: Graph;
 
     constructor(env: Environment) {
+        super();
         this.env = env;
         this.graph = new Graph();
     }
