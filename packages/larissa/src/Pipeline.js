@@ -2,7 +2,7 @@
 import Graph from 'graph.js/dist/graph.full';
 
 import Block from './Block';
-import Node from './Node';
+import Node, {RUNNING} from './Node';
 
 import type Environment from './Environment';
 
@@ -48,10 +48,32 @@ export default class Pipeline extends Node {
     }
 
     async run() {
-
+        this.runCheck();
+        const self = this;
+        const endNodes: Array<Node> = Array.from(this.graph.sinks()).map(a => a[1]); // grab endNodes
+        const nodesToRun = endNodes.slice();
+        for (const node of endNodes) {
+            addParents(node);
+        }
+        function addParents(node) {
+            for (const [, parent] of self.graph.verticesTo(node.id)) {
+                if (nodesToRun.includes(parent)) nodesToRun.splice(nodesToRun.indexOf(parent), 1);
+                nodesToRun.unshift(parent);
+                addParents(parent);
+            }
+        }
+        await this.schedule(nodesToRun);
     }
 
     reset(): void {
 
     }
+
+    async schedule(nodeList: Array<Node>) {
+        this.status = RUNNING;
+        for (const node of nodeList) {
+            await node.run();
+        }
+    }
 }
+
