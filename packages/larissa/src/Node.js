@@ -7,18 +7,23 @@ import Output from './Output';
 export default class Node {
     id: string;
     status: NodeStatus;
+    inputs: Map<String, Input>;
+    outputs: Map<String, Output>;
 
     constructor() {
         this.id = uuid();
+        this.inputs = [];
+        this.outputs = [];
     }
 
     output(name: string = 'default'): Output {
-        return new Output({name});
+        return this.outputs.get(name);
     }
 
     input(name: string = 'default'): Input {
-        return new Input({name});
+        return this.inputs.get(name);
     }
+
 
     reset(): void {
         // TODO: delete output
