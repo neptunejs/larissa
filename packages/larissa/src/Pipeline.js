@@ -5,6 +5,8 @@ import Block from './Block';
 import Node, {FINISHED, RUNNING} from './Node';
 
 import type Environment from './Environment';
+import type Input from './Input';
+import type Output from './Output';
 
 export default class Pipeline extends Node {
     env: Environment;
@@ -16,10 +18,14 @@ export default class Pipeline extends Node {
         this.graph = new Graph();
     }
 
-    connect(node1: Node, node2: Node) {
-        this.graph.addEdge(node1.id, node2.id, {
-            edge: 'test'
-        });
+    connect(node1: Node | Output, node2: Node | Input) {
+        if (node1 instanceof Node) {
+            node1 = node1.output();
+        }
+        if (node2 instanceof Node) {
+            node2 = node2.input();
+        }
+        this.graph.addEdge(node1.id, node2.id);
         if (this.graph.hasCycle()) {
             this.graph.removeEdge(node1.id, node2.id);
             throw new Error(`cannot connect nodes ${node1.id} and ${node2.id} because of cycle`);
@@ -40,6 +46,7 @@ export default class Pipeline extends Node {
         }
         const node = new Block(blockType, options);
         this.graph.addVertex(node.id, node);
+        // Todo for each input and output of this node, create a vertex and connect with the node
         return node;
     }
 
