@@ -3,6 +3,7 @@ import Graph from 'graph.js/dist/graph.full';
 
 import Block from './Block';
 import Node, {FINISHED, RUNNING} from './Node';
+import BuiltInBlocks from './Blocks/Blocks';
 
 import type Environment from './Environment';
 import type Input from './Input';
@@ -25,6 +26,12 @@ export default class Pipeline extends Node {
         if (node2 instanceof Node) {
             node2 = node2.input();
         }
+    connect(node1: Node, node2: Node) {
+        // TODO: find single type match between node1 outputs and node2 inputs ?
+        // TODO: or additional arguments to specify the input and output names
+        // TODO: check that the types of node1's output is compatible with node2's input
+        // TODO: check if the connection already exists and if so remove edge
+        // How are inputs and outputs defined for a Pipeline ?
         this.graph.addEdge(node1.id, node2.id);
         if (this.graph.hasCycle()) {
             this.graph.removeEdge(node1.id, node2.id);
@@ -42,7 +49,7 @@ export default class Pipeline extends Node {
         if (typeof plugin === 'string') {
             blockType = this.env.getPlugin(plugin).getBlockType(name);
         } else {
-            // TODO grab blockType from built-ins
+            blockType = BuiltInBlocks[name];
         }
         const node = new Block(blockType, options);
         this.graph.addVertex(node.id, node);

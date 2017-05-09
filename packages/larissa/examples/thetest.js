@@ -1,5 +1,5 @@
 // @flow
-import Environment from './Environment';
+import Environment from '../src/Environment';
 import imageJsPlugin from 'larissa-plugin-nodes-image-js';
 
 // async function createPipeline() {
