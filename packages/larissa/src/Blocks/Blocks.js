@@ -8,4 +8,4 @@ export default {
     LoopStart,
     Number,
     Sum
-}
+};
