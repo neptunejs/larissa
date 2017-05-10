@@ -1,10 +1,14 @@
 {
   "name": "larissa",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "JavaScript engine for dataflow programming",
   "main": "lib/index.js",
   "module": "src/index.js",
-  "keywords": ["dataflow", "pipeline", "knime"],
+  "keywords": [
+    "dataflow",
+    "pipeline",
+    "knime"
+  ],
   "author": "Michaël Zasso",
   "license": "MIT",
   "dependencies": {
@@ -13,6 +17,6 @@
     "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "larissa-plugin-nodes-image-js": "0.0.0"
+    "larissa-plugin-nodes-image-js": "^0.0.1"
   }
 }
