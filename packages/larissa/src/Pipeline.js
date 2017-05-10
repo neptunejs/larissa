@@ -26,7 +26,6 @@ export default class Pipeline extends Node {
         if (node2 instanceof Node) {
             node2 = node2.input();
         }
-    connect(node1: Node, node2: Node) {
         // TODO: find single type match between node1 outputs and node2 inputs ?
         // TODO: or additional arguments to specify the input and output names
         // TODO: check that the types of node1's output is compatible with node2's input

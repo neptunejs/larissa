@@ -12,8 +12,8 @@ export default class Node {
 
     constructor() {
         this.id = uuid();
-        this.inputs = [];
-        this.outputs = [];
+        this.inputs = new Map();
+        this.outputs = new Map();
     }
 
     output(name: string = 'default'): Output {
