@@ -397,8 +397,8 @@ babel-types@^6.18.0, babel-types@^6.23.0, babel-types@^6.24.1:
     to-fast-properties "^1.0.1"
 
 babylon@^6.11.0, babylon@^6.13.0, babylon@^6.15.0, babylon@^6.17.0:
-  version "6.17.0"
-  resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.17.0.tgz#37da948878488b9c4e3c4038893fa3314b3fc932"
+  version "6.17.1"
+  resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.17.1.tgz#17f14fddf361b695981fe679385e4f1c01ebd86f"
 
 balanced-match@^0.4.1:
   version "0.4.2"
@@ -1104,8 +1104,8 @@ escope@^3.6.0:
     estraverse "^4.1.1"
 
 eslint-config-cheminfo@^1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-cheminfo/-/eslint-config-cheminfo-1.7.0.tgz#a930dc069be9dbf3bb41ddc530a1d3720597882a"
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-cheminfo/-/eslint-config-cheminfo-1.8.0.tgz#7f5c15889c240425643a8f8159c881937b2cdd82"
 
 eslint-plugin-flowtype@^2.32.1:
   version "2.32.1"
@@ -4241,8 +4241,8 @@ whatwg-encoding@^1.0.1:
     iconv-lite "0.4.13"
 
 whatwg-url@^4.3.0:
-  version "4.7.1"
-  resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-4.7.1.tgz#df4dc2e3f25a63b1fa5b32ed6d6c139577d690de"
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-4.8.0.tgz#d2981aa9148c1e00a41c5a6131166ab4683bbcc0"
   dependencies:
     tr46 "~0.0.3"
     webidl-conversions "^3.0.0"
@@ -4258,10 +4258,10 @@ which@^1.2.12, which@^1.2.9:
     isexe "^2.0.0"
 
 wide-align@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/wide-align/-/wide-align-1.1.0.tgz#40edde802a71fea1f070da3e62dcda2e7add96ad"
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/wide-align/-/wide-align-1.1.1.tgz#d2ea8aa2db2e66467e8b60cc3e897de3bc4429e6"
   dependencies:
-    string-width "^1.0.1"
+    string-width "^2.0.0"
 
 window-size@0.1.0:
   version "0.1.0"

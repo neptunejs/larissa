@@ -1,11 +1,14 @@
-// A very simple block that takes several numbers as input and outputs their sum
+// @flow
 
+import type {Context} from '../Block';
+
+// A very simple block that takes several numbers as input and outputs their sum
 export default {
-    name: 'greyscale',
+    name: 'sum',
     inputs: [
         {
             name: 'value',
-            many: true,
+            multiple: true,
             type: 'number'
         }
     ],
@@ -19,7 +22,7 @@ export default {
     executor: computeSum
 };
 
-async function computeSum(ctx) {
-    const numbers = ctx.getInput('value');
+async function computeSum(ctx: Context) {
+    const numbers: Array<number> = ctx.getInput('value');
     return numbers.reduce((prev, current) => prev + current, 0);
 }

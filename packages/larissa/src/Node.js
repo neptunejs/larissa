@@ -7,8 +7,8 @@ import Output from './Output';
 export default class Node {
     id: string;
     status: NodeStatus;
-    inputs: Map<String, Input>;
-    outputs: Map<String, Output>;
+    inputs: Map<string, Input>;
+    outputs: Map<string, Output>;
 
     constructor() {
         this.id = uuid();
@@ -17,11 +17,19 @@ export default class Node {
     }
 
     output(name: string = 'default'): Output {
-        return this.outputs.get(name);
+        const output = this.outputs.get(name);
+        if (output !== undefined) {
+            return output;
+        }
+        throw new Error(`Unknown output: ${name}`);
     }
 
     input(name: string = 'default'): Input {
-        return this.inputs.get(name);
+        const input = this.inputs.get(name);
+        if (input !== undefined) {
+            return input;
+        }
+        throw new Error(`Unknown input: ${name}`);
     }
 
 

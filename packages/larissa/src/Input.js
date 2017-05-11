@@ -5,4 +5,8 @@ export default class Input extends Port {
     constructor(options: Object) {
         super(options);
     }
+
+    getValue() {
+        return null;
+    }
 }
