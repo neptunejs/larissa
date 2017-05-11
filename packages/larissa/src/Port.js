@@ -1,5 +1,4 @@
 // @flow
-
 import type Node from './Node';
 
 export default class Port {

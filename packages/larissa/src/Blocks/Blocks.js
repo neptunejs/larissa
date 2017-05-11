@@ -1,3 +1,4 @@
+// @flow
 import sum from './sum';
 import number from './number';
 
