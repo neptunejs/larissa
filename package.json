@@ -27,6 +27,7 @@
     "eslint-fix": "npm run eslint -- --fix",
     "flow": "flow",
     "prepare": "npm run bootstrap",
+    "prepublish": "npm run build",
     "test": "run-s build test-only flow eslint",
     "test-only": "jest",
     "test-watch": "jest --watch",
