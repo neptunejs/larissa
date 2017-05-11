@@ -63,7 +63,7 @@ export default class Pipeline extends Node {
         this.graph.addNewVertex(node.id, node);
         for (const input of node.inputs.values()) {
             this.graph.addNewVertex(input.id, input);
-            this.graph.addNewEdge(input.id, node.id)
+            this.graph.addNewEdge(input.id, node.id);
         }
         for (const output of node.outputs.values()) {
             this.graph.addNewVertex(output.id, output);
@@ -88,7 +88,7 @@ export default class Pipeline extends Node {
 
     async run() {
         this.runCheck();
-        if (this.status === FINISHED) return;
+        if (this.status === FINISHED) return null;
         const self = this;
         const endNodes: Array<Node> = Array.from(this.graph.sinks()).map(a => a[1]); // grab endNodes
         const nodesToRun = endNodes.slice().filter(node => node instanceof Node);
@@ -130,10 +130,10 @@ export default class Pipeline extends Node {
     }
 
     getConnectedOutputs(input: Input): Array<Output> {
-        return Array.from(this.graph.verticesTo(input.id)).map(([id, output]) => output);
+        return Array.from(this.graph.verticesTo(input.id)).map(([, output]) => output);
     }
 
     getConnectedInputs(output: Output): Array<Input> {
-        return Array.from(this.graph.verticesFrom(output.id)).map(([id, input]) => input);
+        return Array.from(this.graph.verticesFrom(output.id)).map(([, input]) => input);
     }
 }

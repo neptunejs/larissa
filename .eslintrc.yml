@@ -11,5 +11,5 @@ plugins:
   - flowtype
 rules:
   flowtype/no-weak-types:
-    - error
+    - warn
     - Object: false

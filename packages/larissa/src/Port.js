@@ -21,7 +21,7 @@ export default class Port {
     }
 
     setValue(value: any) {
-        this.value = value
+        this.value = value;
     }
 
     hasValue(): boolean {
