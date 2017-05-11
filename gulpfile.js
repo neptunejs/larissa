@@ -11,7 +11,7 @@ const through = require('through2');
 const watch = require('gulp-watch');
 
 const base = path.join(__dirname, 'packages');
-const scripts = ['./packages/*/src/**/*.js', '!./packages/*/src/**/__tests__/*'];
+const scripts = ['./packages/*/src/**/*.js', '!./packages/*/src/**/__tests__/**/*'];
 
 function swapSrcWithLib(srcPath) {
     const parts = srcPath.split(path.sep);

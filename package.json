@@ -21,11 +21,12 @@
   },
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "build": "gulp build",
+    "build": "rm -rf packages/*/lib; gulp build",
     "build-clean": "rimraf ./packages/*/lib/",
     "eslint": "eslint packages *.js --cache",
     "eslint-fix": "npm run eslint -- --fix",
     "flow": "flow",
+    "prepare": "npm run bootstrap",
     "test": "run-s build test-only flow eslint",
     "test-only": "jest",
     "test-watch": "jest --watch",

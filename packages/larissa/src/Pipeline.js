@@ -91,7 +91,7 @@ export default class Pipeline extends Node {
         if (this.status === FINISHED) return null;
         const self = this;
         const endNodes: Array<Node> = Array.from(this.graph.sinks()).map(a => a[1]); // grab endNodes
-        const nodesToRun = endNodes.slice().filter(node => node instanceof Node);
+        const nodesToRun = endNodes.filter(node => node instanceof Node);
         for (const node of endNodes) {
             addParents(node);
         }
@@ -127,6 +127,7 @@ export default class Pipeline extends Node {
             }
             await node.run();
         }
+        this.status = FINISHED;
     }
 
     getConnectedOutputs(input: Input): Array<Output> {
