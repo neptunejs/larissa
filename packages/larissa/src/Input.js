@@ -5,4 +5,8 @@ export default class Input extends Port {
     getValue() {
         return null;
     }
+
+    getDirection() {
+        return 'input';
+    }
 }

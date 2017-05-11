@@ -37,11 +37,11 @@ export default class Pipeline extends Node {
         // TODO: find single type match between node1 outputs and node2 inputs ?
         // TODO: or additional arguments to specify the input and output names
         // TODO: check that the types of node1's output is compatible with node2's input
-        // TODO: check if the connection already exists and if so remove edge
+        // TODO: check if the connection already exists and if so throw
         // How are inputs and outputs defined for a Pipeline ?
-        this.graph.addEdge(nodeOutput.id, nodeInput.id);
+        this.graph.addNewEdge(nodeOutput.id, nodeInput.id);
         if (this.graph.hasCycle()) {
-            this.graph.removeEdge(nodeOutput.id, nodeInput.id);
+            this.graph.removeExistingEdge(nodeOutput.id, nodeInput.id);
             throw new Error(`cannot connect nodes ${nodeOutput.id} and ${nodeInput.id} because of cycle`);
         }
     }
@@ -60,7 +60,17 @@ export default class Pipeline extends Node {
         }
         const node = new Block(blockType, options);
         this.nodes.add(node);
-        this.graph.addVertex(node.id, node);
+        this.graph.addNewVertex(node.id, node);
+        for (const [inputName, input] of node.inputs) {
+            if (inputName === 'default') continue;
+            this.graph.addNewVertex(input.id, input);
+            this.graph.addNewEdge(input.id, node.id)
+        }
+        for (const [outputName, output] of node.outputs) {
+            if (outputName === 'default') continue;
+            this.graph.addNewVertex(output.id, output);
+            this.graph.addNewEdge(node.id, output.id);
+        }
         // Todo for each input and output of this node, create a vertex and connect with the node
         return node;
     }
@@ -83,18 +93,20 @@ export default class Pipeline extends Node {
         if (this.status === FINISHED) return;
         const self = this;
         const endNodes: Array<Node> = Array.from(this.graph.sinks()).map(a => a[1]); // grab endNodes
-        const nodesToRun = endNodes.slice();
+        const nodesToRun = endNodes.slice().filter(node => node instanceof Node);
         for (const node of endNodes) {
             addParents(node);
         }
         function addParents(node) {
             for (const [, parent] of self.graph.verticesTo(node.id)) {
-                if (nodesToRun.includes(parent)) nodesToRun.splice(nodesToRun.indexOf(parent), 1);
-                nodesToRun.unshift(parent);
+                if (parent instanceof Node) {
+                    if (nodesToRun.includes(parent)) nodesToRun.splice(nodesToRun.indexOf(parent), 1);
+                    nodesToRun.unshift(parent);
+                }
                 addParents(parent);
             }
         }
-        await this.schedule(nodesToRun);
+        return this.schedule(nodesToRun);
     }
 
     reset(): void {

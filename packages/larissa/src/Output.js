@@ -15,4 +15,8 @@ export default class Output extends Port {
     setValue(value: mixed) {
         this.value = value;
     }
+
+    getDirection() {
+        return 'output';
+    }
 }

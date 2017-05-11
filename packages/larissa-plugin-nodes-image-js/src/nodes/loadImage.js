@@ -16,6 +16,6 @@ export default {
 };
 
 async function loadImage(ctx) {
-    const path = ctx.options.path;
+    const path = ctx.getOptions().path;
     ctx.setOutput('loaded', await Image.load(path));
 }

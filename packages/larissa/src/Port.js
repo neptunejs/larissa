@@ -6,10 +6,15 @@ export default class Port {
     id: string;
     name: string;
     node: Node;
+    type: string;
 
     constructor(node: Node, options: Object) {
-        this.id = options.name;
+        this.id = `${node.id}_${this.getDirection()}_${options.name}`;
         this.name = options.name;
         this.node = node;
+    }
+
+    getDirection(): string {
+        throw new Error('implement me!');
     }
 }
