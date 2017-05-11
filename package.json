@@ -21,7 +21,7 @@
   },
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "build": "rm -rf packages/*/lib; gulp build",
+    "build": "npm run build-clean && gulp build",
     "build-clean": "rimraf ./packages/*/lib/",
     "eslint": "eslint packages *.js --cache",
     "eslint-fix": "npm run eslint -- --fix",
