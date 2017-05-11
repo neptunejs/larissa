@@ -33,7 +33,12 @@ async function test() {
     const node2 = pipeline.newNode('image-js/greyscale');
     pipeline.connect(node1, node2);
     await pipeline.run();
-    console.log(node2.output().getValue()); // eslint-disable-line no-console
+    const result = node2.output().getValue();
+    if (result.width === 100 && result.height === 100 && result.channels === 1) {
+        console.log('OK, image is grey'); // eslint-disable-line no-console
+    } else {
+        throw new Error('did not work');
+    }
 }
 
 export default test;
