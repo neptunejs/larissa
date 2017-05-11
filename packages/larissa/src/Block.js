@@ -30,7 +30,7 @@ export default class Block extends Node {
             kind: 'block',
             type: this.blockType.name,
             options: this.options
-        }
+        };
     }
 }
 

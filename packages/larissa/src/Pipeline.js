@@ -149,6 +149,6 @@ export default class Pipeline extends Node {
         return {
             kind: 'pipeline',
             graph: this.graph.toJSON()
-        }
+        };
     }
 }
