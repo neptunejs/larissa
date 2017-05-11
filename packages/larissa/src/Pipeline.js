@@ -61,13 +61,11 @@ export default class Pipeline extends Node {
         const node = new Block(blockType, options);
         this.nodes.add(node);
         this.graph.addNewVertex(node.id, node);
-        for (const [inputName, input] of node.inputs) {
-            if (inputName === 'default') continue;
+        for (const input of node.inputs.values()) {
             this.graph.addNewVertex(input.id, input);
             this.graph.addNewEdge(input.id, node.id)
         }
-        for (const [outputName, output] of node.outputs) {
-            if (outputName === 'default') continue;
+        for (const output of node.outputs.values()) {
             this.graph.addNewVertex(output.id, output);
             this.graph.addNewEdge(node.id, output.id);
         }
@@ -119,9 +117,23 @@ export default class Pipeline extends Node {
             if (node.status === FINISHED) {
                 continue;
             }
-            // TODO get incoming nodes and their output values
-            // then pass the values to run
+            for (const input of node.inputs.values()) {
+                if (input.multiple) {
+                    // todo handle multiple inputs
+                } else {
+                    const output = this.getConnectedOutputs(input)[0];
+                    input.setValue(output.getValue());
+                }
+            }
             await node.run();
         }
+    }
+
+    getConnectedOutputs(input: Input): Array<Output> {
+        return Array.from(this.graph.verticesTo(input.id)).map(([id, output]) => output);
+    }
+
+    getConnectedInputs(output: Output): Array<Input> {
+        return Array.from(this.graph.verticesFrom(output.id)).map(([id, input]) => input);
     }
 }

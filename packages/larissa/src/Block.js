@@ -38,14 +38,16 @@ function createPorts<P>(self: Block, type: string, map: Map<string, P>, list: Ar
         const port = new Constructor(self, portDef);
         map.set(portName, port);
         if (list.length === 1) {
-            map.set('default', port);
+            if (type === 'inputs') self.defaultInput = port;
+            else if (type === 'outputs') self.defaultOutput = port;
         }
         if (portDef.default) {
             if (hasDefaultPort) {
                 throw new Error(`cannot have more than one default ${type}`);
             } else {
                 hasDefaultPort = true;
-                map.set('default', port);
+                if (type === 'inputs') self.defaultInput = port;
+                else if (type === 'outputs') self.defaultOutput = port;
             }
         }
     }

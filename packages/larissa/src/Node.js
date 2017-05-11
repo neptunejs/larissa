@@ -9,6 +9,8 @@ export default class Node {
     status: NodeStatus;
     inputs: Map<string, Input>;
     outputs: Map<string, Output>;
+    defaultInput: ?Input;
+    defaultOutput: ?Output;
 
     constructor() {
         this.id = uuid();
@@ -16,22 +18,29 @@ export default class Node {
         this.outputs = new Map();
     }
 
-    output(name: string = 'default'): Output {
-        const output = this.outputs.get(name);
-        if (output !== undefined) {
+    output(name?: string): Output {
+        if (name === undefined) {
+            const output = this.defaultOutput;
+            if (!output) throw new Error('Node has no default output');
+            return output;
+        } else {
+            const output = this.outputs.get(name);
+            if (!output) throw new Error(`Unknown output: ${name}`);
             return output;
         }
-        throw new Error(`Unknown output: ${name}`);
     }
 
-    input(name: string = 'default'): Input {
-        const input = this.inputs.get(name);
-        if (input !== undefined) {
+    input(name?: string): Input {
+        if (name === undefined) {
+            const input = this.defaultInput;
+            if (!input) throw new Error('Node has no default input');
+            return input;
+        } else {
+            const input = this.inputs.get(name);
+            if (!input) throw new Error(`Unknown input: ${name}`);
             return input;
         }
-        throw new Error(`Unknown input: ${name}`);
     }
-
 
     reset(): void {
         // TODO: delete output
