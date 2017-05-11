@@ -13,7 +13,24 @@ JavaScript engine for dataflow programming.
 ## Usage
 
 ```js
-import {Pipeline} from 'larissa';
+import {Environment} from 'larissa';
+
+async function runPipeline() {
+    const env = new Environment();
+    const pipeline = env.newPipeline();
+
+    const number1 = pipeline.newNode('number', {value: 5});
+    const number2 = pipeline.newNode('number', {value: 10});
+    const sum = pipeline.newNode('sum');
+
+    pipeline.connect(number1, sum);
+    pipeline.connect(number2, sum);
+    
+    // run is always asynchronous
+    await pipeline.run();
+    const result = sum.output().getValue();
+    console.log(result); // 15
+}
 ```
 
 ## License
