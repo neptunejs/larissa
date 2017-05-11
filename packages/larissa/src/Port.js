@@ -30,4 +30,8 @@ export default class Port {
     getDirection(): string {
         throw new Error('implement me!');
     }
+
+    toJSON() {
+        return null;
+    }
 }

@@ -24,6 +24,14 @@ export default class Block extends Node {
         }
         return this.blockType.executor(context);
     }
+
+    toJSON() {
+        return {
+            kind: 'block',
+            type: this.blockType.name,
+            options: this.options
+        }
+    }
 }
 
 function createAllPorts(self: Block): void {

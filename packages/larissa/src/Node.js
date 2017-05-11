@@ -55,6 +55,12 @@ export default class Node {
     async run() {
         throw new Error('Node.run: implement me');
     }
+
+    toJSON() {
+        return {
+            kind: 'node'
+        };
+    }
 }
 
 export const INSTANTIATED: 'INSTANTIATED' = 'INSTANTIATED';

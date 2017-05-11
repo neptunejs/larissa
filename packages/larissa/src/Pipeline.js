@@ -144,4 +144,11 @@ export default class Pipeline extends Node {
     getConnectedInputs(output: Output): Array<Input> {
         return Array.from(this.graph.verticesFrom(output.id)).map(([, input]) => input);
     }
+
+    toJSON() {
+        return {
+            kind: 'pipeline',
+            graph: this.graph.toJSON()
+        }
+    }
 }
