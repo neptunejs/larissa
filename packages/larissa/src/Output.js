@@ -4,10 +4,6 @@ import Port from './Port';
 export default class Output extends Port {
     value: mixed;
 
-    constructor(options: Object) {
-        super(options);
-    }
-
     hasValue(): boolean {
         return this.value !== undefined;
     }
