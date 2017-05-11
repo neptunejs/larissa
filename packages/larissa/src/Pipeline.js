@@ -12,29 +12,37 @@ import type Output from './Output';
 export default class Pipeline extends Node {
     env: Environment;
     graph: Graph;
+    nodes: WeakSet<Node>;
 
     constructor(env: Environment) {
         super();
         this.env = env;
         this.graph = new Graph();
+        this.nodes = new WeakSet();
     }
 
-    connect(node1: Node | Output, node2: Node | Input) {
-        if (node1 instanceof Node) {
-            node1 = node1.output();
+    connect(nodeOutput: Node | Output, nodeInput: Node | Input) {
+        if (nodeOutput instanceof Node) {
+            nodeOutput = nodeOutput.output();
         }
-        if (node2 instanceof Node) {
-            node2 = node2.input();
+        if (nodeInput instanceof Node) {
+            nodeInput = nodeInput.input();
+        }
+        if (!this.nodes.has(nodeOutput.node)) {
+            throw new Error('output node not found in pipeline');
+        }
+        if (!this.nodes.has(nodeInput.node)) {
+            throw new Error('input node not found in pipeline');
         }
         // TODO: find single type match between node1 outputs and node2 inputs ?
         // TODO: or additional arguments to specify the input and output names
         // TODO: check that the types of node1's output is compatible with node2's input
         // TODO: check if the connection already exists and if so remove edge
         // How are inputs and outputs defined for a Pipeline ?
-        this.graph.addEdge(node1.id, node2.id);
+        this.graph.addEdge(nodeOutput.id, nodeInput.id);
         if (this.graph.hasCycle()) {
-            this.graph.removeEdge(node1.id, node2.id);
-            throw new Error(`cannot connect nodes ${node1.id} and ${node2.id} because of cycle`);
+            this.graph.removeEdge(nodeOutput.id, nodeInput.id);
+            throw new Error(`cannot connect nodes ${nodeOutput.id} and ${nodeInput.id} because of cycle`);
         }
     }
 
@@ -51,9 +59,19 @@ export default class Pipeline extends Node {
             blockType = BuiltInBlocks[name];
         }
         const node = new Block(blockType, options);
+        this.nodes.add(node);
         this.graph.addVertex(node.id, node);
         // Todo for each input and output of this node, create a vertex and connect with the node
         return node;
+    }
+
+    removeNode(node: Node): void {
+        if (!this.nodes.has(node)) {
+            throw new Error('node not found in pipeline');
+        }
+        this.nodes.delete(node);
+        this.graph.removeExistingVertex(node.id);
+        // Todo for each input and output of this node, remove corresponding vertices
     }
 
     async runNode() {
