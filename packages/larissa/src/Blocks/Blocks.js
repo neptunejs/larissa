@@ -1,11 +1,11 @@
-import LoopStart from './LoopStart';
-import LoopEnd from './LoopEnd';
-import Sum from './Sum';
-import Number from './Number';
+import sum from './sum';
+import number from './number';
 
-export default {
-    LoopEnd,
-    LoopStart,
-    Number,
-    Sum
-};
+import BlockTypes from '../BlockTypes';
+
+const blockTypes = new BlockTypes();
+
+export default blockTypes;
+
+blockTypes.addBlock(sum);
+blockTypes.addBlock(number);

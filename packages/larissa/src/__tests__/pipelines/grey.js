@@ -1,8 +1,7 @@
 import Environment from '../../Environment';
 import imageJsPlugin from 'larissa-plugin-nodes-image-js';
 
-
-test('image load and apply grayscale filter', async () => {
+test('pipeline - image load and apply grayscale filter', async () => {
     const env = new Environment();
     env.loadPlugin(imageJsPlugin());
     const pipeline = env.newPipeline();
@@ -13,4 +12,3 @@ test('image load and apply grayscale filter', async () => {
     const result = node2.output().getValue();
     expect(result.channels).toEqual(1);
 });
-

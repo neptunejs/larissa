@@ -2,6 +2,7 @@
 import Node from './Node';
 import Input from './Input';
 import Output from './Output';
+import Context from './BlockContext';
 
 import type {BlockType} from './BlockTypes';
 
@@ -36,6 +37,9 @@ function createPorts<P>(self: Block, type: string, map: Map<string, P>, list: Ar
     for (const portDef of list) {
         const portName = portDef.name;
         const port = new Constructor(self, portDef);
+        if (portDef.multiple) {
+            port.multiple = true;
+        }
         map.set(portName, port);
         if (list.length === 1) {
             if (type === 'inputs') self.defaultInput = port;
@@ -52,24 +56,3 @@ function createPorts<P>(self: Block, type: string, map: Map<string, P>, list: Ar
         }
     }
 }
-
-class Context {
-    block: Block;
-    constructor(block: Block) {
-        this.block = block;
-    }
-
-    getOptions(): ?Object {
-        return this.block.options;
-    }
-
-    getInput(name: string): any {
-        return this.block.input(name).getValue();
-    }
-
-    setOutput(name: string, value: mixed): void {
-        this.block.output(name).setValue(value);
-    }
-}
-
-export type {Context};

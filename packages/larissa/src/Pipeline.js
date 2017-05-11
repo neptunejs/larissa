@@ -3,7 +3,7 @@ import Graph from 'graph.js/dist/graph.full';
 
 import Block from './Block';
 import Node, {FINISHED, RUNNING} from './Node';
-import BuiltInBlocks from './Blocks/Blocks';
+import builtInBlocks from './Blocks/Blocks';
 
 import type Environment from './Environment';
 import type Input from './Input';
@@ -56,7 +56,10 @@ export default class Pipeline extends Node {
         if (typeof plugin === 'string') {
             blockType = this.env.getPlugin(plugin).getBlockType(name);
         } else {
-            blockType = BuiltInBlocks[name];
+            blockType = builtInBlocks.getBlock(name);
+            if (blockType === undefined) {
+                throw new Error(`no such builtin block: ${name}`);
+            }
         }
         const node = new Block(blockType, options);
         this.nodes.add(node);
@@ -118,8 +121,12 @@ export default class Pipeline extends Node {
                 continue;
             }
             for (const input of node.inputs.values()) {
-                if (input.multiple) {
-                    // todo handle multiple inputs
+                if (input.isMultiple()) {
+                    const value = [];
+                    for (const output of this.getConnectedOutputs(input)) {
+                        value.push(output.getValue());
+                    }
+                    input.setValue(value);
                 } else {
                     const output = this.getConnectedOutputs(input)[0];
                     input.setValue(output.getValue());
