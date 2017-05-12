@@ -161,7 +161,7 @@ export default class Pipeline extends Node {
             }
             this.defaultInput = newInput;
         }
-        this.connect(id, input)
+        this.connect(id, input);
     }
 
     linkOutput(output: Output, configOrName: string) {
@@ -190,7 +190,7 @@ export default class Pipeline extends Node {
         return {
             kind: 'pipeline',
             id: this.id
-        }
+        };
     }
 }
 
