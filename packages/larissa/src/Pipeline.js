@@ -2,7 +2,7 @@
 import Graph from 'graph.js/dist/graph.full';
 
 import Block from './Block';
-import Node, {FINISHED, RUNNING} from './Node';
+import Node, {INSTANTIATED} from './Node';
 import builtInBlocks from './Blocks/Blocks';
 
 import type Input from './Input';
@@ -86,13 +86,12 @@ export default class Pipeline extends Node {
         // Todo for each input and output of this node, remove corresponding vertices
     }
 
-    async runNode() {
-
+    async run() {
+        this.status = INSTANTIATED;
+        await super.run();
     }
 
-    async run() {
-        this.runCheck();
-        if (this.status === FINISHED) return null;
+    async _run() {
         const self = this;
         const endNodes: Array<Node> = Array.from(this.graph.sinks()).map(a => a[1]); // grab endNodes
         const nodesToRun = endNodes.filter(node => node instanceof Node);
@@ -109,19 +108,16 @@ export default class Pipeline extends Node {
             }
         }
 
-        return this.schedule(nodesToRun);
+        await this.schedule(nodesToRun);
     }
 
     reset(): void {
-
+        super.reset();
+        // todo implement pipeline reset
     }
 
     async schedule(nodeList: Array<Node>) {
-        this.status = RUNNING;
         for (const node of nodeList) {
-            if (node.status === FINISHED) {
-                continue;
-            }
             for (const input of node.inputs.values()) {
                 if (!input.hasValue()) {
                     if (input.isMultiple()) {
@@ -138,7 +134,6 @@ export default class Pipeline extends Node {
             }
             await node.run();
         }
-        this.status = FINISHED;
     }
 
     getConnectedOutputs(input: Input): Array<Output> {

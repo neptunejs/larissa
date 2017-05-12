@@ -34,4 +34,8 @@ export default class Port {
     toJSON() {
         return null;
     }
+
+    reset() {
+        this.value = undefined;
+    }
 }

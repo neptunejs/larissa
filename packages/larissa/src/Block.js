@@ -17,7 +17,7 @@ export default class Block extends Node {
         createAllPorts(this);
     }
 
-    async run(options: Object = {}) {
+    async _run(options: Object = {}) {
         const context = new Context(this, options);
         if (this.options && this.blockType.validator) {
             this.blockType.validator(this.options);
