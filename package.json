@@ -33,5 +33,9 @@
     "test-watch": "jest --watch",
     "watch": "gulp watch"
   },
-  "jest": {}
+  "jest": {
+    "moduleNameMapper": {
+      "^test/(.*)$": "<rootDir>/packages/larissa/test/$1.js"
+    }
+  }
 }

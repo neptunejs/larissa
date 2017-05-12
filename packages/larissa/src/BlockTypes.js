@@ -23,7 +23,7 @@ export default class BlockTypes {
     }
 }
 
-class BlockType {
+export class BlockType {
     name: string;
     inputs: Array<Object>;
     outputs: Array<Object>;
@@ -63,5 +63,3 @@ class BlockType {
         }
     }
 }
-
-export type {BlockType};
