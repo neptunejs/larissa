@@ -5,9 +5,10 @@ import Block from './Block';
 import Node, {FINISHED, RUNNING} from './Node';
 import builtInBlocks from './Blocks/Blocks';
 
-import type Environment from './Environment';
 import type Input from './Input';
 import type Output from './Output';
+
+import type Environment from './Environment';
 
 export default class Pipeline extends Node {
     env: Environment;
@@ -46,6 +47,14 @@ export default class Pipeline extends Node {
         }
     }
 
+    addNode(node: Node): void {
+        if (this.nodes.has(node)) {
+            throw new Error('node is already in pipeline');
+        }
+        this.nodes.add(node);
+        addNodeToGraph(node, this);
+    }
+
     newNode(identifier: string, options?: Object): Node {
         let [plugin, name] = identifier.split('/');
         if (name === undefined) {
@@ -63,15 +72,7 @@ export default class Pipeline extends Node {
         }
         const node = new Block(blockType, options);
         this.nodes.add(node);
-        this.graph.addNewVertex(node.id, node);
-        for (const input of node.inputs.values()) {
-            this.graph.addNewVertex(input.id, input);
-            this.graph.addNewEdge(input.id, node.id);
-        }
-        for (const output of node.outputs.values()) {
-            this.graph.addNewVertex(output.id, output);
-            this.graph.addNewEdge(node.id, output.id);
-        }
+        addNodeToGraph(node, this);
         // Todo for each input and output of this node, create a vertex and connect with the node
         return node;
     }
@@ -107,6 +108,7 @@ export default class Pipeline extends Node {
                 addParents(parent);
             }
         }
+
         return this.schedule(nodesToRun);
     }
 
@@ -121,15 +123,17 @@ export default class Pipeline extends Node {
                 continue;
             }
             for (const input of node.inputs.values()) {
-                if (input.isMultiple()) {
-                    const value = [];
-                    for (const output of this.getConnectedOutputs(input)) {
-                        value.push(output.getValue());
+                if (!input.hasValue()) {
+                    if (input.isMultiple()) {
+                        const value = [];
+                        for (const output of this.getConnectedOutputs(input)) {
+                            value.push(output.getValue());
+                        }
+                        input.setValue(value);
+                    } else {
+                        const output = this.getConnectedOutputs(input)[0];
+                        input.setValue(output.getValue());
                     }
-                    input.setValue(value);
-                } else {
-                    const output = this.getConnectedOutputs(input)[0];
-                    input.setValue(output.getValue());
                 }
             }
             await node.run();
@@ -145,6 +149,36 @@ export default class Pipeline extends Node {
         return Array.from(this.graph.verticesFrom(output.id)).map(([, input]) => input);
     }
 
+    linkInput(input: Input, configOrName: string | Object) {
+        const config = getConfig(configOrName);
+        const id = this.newNode('identity');
+        const newInput = id.input();
+        newInput.node = this;
+        this.inputs.set(config.name, newInput);
+        if (config.default) {
+            if (this.defaultInput) {
+                throw new Error('cannot have more than one default input');
+            }
+            this.defaultInput = newInput;
+        }
+        this.connect(id, input)
+    }
+
+    linkOutput(output: Output, configOrName: string) {
+        const config = getConfig(configOrName);
+        const id = this.newNode('identity');
+        const newOutput = id.output();
+        newOutput.node = this;
+        this.outputs.set(config.name, newOutput);
+        if (config.default) {
+            if (this.defaultOutput) {
+                throw new Error('cannot have more than one default output');
+            }
+            this.defaultOutput = newOutput;
+        }
+        this.connect(output, id);
+    }
+
     toJSON() {
         return {
             kind: 'pipeline',
@@ -152,11 +186,35 @@ export default class Pipeline extends Node {
         };
     }
 
-    linkInput(input: Input, name: string) {
-        // todo implement
+    inspect() {
+        return {
+            kind: 'pipeline',
+            id: this.id
+        }
     }
+}
 
-    linkOutput(output: Output, name: string) {
-        // todo implement
+function getConfig(configOrName: string | Object): Object {
+    let config: Object;
+    if (typeof configOrName === 'string') {
+        config = {name: configOrName};
+    } else {
+        if (!configOrName.name) {
+            throw new Error('port config must have a name');
+        }
+        config = configOrName;
+    }
+    return config;
+}
+
+function addNodeToGraph(node: Node, self: Pipeline) {
+    self.graph.addNewVertex(node.id, node);
+    for (const input of node.inputs.values()) {
+        self.graph.addNewVertex(input.id, input);
+        self.graph.addNewEdge(input.id, node.id);
+    }
+    for (const output of node.outputs.values()) {
+        self.graph.addNewVertex(output.id, output);
+        self.graph.addNewEdge(node.id, output.id);
     }
 }

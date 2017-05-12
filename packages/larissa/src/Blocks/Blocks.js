@@ -3,8 +3,10 @@ import BlockTypes from '../BlockTypes';
 const blockTypes = new BlockTypes();
 export default blockTypes;
 
+import identity from './identity';
 import string from './string';
 import jsonParse from './json-parse';
+blockTypes.addBlock(identity);
 blockTypes.addBlock(string);
 blockTypes.addBlock(jsonParse);
 

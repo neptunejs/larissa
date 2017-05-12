@@ -32,6 +32,15 @@ export default class Block extends Node {
             options: this.options
         };
     }
+
+    inspect() {
+        return {
+            kind: 'block',
+            id: this.id,
+            type: this.blockType.name,
+            options: this.options
+        };
+    }
 }
 
 function createAllPorts(self: Block): void {
