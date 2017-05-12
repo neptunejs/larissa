@@ -12,7 +12,7 @@ test('pipeline in a pipeline', async () => {
     const pOut = env.newPipeline();
     const ten = pOut.newNode('number', {value: 10});
     const two = pOut.newNode('number', {value: 2});
-    const div = pOut.newNode('divide');
+    const div = pOut.newNode('division');
     pOut.connect(ten, pIn, div.input('dividend'));
     pOut.connect(two, div.input('divisor'));
     

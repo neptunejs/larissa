@@ -151,4 +151,12 @@ export default class Pipeline extends Node {
             graph: this.graph.toJSON()
         };
     }
+
+    linkInput(input: Input, name: string) {
+        // todo implement
+    }
+
+    linkOutput(output: Output, name: string) {
+        // todo implement
+    }
 }
