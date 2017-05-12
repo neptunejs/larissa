@@ -1,6 +1,6 @@
 import Environment from '../../Environment';
 
-test('loop over an array to double the values', async () => {
+test.skip('loop over an array to double the values', async () => {
     const env = new Environment();
     const p = env.newPipeline();
     const string = p.newNode('string', {value: '[0, 5, 10, 1]'});
