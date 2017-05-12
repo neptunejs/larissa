@@ -1,5 +1,5 @@
 // @flow
-import type Context from '../BlockContext';
+import type Context from '../../BlockContext';
 
 // A very simple block that takes several numbers as input and outputs their sum
 export default {

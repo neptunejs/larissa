@@ -1,5 +1,5 @@
 // @flow
-import type Context from '../BlockContext';
+import type Context from '../../BlockContext';
 
 export default {
     name: 'number',
