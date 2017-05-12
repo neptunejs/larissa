@@ -1,6 +1,6 @@
 import Environment from '../../Environment';
 
-test.skip('loop over an array to double the values', async () => {
+test('loop over an array to double the values', async () => {
     const env = new Environment();
     const p = env.newPipeline();
     const string = p.newNode('string', {value: '[0, 5, 10, 1]'});
@@ -17,8 +17,8 @@ test.skip('loop over an array to double the values', async () => {
     const loop = p.newLoop(inner, {
         type: 'map'
     });
-    p.connect(json, loop);
+    p.connect(json, loop.input('number'));
 
     await p.run();
-    expect(loop.output().getValue()).toEqual([0, 10, 20, 2]);
+    expect(loop.output('result').getValue()).toEqual([0, 10, 20, 2]);
 });

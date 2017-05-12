@@ -3,6 +3,7 @@ import Graph from 'graph.js/dist/graph.full';
 
 import Block from './Block';
 import Node, {INSTANTIATED} from './Node';
+import MapLoop from './MapLoop';
 import builtInBlocks from './Blocks/Blocks';
 
 import type Input from './Input';
@@ -13,13 +14,13 @@ import type Environment from './Environment';
 export default class Pipeline extends Node {
     env: Environment;
     graph: Graph;
-    nodes: WeakSet<Node>;
+    nodes: Set<Node>;
 
     constructor(env: Environment) {
         super();
         this.env = env;
         this.graph = new Graph();
-        this.nodes = new WeakSet();
+        this.nodes = new Set();
     }
 
     connect(nodeOutput: Node | Output, nodeInput: Node | Input) {
@@ -77,6 +78,21 @@ export default class Pipeline extends Node {
         return node;
     }
 
+    newLoop(node: Node, options?: Object): Node {
+        options = Object.assign({}, options, {type: 'map'});
+        let loopNode;
+        switch (options.type) {
+            case 'map':
+                loopNode = new MapLoop(node);
+                break;
+            default:
+                throw new Error(`Unknow loop type ${options.type}`);
+        }
+        this.nodes.add(loopNode);
+        addNodeToGraph(loopNode, this);
+        return loopNode;
+    }
+
     removeNode(node: Node): void {
         if (!this.nodes.has(node)) {
             throw new Error('node not found in pipeline');
@@ -113,6 +129,9 @@ export default class Pipeline extends Node {
 
     reset(): void {
         super.reset();
+        for (let node of this.nodes) {
+            node.reset();
+        }
         // todo implement pipeline reset
     }
 
