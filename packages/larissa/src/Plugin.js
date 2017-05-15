@@ -33,4 +33,8 @@ export default class Plugin {
         }
         return blockType;
     }
+
+    getBlockList() {
+        return this.blockTypes.getBlockList();
+    }
 }

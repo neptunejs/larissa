@@ -1,6 +1,8 @@
 // @flow
 import Pipeline from './Pipeline';
 import Plugin from './Plugin';
+import builtinBlockTypes from './Blocks/Blocks';
+import type {BlockType} from './BlockTypes';
 
 export default class Environment {
     plugins: Map<string, Plugin>;
@@ -27,5 +29,21 @@ export default class Environment {
 
     newPipeline(): Pipeline {
         return new Pipeline(this);
+    }
+
+    getBlock(name: string) {
+        const blockType = builtinBlockTypes.getBlock(name);
+        if (blockType === undefined) {
+            throw new Error(`built-in block type "${name}" does not exist`);
+        }
+        return blockType;
+    }
+
+    getBlockList(): Array<BlockType> {
+        let arr = builtinBlockTypes.getBlockList();
+        for (let plugin of this.plugins.values()) {
+            arr = arr.concat(Array.from(plugin.getBlockList()));
+        }
+        return arr;
     }
 }

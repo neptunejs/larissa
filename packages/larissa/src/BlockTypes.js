@@ -21,6 +21,10 @@ export default class BlockTypes {
     getBlock(name: string) {
         return this.blocks.get(name);
     }
+
+    getBlockList() {
+        return Array.from(this.blocks.values());
+    }
 }
 
 export class BlockType {

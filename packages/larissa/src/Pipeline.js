@@ -66,7 +66,7 @@ export default class Pipeline extends Node {
         if (typeof plugin === 'string') {
             blockType = this.env.getPlugin(plugin).getBlockType(name);
         } else {
-            blockType = builtInBlocks.getBlock(name);
+            blockType = this.env.getBlock(name);
             if (blockType === undefined) {
                 throw new Error(`no such builtin block: ${name}`);
             }
