@@ -52,6 +52,7 @@ export default class Environment {
             blockList.forEach(block => block.plugin = plugin.name);
             arr = [...arr, ...blockList];
         }
+        arr.forEach(block => block.identifier = block.plugin ? `${block.plugin}/${block.name}` : block.name);
         return arr;
     }
 }
