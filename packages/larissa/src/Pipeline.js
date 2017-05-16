@@ -2,8 +2,9 @@
 import Graph from 'graph.js/dist/graph.full';
 
 import Block from './Block';
-import Node, {INSTANTIATED} from './Node';
+import GraphEdge from './GraphEdge';
 import MapLoop from './MapLoop';
+import Node, {INSTANTIATED} from './Node';
 import builtInBlocks from './Blocks/Blocks';
 
 import type Input from './Input';
@@ -31,28 +32,31 @@ export default class Pipeline extends Node {
             nodeInput = nodeInput.input();
         }
         if (!this.nodes.has(nodeOutput.node)) {
-            throw new Error('output node not found in pipeline');
+            throw new Error(`output node ${nodeOutput.node.id} not found in pipeline`);
         }
         if (!this.nodes.has(nodeInput.node)) {
-            throw new Error('input node not found in pipeline');
+            throw new Error(`input node ${nodeInput.node.id} not found in pipeline`);
         }
         // TODO: find single type match between node1 outputs and node2 inputs ?
-        // TODO: or additional arguments to specify the input and output names
         // TODO: check that the types of node1's output is compatible with node2's input
-        // TODO: check if the connection already exists and if so throw
-        // How are inputs and outputs defined for a Pipeline ?
-        this.graph.addNewEdge(nodeOutput.id, nodeInput.id);
-        if (this.graph.hasCycle()) {
-            this.graph.removeExistingEdge(nodeOutput.id, nodeInput.id);
-            throw new Error(`cannot connect nodes ${nodeOutput.id} and ${nodeInput.id} because of cycle`);
+        let edge: GraphEdge;
+        if (this.graph.hasEdge(nodeOutput.node.id, nodeInput.node.id)) {
+            edge = this.graph.edgeValue(nodeOutput.node.id, nodeInput.node.id);
+        } else {
+            edge = new GraphEdge(nodeOutput.node, nodeInput.node);
+            this.graph.addNewEdge(nodeOutput.node.id, nodeInput.node.id, edge);
+            if (this.graph.hasCycle()) {
+                this.graph.removeExistingEdge(nodeOutput.node.id, nodeInput.node.id);
+                throw new Error(`cannot connect nodes ${nodeOutput.node.id} and ${nodeInput.node.id} because of cycle`);
+            }
         }
+        edge.addConnection(nodeOutput, nodeInput);
     }
 
     addNode(node: Node): void {
         if (this.nodes.has(node)) {
             throw new Error('node is already in pipeline');
         }
-        this.nodes.add(node);
         addNodeToGraph(node, this);
     }
 
@@ -72,7 +76,6 @@ export default class Pipeline extends Node {
             }
         }
         const node = new Block(blockType, options);
-        this.nodes.add(node);
         addNodeToGraph(node, this);
         // Todo for each input and output of this node, create a vertex and connect with the node
         return node;
@@ -88,7 +91,6 @@ export default class Pipeline extends Node {
             default:
                 throw new Error(`Unknow loop type ${options.type}`);
         }
-        this.nodes.add(loopNode);
         addNodeToGraph(loopNode, this);
         return loopNode;
     }
@@ -108,8 +110,8 @@ export default class Pipeline extends Node {
     }
 
     async _run() {
-        const self = this;
-        const endNodes: Array<Node> = Array.from(this.graph.sinks()).map(a => a[1]); // grab endNodes
+        /*const self = this;
+        /*const endNodes: Array<Node> = Array.from(this.graph.sinks()).map(mapNode); // grab endNodes
         const nodesToRun = endNodes.filter(node => node instanceof Node);
         for (const node of endNodes) {
             addParents(node);
@@ -122,8 +124,8 @@ export default class Pipeline extends Node {
                 }
                 addParents(parent);
             }
-        }
-
+        }*/
+        const nodesToRun = Array.from(this.graph.transitiveReduction().vertices_topologically()).map(mapNode);
         await this.schedule(nodesToRun);
     }
 
@@ -156,23 +158,50 @@ export default class Pipeline extends Node {
     }
 
     getConnectedOutputs(input: Input): Array<Output> {
-        return Array.from(this.graph.verticesTo(input.id)).map(([, output]) => output);
+        const nodeId = input.node.id;
+        const parentNodes: Array<string> = Array.from(this.graph.verticesTo(nodeId)).map(mapId);
+        const result = [];
+        for (const parentId of parentNodes) {
+            const graphEdge: GraphEdge = this.graph.edgeValue(parentId, nodeId);
+            for (const connection of graphEdge.connections) {
+                const [outputId, inputId] = connection.split(':');
+                if (inputId === input.id) {
+                    const [,, outputType] = outputId.split('_');
+                    result.push(graphEdge.from.output(outputType));
+                }
+            }
+        }
+        return result;
     }
 
     getConnectedInputs(output: Output): Array<Input> {
-        return Array.from(this.graph.verticesFrom(output.id)).map(([, input]) => input);
+        const nodeId = output.node.id;
+        const childNodes: Array<string> = Array.from(this.graph.verticesFrom(nodeId)).map(mapId);
+        const result = [];
+        for (const childId of childNodes) {
+            const graphEdge: GraphEdge = this.graph.edgeValue(nodeId, childId);
+            for (const connection of graphEdge.connections) {
+                const [outputId, inputId] = connection.split(':');
+                if (outputId === output.id) {
+                    const [,, inputType] = inputId.split('_');
+                    result.push(graphEdge.to.input(inputType));
+                }
+            }
+        }
+        return result;
     }
 
     linkInput(input: Input, configOrName: string | Object) {
         const config = getConfig(configOrName);
+        if (config.default && this.defaultInput) {
+            throw new Error('cannot have more than one default input');
+        }
         const id = this.newNode('identity');
         const newInput = id.input();
         newInput.node = this;
         this.inputs.set(config.name, newInput);
+        newInput.id = newInput.id.replace(/_[a-z]+$/, '_' + config.name);
         if (config.default) {
-            if (this.defaultInput) {
-                throw new Error('cannot have more than one default input');
-            }
             this.defaultInput = newInput;
         }
         this.connect(id, input);
@@ -180,14 +209,15 @@ export default class Pipeline extends Node {
 
     linkOutput(output: Output, configOrName: string) {
         const config = getConfig(configOrName);
+        if (config.default && this.defaultOutput) {
+            throw new Error('cannot have more than one default output');
+        }
         const id = this.newNode('identity');
         const newOutput = id.output();
         newOutput.node = this;
         this.outputs.set(config.name, newOutput);
+        newOutput.id = newOutput.id.replace(/_[a-z]+$/, '_' + config.name);
         if (config.default) {
-            if (this.defaultOutput) {
-                throw new Error('cannot have more than one default output');
-            }
             this.defaultOutput = newOutput;
         }
         this.connect(output, id);
@@ -222,13 +252,14 @@ function getConfig(configOrName: string | Object): Object {
 }
 
 function addNodeToGraph(node: Node, self: Pipeline) {
+    self.nodes.add(node);
     self.graph.addNewVertex(node.id, node);
-    for (const input of node.inputs.values()) {
-        self.graph.addNewVertex(input.id, input);
-        self.graph.addNewEdge(input.id, node.id);
-    }
-    for (const output of node.outputs.values()) {
-        self.graph.addNewVertex(output.id, output);
-        self.graph.addNewEdge(node.id, output.id);
-    }
+}
+
+function mapNode([, node]) {
+    return node;
+}
+
+function mapId([id]) {
+    return id;
 }
