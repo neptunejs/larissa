@@ -32,7 +32,13 @@ export default class Environment {
     }
 
     getBlock(name: string) {
-        const blockType = builtinBlockTypes.getBlock(name);
+        const s = name.split('/');
+        let blockType;
+        if (s.length === 1) {
+            blockType = builtinBlockTypes.getBlock(s[0]);
+        } else {
+            blockType = this.getPlugin(s[0]).getBlockType(s[1]);
+        }
         if (blockType === undefined) {
             throw new Error(`built-in block type "${name}" does not exist`);
         }

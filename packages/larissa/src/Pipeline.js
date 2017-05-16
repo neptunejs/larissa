@@ -57,20 +57,7 @@ export default class Pipeline extends Node {
     }
 
     newNode(identifier: string, options?: Object): Node {
-        let [plugin, name] = identifier.split('/');
-        if (name === undefined) {
-            name = plugin;
-            plugin = undefined;
-        }
-        let blockType;
-        if (typeof plugin === 'string') {
-            blockType = this.env.getPlugin(plugin).getBlockType(name);
-        } else {
-            blockType = this.env.getBlock(name);
-            if (blockType === undefined) {
-                throw new Error(`no such builtin block: ${name}`);
-            }
-        }
+        const blockType = this.env.getBlock(identifier);
         const node = new Block(blockType, options);
         this.nodes.add(node);
         addNodeToGraph(node, this);
