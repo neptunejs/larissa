@@ -110,21 +110,6 @@ export default class Pipeline extends Node {
     }
 
     async _run() {
-        /*const self = this;
-        /*const endNodes: Array<Node> = Array.from(this.graph.sinks()).map(mapNode); // grab endNodes
-        const nodesToRun = endNodes.filter(node => node instanceof Node);
-        for (const node of endNodes) {
-            addParents(node);
-        }
-        function addParents(node) {
-            for (const [, parent] of self.graph.verticesTo(node.id)) {
-                if (parent instanceof Node) {
-                    if (nodesToRun.includes(parent)) nodesToRun.splice(nodesToRun.indexOf(parent), 1);
-                    nodesToRun.unshift(parent);
-                }
-                addParents(parent);
-            }
-        }*/
         const nodesToRun = Array.from(this.graph.transitiveReduction().vertices_topologically()).map(mapNode);
         await this.schedule(nodesToRun);
     }
