@@ -22,8 +22,9 @@ export default class BlockTypes {
         return this.blocks.get(name);
     }
 
-    getBlockList() {
-        return Array.from(this.blocks.values());
+    getBlockList(): Array<Object> {
+        // We make a copy of the blocks. We don't want side effects.
+        return Array.from(this.blocks.values()).map(block => Object.assign({}, block));
     }
 }
 

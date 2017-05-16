@@ -39,10 +39,12 @@ export default class Environment {
         return blockType;
     }
 
-    getBlockList(): Array<BlockType> {
+    getBlockList(): Array<Object> {
         let arr = builtinBlockTypes.getBlockList();
         for (let plugin of this.plugins.values()) {
-            arr = arr.concat(Array.from(plugin.getBlockList()));
+            const blockList = plugin.getBlockList();
+            blockList.forEach(block => block.plugin = plugin.name);
+            arr = [...arr, ...blockList];
         }
         return arr;
     }
