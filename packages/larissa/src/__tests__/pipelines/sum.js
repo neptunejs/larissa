@@ -10,6 +10,7 @@ test('pipeline - add two numbers', async () => {
     pipeline.connect(number1, sum);
     pipeline.connect(number2, sum);
     pipeline.connect(rng, sum);
+    // console.log(JSON.stringify(pipeline.graph));
     await pipeline.run();
     expect(number1.output().getValue()).toEqual(5);
     expect(number2.output().getValue()).toEqual(10);

@@ -22,4 +22,7 @@ export default class GraphEdge {
         }
         this.connections.add(connectionId);
     }
+    toJSON() {
+        return Array.from(this.connections);
+    }
 }
