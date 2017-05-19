@@ -68,21 +68,22 @@ export default class Node extends EventEmitter {
     }
 
     async run() {
-        if (this._status === RUNNING) {
+        // TODO: how can we prevent the end-user to set status?
+        if (this.status === RUNNING) {
             throw new Error('node is already running');
         }
-        if (this._status === FINISHED) {
+        if (this.status === FINISHED) {
             return;
         }
-        this._status = RUNNING;
+        this.status = RUNNING;
         try {
             await this._run();
         } catch (e) {
-            this._status = ERRORED;
+            this.status = ERRORED;
             this.error = e;
             throw e;
         }
-        this._status = FINISHED;
+        this.status = FINISHED;
     }
 
     async _run() {

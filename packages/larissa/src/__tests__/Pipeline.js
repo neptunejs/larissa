@@ -1,7 +1,7 @@
 import Environment from '../Environment';
 import Node, {ERRORED, FINISHED} from '../Node';
 import sinon from 'sinon';
-describe('Pipeline low level tests', function() {
+describe('Pipeline low level tests', function () {
     it('should detect updated status on nodes that the pipeline owns', function () {
         const env = new Environment();
         const pipeline = env.newPipeline();
