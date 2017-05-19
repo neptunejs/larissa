@@ -53,6 +53,15 @@ export default class Pipeline extends Node {
         edge.addConnection(nodeOutput, nodeInput);
     }
 
+    getNode(id: string): Node | null {
+        for (let node of this.nodes) {
+            if (node.id === id) {
+                return node;
+            }
+        }
+        return null;
+    }
+
     addNode(node: Node): void {
         if (this.nodes.has(node)) {
             throw new Error('node is already in pipeline');
@@ -138,7 +147,7 @@ export default class Pipeline extends Node {
             for (const connection of graphEdge.connections) {
                 const [outputId, inputId] = connection.split(':');
                 if (inputId === input.id) {
-                    const [,, outputType] = outputId.split('_');
+                    const [, , outputType] = outputId.split('_');
                     result.push(graphEdge.from.output(outputType));
                 }
             }
@@ -155,7 +164,7 @@ export default class Pipeline extends Node {
             for (const connection of graphEdge.connections) {
                 const [outputId, inputId] = connection.split(':');
                 if (outputId === output.id) {
-                    const [,, inputType] = inputId.split('_');
+                    const [, , inputType] = inputId.split('_');
                     result.push(graphEdge.to.input(inputType));
                 }
             }
