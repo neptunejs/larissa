@@ -5,7 +5,6 @@ import Block from './Block';
 import GraphEdge from './GraphEdge';
 import MapLoop from './MapLoop';
 import Node, {INSTANTIATED} from './Node';
-import builtInBlocks from './Blocks/Blocks';
 
 import type Input from './Input';
 import type Output from './Output';
@@ -73,7 +72,6 @@ export default class Pipeline extends Node {
         const blockType = this.env.getBlock(identifier);
         const node = new Block(blockType, options);
         addNodeToGraph(node, this);
-        // Todo for each input and output of this node, create a vertex and connect with the node
         return node;
     }
 
@@ -234,6 +232,9 @@ function getConfig(configOrName: string | Object): Object {
 }
 
 function addNodeToGraph(node: Node, self: Pipeline) {
+    node.on('status', status => {
+        self.emit('child-status', status, node);
+    });
     self.nodes.add(node);
     self.graph.addNewVertex(node.id, node);
 }
