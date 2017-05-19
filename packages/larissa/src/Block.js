@@ -38,7 +38,8 @@ export default class Block extends Node {
             kind: 'block',
             id: this.id,
             type: this.blockType.name,
-            options: this.options
+            options: this.options,
+            status: this.status
         };
     }
 }

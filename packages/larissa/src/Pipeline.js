@@ -205,7 +205,8 @@ export default class Pipeline extends Node {
     inspect() {
         return {
             kind: 'pipeline',
-            id: this.id
+            id: this.id,
+            status: this.status
         };
     }
 }

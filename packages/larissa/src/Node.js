@@ -76,6 +76,10 @@ export default class Node {
         throw new Error('Node.run: implement me');
     }
 
+    inspect() {
+        throw new Error('Node.inspect: implement me');
+    }
+
     toJSON() {
         return {
             kind: 'node'

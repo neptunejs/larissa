@@ -5,6 +5,7 @@ import Output from './Output';
 
 class MapLoop extends Node {
     loopNode: Node;
+
     constructor(node: Node) {
         super();
         this.loopNode = node;
@@ -42,6 +43,14 @@ class MapLoop extends Node {
             result.push(this.loopNode.outputs.get(outKey).getValue());
         }
         this.outputs.get(outKey).setValue(result);
+    }
+
+    inspect() {
+        return {
+            kind: 'MapLoop',
+            id: this.id,
+            status: this.status
+        };
     }
 }
 
