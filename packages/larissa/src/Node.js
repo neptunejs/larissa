@@ -3,10 +3,11 @@ import uuid from 'uuid/v4';
 
 import Input from './Input';
 import Output from './Output';
+import EventEmitter from 'events';
 
-export default class Node {
+export default class Node extends EventEmitter {
     id: string;
-    status: NodeStatus;
+    _status: NodeStatus;
     inputs: Map<string, Input>;
     outputs: Map<string, Output>;
     defaultInput: ?Input;
@@ -14,10 +15,11 @@ export default class Node {
     error: Error;
 
     constructor() {
+        super();
         this.id = uuid();
         this.inputs = new Map();
         this.outputs = new Map();
-        this.status = INSTANTIATED;
+        this._status = INSTANTIATED;
     }
 
     output(name?: string): Output {
@@ -44,8 +46,19 @@ export default class Node {
         }
     }
 
+    set status(status: NodeStatus) {
+        if (this._status !== status) {
+            this._status = status;
+            this.emit('status', status);
+        }
+    }
+
+    get status(): NodeStatus {
+        return this._status;
+    }
+
     reset(): void {
-        this.status = INSTANTIATED;
+        this._status = INSTANTIATED;
         for (const input of this.inputs.values()) {
             input.reset();
         }
@@ -55,21 +68,21 @@ export default class Node {
     }
 
     async run() {
-        if (this.status === RUNNING) {
+        if (this._status === RUNNING) {
             throw new Error('node is already running');
         }
-        if (this.status === FINISHED) {
+        if (this._status === FINISHED) {
             return;
         }
-        this.status = RUNNING;
+        this._status = RUNNING;
         try {
             await this._run();
         } catch (e) {
-            this.status = ERRORED;
+            this._status = ERRORED;
             this.error = e;
             throw e;
         }
-        this.status = FINISHED;
+        this._status = FINISHED;
     }
 
     async _run() {
