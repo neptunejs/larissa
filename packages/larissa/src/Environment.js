@@ -2,7 +2,6 @@
 import Pipeline from './Pipeline';
 import Plugin from './Plugin';
 import builtinBlockTypes from './Blocks/Blocks';
-import type {BlockType} from './BlockTypes';
 
 export default class Environment {
     plugins: Map<string, Plugin>;

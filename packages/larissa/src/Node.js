@@ -17,6 +17,7 @@ export default class Node {
         this.id = uuid();
         this.inputs = new Map();
         this.outputs = new Map();
+        this.status = INSTANTIATED;
     }
 
     output(name?: string): Output {
