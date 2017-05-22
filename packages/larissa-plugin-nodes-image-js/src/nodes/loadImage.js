@@ -1,5 +1,3 @@
-import Image from 'image-js';
-
 export default {
     name: 'load',
     inputs: [],
@@ -17,5 +15,6 @@ export default {
 
 async function loadImage(ctx) {
     const path = ctx.getOptions().path;
-    ctx.setOutput('loaded', await Image.load(path));
+    const ImageJS = await import('image-js');
+    ctx.setOutput('loaded', await ImageJS.default.load(path));
 }
