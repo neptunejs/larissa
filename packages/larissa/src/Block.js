@@ -25,6 +25,11 @@ export default class Block extends Node {
         return this.blockType.executor(context);
     }
 
+    setOptions(options) {
+        this.options = options;
+        this.reset();
+    }
+
     toJSON() {
         return {
             kind: 'block',
