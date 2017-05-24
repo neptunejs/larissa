@@ -24,7 +24,10 @@ export default class Block extends Node {
     async _run(options: Object = {}) {
         const context = new Context(this, options);
         if (this.options && this.blockType.validator) {
-            this.blockType.validator(this.options);
+            const result = this.blockType.validator(this.options);
+            if (!result) {
+                throw new Error('options do not satisfy validation rules');
+            }
         }
         return this.blockType.executor(context);
     }
