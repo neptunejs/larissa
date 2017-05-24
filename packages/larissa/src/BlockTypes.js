@@ -2,9 +2,11 @@
 import schemaValidator from 'is-my-json-valid';
 
 export default class BlockTypes {
+    prefix: string;
     blocks: Map<string, BlockType>;
 
-    constructor() {
+    constructor(pluginName: string) {
+        this.prefix = pluginName === '' ? '' : `${pluginName}/`;
         this.blocks = new Map();
     }
 
@@ -15,7 +17,7 @@ export default class BlockTypes {
         if (this.blocks.has(definition.name)) {
             throw new Error(`existing block with name ${definition.name}`);
         }
-        this.blocks.set(definition.name, new BlockType(definition));
+        this.blocks.set(definition.name, new BlockType(definition, this.prefix));
     }
 
     getBlock(name: string) {
@@ -30,14 +32,18 @@ export default class BlockTypes {
 
 export class BlockType {
     name: string;
+    identifier: string;
+    plugin: string;
     inputs: Array<Object>;
     outputs: Array<Object>;
     schema: ?Object;
     validator: ?(Object) => void;
     executor: (Object) => Promise<mixed>;
 
-    constructor(definition: Object) {
+    constructor(definition: Object, prefix: string) {
         this.name = definition.name;
+        this.plugin = prefix.replace('/', '');
+        this.identifier = prefix + this.name;
         this.inputs = [];
         this.outputs = [];
         this.schema = null;

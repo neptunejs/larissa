@@ -1,6 +1,6 @@
 // @flow
 import BlockTypes from '../BlockTypes';
-const blockTypes = new BlockTypes();
+const blockTypes = new BlockTypes('');
 export default blockTypes;
 
 import identity from './identity';

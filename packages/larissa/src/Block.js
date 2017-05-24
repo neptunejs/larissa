@@ -10,10 +10,10 @@ export default class Block extends Node {
     blockType: BlockType;
     options: ?Object;
 
-    constructor(blockType: BlockType, options?: Object) {
+    constructor(blockType: BlockType, options: Object = {}) {
         super();
         this.blockType = blockType;
-        this.options = options === undefined ? {} : options;
+        this.options = options;
         createAllPorts(this);
     }
 
@@ -37,19 +37,16 @@ export default class Block extends Node {
     toJSON() {
         return {
             kind: this.kind,
+            id: this.id,
             type: this.blockType.name,
-            options: this.options
+            blockType: this.blockType,
+            options: this.options,
+            status: this.status
         };
     }
 
     inspect() {
-        return {
-            kind: this.kind,
-            id: this.id,
-            type: this.blockType.name,
-            options: this.options,
-            status: this.status
-        };
+        return this.toJSON();
     }
 }
 

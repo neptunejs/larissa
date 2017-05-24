@@ -15,7 +15,7 @@ export default class Plugin {
             throw new TypeError('plugin.name must be a string');
         }
         this.name = definition.name;
-        this.blockTypes = new BlockTypes();
+        this.blockTypes = new BlockTypes(this.name);
         if (definition.blocks) {
             if (!Array.isArray(definition.blocks)) {
                 throw new TypeError('plugin.blocks must be an array if present');
