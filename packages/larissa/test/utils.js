@@ -1,9 +1,10 @@
-import {BlockType} from '../src/BlockTypes';
 import Block from '../src/Block';
+import Env from '../src/Environment';
 
-export async function checkBlock(blockDefinition, inputs, outputs, options) {
-    const blockType = new BlockType(blockDefinition);
-    const block = new Block(blockType, options);
+const env = new Env();
+
+export async function checkBlock(type, inputs, outputs, options) {
+    const block = createBlock(type, options);
     if (typeof inputs === 'object') {
         for (const i in inputs) {
             block.input(i).setValue(inputs[i]);
