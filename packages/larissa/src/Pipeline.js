@@ -212,14 +212,6 @@ export default class Pipeline extends Node {
             graph: this.graph.toJSON()
         };
     }
-
-    inspect() {
-        return {
-            kind: this.kind,
-            id: this.id,
-            status: this.status
-        };
-    }
 }
 
 function getConfig(configOrName: string | Object): Object {

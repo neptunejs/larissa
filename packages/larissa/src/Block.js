@@ -44,10 +44,6 @@ export default class Block extends Node {
             status: this.status
         };
     }
-
-    inspect() {
-        return this.toJSON();
-    }
 }
 
 function createAllPorts(self: Block): void {

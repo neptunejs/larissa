@@ -49,14 +49,6 @@ class MapLoop extends Node {
         }
         this.outputs.get(outKey).setValue(result);
     }
-
-    inspect() {
-        return {
-            kind: this.kind,
-            id: this.id,
-            status: this.status
-        };
-    }
 }
 
 export default MapLoop;
