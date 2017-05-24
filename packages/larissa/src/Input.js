@@ -1,11 +1,15 @@
 // @flow
 import Port from './Port';
+import type Node from './Node';
 
 export default class Input extends Port {
     multiple: boolean;
+    required: boolean;
 
-    constructor(...args: Array<any>) {
-        super(...args);
+    constructor(node: Node, options: Object) {
+        super(node, options);
+
+        this.required = !!options.required;
         this.multiple = false;
     }
 
@@ -15,5 +19,9 @@ export default class Input extends Port {
 
     isMultiple(): boolean {
         return this.multiple;
+    }
+
+    isRequired(): boolean {
+        return this.required;
     }
 }

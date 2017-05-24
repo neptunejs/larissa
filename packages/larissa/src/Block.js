@@ -21,13 +21,17 @@ export default class Block extends Node {
         return 'block';
     }
 
+    _canRun(): boolean {
+        if (this.blockType.validator) {
+            return this.blockType.validator(this.options);
+        }
+        return true;
+    }
+
     async _run(options: Object = {}) {
         const context = new Context(this, options);
-        if (this.options && this.blockType.validator) {
-            const result = this.blockType.validator(this.options);
-            if (!result) {
-                throw new Error('options do not satisfy validation rules');
-            }
+        if (!this._canRun()) {
+            throw new Error('options do not satisfy validation rules');
         }
         return this.blockType.executor(context);
     }

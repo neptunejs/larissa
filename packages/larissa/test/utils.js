@@ -20,3 +20,11 @@ export async function checkBlock(blockDefinition, inputs, outputs, options) {
         expect(block.output().getValue()).toEqual(outputs);
     }
 }
+
+export function getBlockType(type) {
+    return env.getBlock(type);
+}
+
+export function createBlock(type, options) {
+    return new Block(getBlockType(type), options);
+}

@@ -12,7 +12,8 @@ export default {
         {
             name: 'json',
             type: 'string',
-            multiple: false
+            multiple: false,
+            required: true
         }
     ],
     executor: setOutput

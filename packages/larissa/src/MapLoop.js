@@ -30,6 +30,10 @@ class MapLoop extends Node {
         return 'map-loop';
     }
 
+    _canRun() {
+        return true;
+    }
+
     async run() {
         const key = this.inputs.keys().next().value;
         const outKey = this.outputs.keys().next().value;
@@ -44,7 +48,7 @@ class MapLoop extends Node {
             this.loopNode.reset();
             this.loopNode.inputs.get(key).setValue(val);
             await
-            this.loopNode.run();
+                this.loopNode.run();
             result.push(this.loopNode.outputs.get(outKey).getValue());
         }
         this.outputs.get(outKey).setValue(result);

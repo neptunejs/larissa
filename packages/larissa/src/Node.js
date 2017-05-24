@@ -71,7 +71,25 @@ export default class Node extends EventEmitter {
         }
     }
 
+    _canRun(): boolean {
+        throw new Error('Node._canRun: implement me');
+    }
+
+    canRun(): boolean {
+        // check all required inputs are present
+        for (const input of this.inputs.values()) {
+            if (input.isRequired() && !input.hasValue()) {
+                return false;
+            }
+        }
+        return this._canRun();
+    }
+
     async run() {
+        if (!this.canRun()) {
+            this.status = ERRORED;
+            throw new Error('Cannot run node, required input ports do not have values');
+        }
         // TODO: how can we prevent the end-user to set status?
         if (this.status === RUNNING) {
             throw new Error('node is already running');

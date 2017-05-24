@@ -112,6 +112,10 @@ export default class Pipeline extends Node {
         await this.schedule(nodesToRun);
     }
 
+    _canRun() {
+        return true;
+    }
+
     reset(): void {
         super.reset();
         for (let node of this.nodes) {
