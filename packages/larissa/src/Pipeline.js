@@ -23,6 +23,10 @@ export default class Pipeline extends Node {
         this.nodes = new Set();
     }
 
+    get kind(): string {
+        return 'pipeline';
+    }
+
     connect(nodeOutput: Node | Output, nodeInput: Node | Input) {
         if (nodeOutput instanceof Node) {
             nodeOutput = nodeOutput.output();
@@ -204,14 +208,14 @@ export default class Pipeline extends Node {
 
     toJSON() {
         return {
-            kind: 'pipeline',
+            kind: this.kind,
             graph: this.graph.toJSON()
         };
     }
 
     inspect() {
         return {
-            kind: 'pipeline',
+            kind: this.kind,
             id: this.id,
             status: this.status
         };

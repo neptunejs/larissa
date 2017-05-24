@@ -26,6 +26,10 @@ class MapLoop extends Node {
         }
     }
 
+    get kind(): string {
+        return 'map-loop';
+    }
+
     async run() {
         const key = this.inputs.keys().next().value;
         const outKey = this.outputs.keys().next().value;
@@ -39,7 +43,8 @@ class MapLoop extends Node {
         for (let val of value) {
             this.loopNode.reset();
             this.loopNode.inputs.get(key).setValue(val);
-            await this.loopNode.run();
+            await
+            this.loopNode.run();
             result.push(this.loopNode.outputs.get(outKey).getValue());
         }
         this.outputs.get(outKey).setValue(result);
@@ -47,7 +52,7 @@ class MapLoop extends Node {
 
     inspect() {
         return {
-            kind: 'MapLoop',
+            kind: this.kind,
             id: this.id,
             status: this.status
         };

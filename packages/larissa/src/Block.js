@@ -17,6 +17,10 @@ export default class Block extends Node {
         createAllPorts(this);
     }
 
+    get kind(): string {
+        return 'block';
+    }
+
     async _run(options: Object = {}) {
         const context = new Context(this, options);
         if (this.options && this.blockType.validator) {
@@ -25,14 +29,14 @@ export default class Block extends Node {
         return this.blockType.executor(context);
     }
 
-    setOptions(options) {
+    setOptions(options: Object) {
         this.options = options;
         this.reset();
     }
 
     toJSON() {
         return {
-            kind: 'block',
+            kind: this.kind,
             type: this.blockType.name,
             options: this.options
         };
@@ -40,7 +44,7 @@ export default class Block extends Node {
 
     inspect() {
         return {
-            kind: 'block',
+            kind: this.kind,
             id: this.id,
             type: this.blockType.name,
             options: this.options,

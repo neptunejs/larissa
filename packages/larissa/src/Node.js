@@ -22,6 +22,10 @@ export default class Node extends EventEmitter {
         this._status = INSTANTIATED;
     }
 
+    get kind(): string {
+        throw new Error('Node.kind: implement me');
+    }
+
     output(name?: string): Output {
         if (name === undefined) {
             const output = this.defaultOutput;
