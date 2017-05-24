@@ -62,7 +62,7 @@ export default class Node extends EventEmitter {
     }
 
     reset(): void {
-        this._status = INSTANTIATED;
+        this.status = INSTANTIATED;
         for (const input of this.inputs.values()) {
             input.reset();
         }
