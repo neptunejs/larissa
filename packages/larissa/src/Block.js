@@ -13,7 +13,7 @@ export default class Block extends Node {
     constructor(blockType: BlockType, options?: Object) {
         super();
         this.blockType = blockType;
-        this.options = options;
+        this.options = options === undefined ? {} : options;
         createAllPorts(this);
     }
 
