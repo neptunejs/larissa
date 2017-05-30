@@ -28,6 +28,17 @@ export default class Pipeline extends Node {
         return 'pipeline';
     }
 
+    findNode(nodeId: string) {
+        for (let node of this.nodes) {
+            if (node.id === nodeId) return node;
+            if (node.kind === 'pipeline') {
+                const subNode = node.findNode(nodeId);
+                if (subNode) return subNode;
+            }
+        }
+        return null;
+    }
+
     connect(nodeOutput: Node | Output, nodeInput: Node | Input) {
         if (nodeOutput instanceof Node) {
             nodeOutput = nodeOutput.output();
