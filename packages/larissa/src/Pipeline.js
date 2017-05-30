@@ -213,6 +213,8 @@ export default class Pipeline extends Node {
     toJSON() {
         return {
             kind: this.kind,
+            status: this.status,
+            id: this.id,
             graph: this.graph.toJSON()
         };
     }
