@@ -13,24 +13,46 @@ const watch = require('gulp-watch');
 const base = path.join(__dirname, 'packages');
 const scripts = ['./packages/*/src/**/*.js', '!./packages/*/src/**/__tests__/**/*'];
 
-function swapSrcWithLib(srcPath) {
-    const parts = srcPath.split(path.sep);
-    parts[1] = 'lib';
-    return parts.join(path.sep);
+function swapSrcWithLib(name) {
+    return function (srcPath) {
+        const parts = srcPath.split(path.sep);
+        parts[1] = name;
+        return parts.join(path.sep);
+    };
 }
 
 gulp.task('default', ['build']);
+gulp.task('build', ['build-lib', 'build-module']);
 
-gulp.task('build', function () {
+gulp.task('build-lib', function () {
     return gulp.src(scripts, {base})
         .pipe(newer({
             dest: base,
-            map: swapSrcWithLib
+            map: swapSrcWithLib('lib')
         }))
         .pipe(babel())
         .pipe(through.obj(function (file, enc, callback) {
             // Passing 'file.relative' because newer() above uses a relative path and this keeps it consistent.
-            file.path = path.resolve(file.base, swapSrcWithLib(file.relative));
+            file.path = path.resolve(file.base, swapSrcWithLib('lib')(file.relative));
+            callback(null, file);
+        }))
+        .pipe(gulp.dest(base));
+});
+
+gulp.task('build-module', function () {
+    return gulp.src(scripts, {base})
+        .pipe(newer({
+            dest: base,
+            map: swapSrcWithLib('lib-module')
+        }))
+        .pipe(babel({
+            babelrc: false,
+            plugins: ['syntax-dynamic-import'],
+            presets: ['flow']
+        }))
+        .pipe(through.obj(function (file, enc, callback) {
+            // Passing 'file.relative' because newer() above uses a relative path and this keeps it consistent.
+            file.path = path.resolve(file.base, swapSrcWithLib('lib-module')(file.relative));
             callback(null, file);
         }))
         .pipe(gulp.dest(base));

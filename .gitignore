@@ -40,3 +40,4 @@ jspm_packages
 
 .eslintcache
 /packages/*/lib/
+/packages/*/lib-module/

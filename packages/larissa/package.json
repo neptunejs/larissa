@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "description": "JavaScript engine for dataflow programming",
   "main": "lib/index.js",
-  "module": "src/index.js",
+  "module": "lib-module/index.js",
   "keywords": [
     "dataflow",
     "pipeline",
