@@ -1,6 +1,6 @@
 {
   "name": "larissa-plugin-nodes-image-js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "lib/index.js",
   "module": "lib-module/index.js",
