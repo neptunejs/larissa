@@ -98,8 +98,13 @@ export default class Pipeline extends Node {
             throw new Error('node not found in pipeline');
         }
         this.nodes.delete(node);
+        for (let [otherId] of this.graph.verticesTo(node.id)) {
+            this.graph.removeExistingEdge(otherId, node.id);
+        }
+        for (let [otherId] of this.graph.verticesFrom(node.id)) {
+            this.graph.removeExistingEdge(node.id, otherId);
+        }
         this.graph.removeExistingVertex(node.id);
-        // Todo for each input and output of this node, remove corresponding vertices
     }
 
     async run() {
