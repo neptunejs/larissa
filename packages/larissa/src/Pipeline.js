@@ -220,6 +220,8 @@ export default class Pipeline extends Node {
             kind: this.kind,
             status: this.status,
             id: this.id,
+            inputs: inputsToArray(this.inputs),
+            outputs: outputsToArray(this.outputs),
             graph: this.graph.toJSON()
         };
     }
@@ -252,4 +254,30 @@ function mapNode([, node]) {
 
 function mapId([id]) {
     return id;
+}
+
+function inputsToArray(ports: Map<string, Input>): Array<Object> {
+    const arr = [];
+    for (let port of ports.values()) {
+        var obj = {
+            id: port.id,
+            name: port.name,
+            multiple: port.multiple,
+            required: port.required
+        };
+        arr.push(obj);
+    }
+    return arr;
+}
+
+function outputsToArray(ports: Map<string, Input>): Array<Object> {
+    const arr = [];
+    for (let port of ports.values()) {
+        var obj = {
+            id: port.id,
+            name: port.name,
+        };
+        arr.push(obj);
+    }
+    return arr;
 }
