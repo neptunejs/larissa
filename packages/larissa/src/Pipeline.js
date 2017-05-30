@@ -131,22 +131,36 @@ export default class Pipeline extends Node {
     }
 
     async schedule(nodeList: Array<Node>) {
-        for (const node of nodeList) {
-            for (const input of node.inputs.values()) {
-                if (!input.hasValue()) {
-                    if (input.isMultiple()) {
-                        const value = [];
-                        for (const output of this.getConnectedOutputs(input)) {
-                            value.push(output.getValue());
-                        }
-                        input.setValue(value);
-                    } else {
-                        const output = this.getConnectedOutputs(input)[0];
-                        input.setValue(output.getValue());
-                    }
+        const erroredNodes: Set<string> = new Set();
+        main: for (const node of nodeList) {
+            for (const errored of erroredNodes) {
+                if (this.graph.hasPath(errored, node.id)) {
+                    continue main;
                 }
             }
-            await node.run();
+            try {
+                for (const input of node.inputs.values()) {
+                    if (!input.hasValue()) {
+                        if (input.isMultiple()) {
+                            const value = [];
+                            for (const output of this.getConnectedOutputs(input)) {
+                                value.push(output.getValue());
+                            }
+                            input.setValue(value);
+                        } else {
+                            const output = this.getConnectedOutputs(input)[0];
+                            input.setValue(output.getValue());
+                        }
+                    }
+                }
+                await node.run();
+            } catch (e) {
+                this.emit('runError', e);
+                erroredNodes.add(node.id);
+            }
+        }
+        if (erroredNodes.size > 0) {
+            throw new Error('Error occured in pipeline');
         }
     }
 
