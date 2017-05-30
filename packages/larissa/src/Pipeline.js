@@ -21,6 +21,7 @@ export default class Pipeline extends Node {
         this.env = env;
         this.graph = new Graph();
         this.nodes = new Set();
+        this.title = 'Pipeline';
     }
 
     get kind(): string {
@@ -222,7 +223,8 @@ export default class Pipeline extends Node {
             id: this.id,
             inputs: inputsToArray(this.inputs),
             outputs: outputsToArray(this.outputs),
-            graph: this.graph.toJSON()
+            graph: this.graph.toJSON(),
+            title: this.title
         };
     }
 }

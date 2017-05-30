@@ -13,6 +13,7 @@ export default class Node extends EventEmitter {
     defaultInput: ?Input;
     defaultOutput: ?Output;
     error: Error;
+    title: string;
 
     constructor() {
         super();
@@ -24,6 +25,10 @@ export default class Node extends EventEmitter {
 
     get kind(): string {
         throw new Error('Node.kind: implement me');
+    }
+
+    setTitle(title) {
+        this.title = title;
     }
 
     output(name?: string): Output {

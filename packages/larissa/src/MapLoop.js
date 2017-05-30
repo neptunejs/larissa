@@ -9,6 +9,7 @@ class MapLoop extends Node {
     constructor(node: Node) {
         super();
         this.loopNode = node;
+        this.title = 'MapLoop';
         for (let [key, val] of node.inputs.entries()) {
             const input = new Input(this, {
                 name: val.name,

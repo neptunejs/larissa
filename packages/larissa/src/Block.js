@@ -15,6 +15,7 @@ export default class Block extends Node {
         this.blockType = blockType;
         this.options = options;
         createAllPorts(this);
+        this.title = this.blockType.defaultTitle || this.blockType.name;
     }
 
     get kind(): string {
@@ -48,7 +49,8 @@ export default class Block extends Node {
             type: this.blockType.name,
             blockType: this.blockType,
             options: this.options,
-            status: this.status
+            status: this.status,
+            title: this.title
         };
     }
 }
