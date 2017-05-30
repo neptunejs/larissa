@@ -5,7 +5,6 @@ export default class Port {
     id: string;
     name: string;
     node: Node;
-    type: string;
     value: any;
 
     constructor(node: Node, options: Object) {
