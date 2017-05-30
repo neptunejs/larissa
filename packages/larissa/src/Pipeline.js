@@ -93,7 +93,7 @@ export default class Pipeline extends Node {
         return loopNode;
     }
 
-    removeNode(node: Node): void {
+    deleteNode(node: Node): void {
         if (!this.nodes.has(node)) {
             throw new Error('node not found in pipeline');
         }
