@@ -1,17 +1,17 @@
 // @flow
 import uuid from 'uuid/v4';
 
-import Input from './Input';
-import Output from './Output';
+import InputPort from './InputPort';
+import OutputPort from './OutputPort';
 import EventEmitter from 'events';
 
 export default class Node extends EventEmitter {
     id: string;
     _status: NodeStatus;
-    inputs: Map<string, Input>;
-    outputs: Map<string, Output>;
-    defaultInput: ?Input;
-    defaultOutput: ?Output;
+    inputs: Map<string, InputPort>;
+    outputs: Map<string, OutputPort>;
+    defaultInput: ?InputPort;
+    defaultOutput: ?OutputPort;
     error: Error;
     title: string;
 
@@ -31,7 +31,7 @@ export default class Node extends EventEmitter {
         this.title = title;
     }
 
-    output(name?: string): Output {
+    output(name?: string): OutputPort {
         if (name === undefined) {
             const output = this.defaultOutput;
             if (!output) throw new Error('Node has no default output');
@@ -43,7 +43,7 @@ export default class Node extends EventEmitter {
         }
     }
 
-    input(name?: string): Input {
+    input(name?: string): InputPort {
         if (name === undefined) {
             const input = this.defaultInput;
             if (!input) throw new Error('Node has no default input');

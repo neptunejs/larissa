@@ -31,6 +31,6 @@ describe('pipeline inceptions', function () {
 
         const pOut = env.newPipeline();
         pOut.addNode(pIn);
-        pOut.toJSON();
+        pOut.toJSON(); // should not throw
     });
 });

@@ -1,8 +1,8 @@
 // @flow
 
-import type Input from './Input';
+import type Input from './InputPort';
 import type Node from './Node';
-import type Output from './Output';
+import type Output from './OutputPort';
 
 export default class GraphEdge {
     from: Node;

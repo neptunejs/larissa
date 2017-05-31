@@ -2,7 +2,7 @@
 import Port from './Port';
 import type Node from './Node';
 
-export default class Input extends Port {
+export default class InputPort extends Port {
     multiple: boolean;
     required: boolean;
 

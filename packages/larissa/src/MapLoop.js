@@ -1,7 +1,7 @@
 // @flow
 import Node from './Node';
-import Input from './Input';
-import Output from './Output';
+import Input from './InputPort';
+import Output from './OutputPort';
 
 class MapLoop extends Node {
     loopNode: Node;

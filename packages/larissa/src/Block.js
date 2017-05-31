@@ -1,7 +1,7 @@
 // @flow
 import Node from './Node';
-import Input from './Input';
-import Output from './Output';
+import Input from './InputPort';
+import Output from './OutputPort';
 import Context from './BlockContext';
 
 import type {BlockType} from './BlockTypes';
