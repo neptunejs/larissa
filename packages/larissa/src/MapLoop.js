@@ -47,12 +47,14 @@ class MapLoop extends Node {
         const result = [];
         for (let val of value) {
             this.loopNode.reset();
-            this.loopNode.inputs.get(key).setValue(val);
-            await
-                this.loopNode.run();
-            result.push(this.loopNode.outputs.get(outKey).getValue());
+            const loopInput: any = this.loopNode.inputs.get(key);
+            loopInput.setValue(val);
+            await this.loopNode.run();
+            const loopOutput: any = this.loopNode.outputs.get(outKey);
+            result.push(loopOutput.getValue());
         }
-        this.outputs.get(outKey).setValue(result);
+        const output: any = this.outputs.get(outKey);
+        output.setValue(result);
     }
 }
 

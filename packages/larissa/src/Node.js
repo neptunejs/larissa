@@ -27,7 +27,7 @@ export default class Node extends EventEmitter {
         throw new Error('Node.kind: implement me');
     }
 
-    setTitle(title) {
+    setTitle(title: string): void {
         this.title = title;
     }
 
@@ -125,8 +125,9 @@ export default class Node extends EventEmitter {
 }
 
 export const INSTANTIATED: 'INSTANTIATED' = 'INSTANTIATED';
+export const READY: 'READY' = 'READY';
 export const ERRORED: 'ERRORED' = 'ERRORED';
 export const RUNNING: 'RUNNING' = 'RUNNING';
 export const FINISHED: 'FINISHED' = 'FINISHED';
 
-type NodeStatus = typeof ERRORED | typeof INSTANTIATED | typeof RUNNING | typeof FINISHED;
+type NodeStatus = typeof INSTANTIATED | typeof READY | typeof ERRORED | typeof RUNNING | typeof FINISHED;

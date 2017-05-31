@@ -8,14 +8,14 @@ import type {BlockType} from './BlockTypes';
 
 export default class Block extends Node {
     blockType: BlockType;
-    options: ?Object;
+    options: Object;
 
     constructor(blockType: BlockType, options: Object = {}) {
         super();
         this.blockType = blockType;
         this.options = options;
         createAllPorts(this);
-        this.title = this.blockType.defaultTitle || this.blockType.name;
+        this.title = this.blockType.name;
     }
 
     get kind(): string {

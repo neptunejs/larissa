@@ -37,7 +37,7 @@ export class BlockType {
     inputs: Array<Object>;
     outputs: Array<Object>;
     schema: ?Object;
-    validator: ?(Object) => void;
+    validator: ?(Object) => boolean;
     executor: (Object) => Promise<mixed>;
 
     constructor(definition: Object, prefix: string) {

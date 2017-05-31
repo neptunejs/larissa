@@ -31,7 +31,7 @@ export default class Pipeline extends Node {
     findNode(nodeId: string) {
         for (let node of this.nodes) {
             if (node.id === nodeId) return node;
-            if (node.kind === 'pipeline') {
+            if (node instanceof Pipeline) {
                 const subNode = node.findNode(nodeId);
                 if (subNode) return subNode;
             }
@@ -297,7 +297,7 @@ function inputsToArray(ports: Map<string, Input>): Array<Object> {
     return arr;
 }
 
-function outputsToArray(ports: Map<string, Input>): Array<Object> {
+function outputsToArray(ports: Map<string, Output>): Array<Object> {
     const arr = [];
     for (let port of ports.values()) {
         var obj = {
