@@ -295,6 +295,9 @@ function getConfig(configOrName: string | Object): Object {
 
 function addNodeToGraph(node: Node, self: Pipeline) {
     node.on('status', status => {
+        if (status === INSTANTIATED) {
+            self.status = INSTANTIATED;
+        }
         self.emit('child-status', status, node);
     });
     self.nodes.add(node);

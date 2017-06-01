@@ -1,4 +1,5 @@
 import Environment from '../Environment';
+import {INSTANTIATED, FINISHED} from '../Node';
 
 describe('reset method of nodes', () => {
     it('reset individual blocks', async () => {
@@ -25,6 +26,26 @@ describe('reset method of nodes', () => {
         await pipeline.run();
         expect(node2.output().getValue()).toEqual(10);
         expect(plugin.stats.executed).toEqual(2);
+    });
+
+    it('reset a block should change its parent status', async () => {
+        const env = new Environment();
+        const pipeline = env.newPipeline();
+        const node1 = pipeline.newNode('number', {value: 42});
+        const node1Output = node1.output();
+        expect(node1.status).toEqual(INSTANTIATED);
+        expect(pipeline.status).toEqual(INSTANTIATED);
+
+        await pipeline.run();
+        expect(node1Output.hasValue()).toEqual(true);
+        expect(node1Output.getValue()).toEqual(42);
+        expect(node1.status).toEqual(FINISHED);
+        expect(pipeline.status).toEqual(FINISHED);
+
+        node1.reset();
+        expect(node1Output.hasValue()).toEqual(false);
+        expect(node1.status).toEqual(INSTANTIATED);
+        expect(pipeline.status).toEqual(INSTANTIATED);
     });
 });
 
