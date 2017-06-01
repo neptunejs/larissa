@@ -34,6 +34,7 @@ export default class Pipeline extends Node {
     }
 
     findNode(nodeId: string) {
+        if (this.id === nodeId) return this;
         for (let node of this.nodes) {
             if (node.id === nodeId) return node;
             if (node instanceof Pipeline) {
