@@ -24,4 +24,11 @@ export default class InputPort extends Port {
     isRequired(): boolean {
         return this.required;
     }
+
+    toJSON() {
+        return Object.assign(super.toJSON(), {
+            required: this.required,
+            multiple: this.multiple
+        });
+    }
 }

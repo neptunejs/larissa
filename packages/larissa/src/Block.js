@@ -42,6 +42,12 @@ export default class Block extends Node {
         this.reset();
     }
 
+    inspect() {
+        return {
+            node: this.toJSON()
+        };
+    }
+
     toJSON() {
         return {
             kind: this.kind,

@@ -86,6 +86,42 @@ export default class Pipeline extends Node {
         return null;
     }
 
+    inspect() {
+        return {
+            node: this.toJSON(),
+            inputs: this.listInputs(),
+            outputs: this.listOutputs()
+        };
+    }
+
+    listInputs() {
+        const inputs = [];
+        for (let node of this.nodes.values()) {
+            const nodeData = node.toJSON();
+            for (let input of node.inputs.values()) {
+                inputs.push({
+                    input: input.toJSON(),
+                    node: nodeData
+                });
+            }
+        }
+        return inputs;
+    }
+
+    listOutputs() {
+        const outputs = [];
+        for (let node of this.nodes.values()) {
+            const nodeData = node.toJSON();
+            for (let output of node.outputs.values()) {
+                outputs.push({
+                    output: output.toJSON(),
+                    node: nodeData
+                });
+            }
+        }
+        return outputs;
+    }
+
     addNode(node: Node): void {
         if (this.nodes.has(node)) {
             throw new Error('node is already in pipeline');

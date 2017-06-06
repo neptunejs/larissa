@@ -31,7 +31,11 @@ export default class Port {
     }
 
     toJSON() {
-        return null;
+        // Don't return node to avoid circularity
+        return {
+            id: this.id,
+            name: this.name
+        };
     }
 
     reset() {
