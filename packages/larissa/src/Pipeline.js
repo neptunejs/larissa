@@ -89,12 +89,12 @@ export default class Pipeline extends Node {
     inspect() {
         return {
             node: this.toJSON(),
-            inputs: this.listInputs(),
-            outputs: this.listOutputs()
+            inputCandidates: this.getInputCandidates(),
+            outputCandidates: this.getOutputCandidates()
         };
     }
 
-    listInputs() {
+    getInputCandidates() {
         const inputs = [];
         for (let node of this.nodes.values()) {
             const nodeData = node.toJSON();
@@ -108,7 +108,7 @@ export default class Pipeline extends Node {
         return inputs;
     }
 
-    listOutputs() {
+    getOutputCandidates() {
         const outputs = [];
         for (let node of this.nodes.values()) {
             const nodeData = node.toJSON();
