@@ -100,7 +100,7 @@ export default class Pipeline extends Node {
             const nodeData = node.toJSON();
             for (let input of node.inputs.values()) {
                 inputs.push({
-                    input: input.toJSON(),
+                    info: input.toJSON(),
                     node: nodeData
                 });
             }
@@ -114,7 +114,7 @@ export default class Pipeline extends Node {
             const nodeData = node.toJSON();
             for (let output of node.outputs.values()) {
                 outputs.push({
-                    output: output.toJSON(),
+                    info: output.toJSON(),
                     node: nodeData
                 });
             }

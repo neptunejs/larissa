@@ -21,8 +21,6 @@ describe('pipeline inceptions', function () {
 
         await pOut.run();
         expect(div.output().getValue()).toEqual(25);
-        console.log(pIn.listInputs());
-        console.log(pIn.listOutputs());
     });
 
     it('toJSON pipeline in a pipeline', function () {
