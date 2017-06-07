@@ -15,9 +15,9 @@ export default class Node extends EventEmitter {
     error: Error;
     title: string;
 
-    constructor() {
+    constructor(id: ?string) {
         super();
-        this.id = uuid();
+        this.id = id || uuid();
         this.inputs = new Map();
         this.outputs = new Map();
         this._status = INSTANTIATED;

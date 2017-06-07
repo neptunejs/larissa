@@ -26,8 +26,17 @@ export default class Environment {
         return plugin;
     }
 
-    newPipeline(): Pipeline {
-        return new Pipeline(this);
+    newPipeline(id: ?string): Pipeline {
+        return new Pipeline(this, id);
+    }
+
+    pipelineFromJSON(json) {
+        if (!json || json.kind !== 'pipeline') {
+            throw new Error('This does not seem to be a pipeline');
+        }
+        const pipeline = new Pipeline(this, json.id);
+        pipeline.loadJSON(json);
+        return pipeline;
     }
 
     getBlock(name: string) {

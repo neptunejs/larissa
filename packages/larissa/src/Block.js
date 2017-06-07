@@ -10,10 +10,10 @@ export default class Block extends Node {
     blockType: BlockType;
     options: Object;
 
-    constructor(blockType: BlockType, options: Object = {}) {
-        super();
+    constructor(blockType: BlockType, options: ?Object, id: ?string) {
+        super(id);
         this.blockType = blockType;
-        this.options = options;
+        this.options = options || {};
         createAllPorts(this);
         this.title = this.blockType.name;
     }

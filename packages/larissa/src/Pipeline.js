@@ -19,8 +19,8 @@ export default class Pipeline extends Node {
     linkedInputs: Map<string, LinkedPort>;
     linkedOutputs: Map<string, LinkedPort>;
 
-    constructor(env: Environment) {
-        super();
+    constructor(env: Environment, id: ?string) {
+        super(id);
         this.env = env;
         this.graph = new Graph();
         this.nodes = new Set();
@@ -135,9 +135,9 @@ export default class Pipeline extends Node {
         this.emit('change');
     }
 
-    newNode(identifier: string, options?: Object): Node {
+    newNode(identifier: string, options?: Object, id: ?string): Node {
         const blockType = this.env.getBlock(identifier);
-        const node = new Block(blockType, options);
+        const node = new Block(blockType, options, id);
         addNodeToGraph(node, this);
         this.emit('change');
         return node;
@@ -325,6 +325,27 @@ export default class Pipeline extends Node {
             graph: this.graph.toJSON(),
             title: this.title
         };
+    }
+
+    loadJSON(json) {
+        const graph = Graph.fromJSON(json.graph);
+        for (const [, node] of graph.vertices()) {
+            if (node.kind === 'block') {
+                this.newNode(node.type, node.options, node.id);
+            } else if (node.kind === 'pipeline') {
+                const pipeline = this.env.newPipeline(node.id);
+                pipeline.loadJSON(node);
+                this.addNode(pipeline);
+            } else {
+                throw new Error('unimplemented load JSON for ' + node.kind);
+            }
+        }
+        for (const [fromId, toId, edgeValue] of graph.edges()) {
+            const fromNode = this.findNode(fromId);
+            const toNode = this.findNode(toId);
+            const split = edgeValue[0].split(':').map((x) => x.split('_'));
+            this.connect(fromNode.output(split[0][2]), toNode.input(split[1][2]));
+        }
     }
 }
 
