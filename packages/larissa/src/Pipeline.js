@@ -175,11 +175,6 @@ export default class Pipeline extends Node {
         this.emit('change');
     }
 
-    async run() {
-        this.status = INSTANTIATED;
-        await super.run();
-    }
-
     async _run() {
         const nodesToRun = Array.from(this.graph.transitiveReduction().vertices_topologically()).map(mapNode);
         for (const linkedInput of this.linkedInputs.values()) {
@@ -378,9 +373,8 @@ function getConfig(configOrName: string | Object): Object {
 
 function addNodeToGraph(node: Node, self: Pipeline) {
     node.on('status', status => {
-        if (status !== INSTANTIATED) {
+        if (status === INSTANTIATED) {
             self.status = INSTANTIATED;
-        } else {
             self.resetChildren(node);
         }
         self.emit('child-status', status, node);
