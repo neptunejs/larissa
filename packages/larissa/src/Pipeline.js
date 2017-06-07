@@ -347,6 +347,12 @@ export default class Pipeline extends Node {
             this.connect(fromNode.output(split[0][2]), toNode.input(split[1][2]));
         }
     }
+
+    resetChildren(node) {
+        for (const [, otherNode] of this.graph.verticesFrom(node.id)) {
+            otherNode.reset();
+        }
+    }
 }
 
 function getConfig(configOrName: string | Object): Object {
@@ -364,8 +370,10 @@ function getConfig(configOrName: string | Object): Object {
 
 function addNodeToGraph(node: Node, self: Pipeline) {
     node.on('status', status => {
-        if (status === INSTANTIATED) {
+        if (status !== INSTANTIATED) {
             self.status = INSTANTIATED;
+        } else {
+            self.resetChildren(node);
         }
         self.emit('child-status', status, node);
     });
