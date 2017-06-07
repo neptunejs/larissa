@@ -58,6 +58,7 @@ export default class Node extends EventEmitter {
     set status(status: NodeStatus) {
         if (this._status !== status) {
             this._status = status;
+            this.emit('change');
             this.emit('status', status);
         }
     }
@@ -74,6 +75,7 @@ export default class Node extends EventEmitter {
         for (const output of this.outputs.values()) {
             output.reset();
         }
+        this.emit('change');
     }
 
     _canRun(): boolean {

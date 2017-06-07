@@ -79,6 +79,7 @@ export default class Pipeline extends Node {
             }
         }
         edge.addConnection(nodeOutput, nodeInput);
+        this.emit('change');
     }
 
     getNode(id: string): Node | null {
@@ -131,12 +132,14 @@ export default class Pipeline extends Node {
             throw new Error('node is already in pipeline');
         }
         addNodeToGraph(node, this);
+        this.emit('change');
     }
 
     newNode(identifier: string, options?: Object): Node {
         const blockType = this.env.getBlock(identifier);
         const node = new Block(blockType, options);
         addNodeToGraph(node, this);
+        this.emit('change');
         return node;
     }
 
@@ -151,6 +154,7 @@ export default class Pipeline extends Node {
                 throw new Error(`Unknow loop type ${options.type}`);
         }
         addNodeToGraph(loopNode, this);
+        this.emit('change');
         return loopNode;
     }
 
@@ -160,6 +164,7 @@ export default class Pipeline extends Node {
         }
         this.nodes.delete(node);
         this.graph.destroyExistingVertex(node.id);
+        this.emit('change');
     }
 
     async run() {
@@ -289,6 +294,7 @@ export default class Pipeline extends Node {
         if (config.default) {
             this.defaultInput = newInput;
         }
+        this.emit('change');
     }
 
     linkOutput(output: OutputPort, configOrName: string) {
@@ -306,6 +312,7 @@ export default class Pipeline extends Node {
         if (config.default) {
             this.defaultOutput = newOutput;
         }
+        this.emit('change');
     }
 
     toJSON() {
@@ -341,6 +348,16 @@ function addNodeToGraph(node: Node, self: Pipeline) {
         }
         self.emit('child-status', status, node);
     });
+    node.on('change', () => {
+        self.emit('child-change', node);
+        self.emit('deep-child-change', node);
+    });
+    if (node.kind === 'pipeline') {
+        node.on('deep-child-change', (node) => {
+            self.emit('deep-child-change', node);
+        });
+    }
+
     self.nodes.add(node);
     self.graph.addNewVertex(node.id, node);
 }
