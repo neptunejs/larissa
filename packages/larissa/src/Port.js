@@ -36,7 +36,7 @@ export default class Port {
         throw new Error('implement me!');
     }
 
-    toJSON() {
+    toJSON(): Object {
         // Don't return node to avoid circularity
         return {
             id: this.id,

@@ -32,7 +32,7 @@ export default class Environment {
         return new Pipeline(this, id);
     }
 
-    pipelineFromJSON(json) {
+    pipelineFromJSON(json: Object) {
         if (!json || json.kind !== 'pipeline') {
             throw new Error('This does not seem to be a pipeline');
         }

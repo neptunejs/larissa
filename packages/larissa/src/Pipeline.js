@@ -330,14 +330,14 @@ export default class Pipeline extends Node {
         };
     }
 
-    loadJSON(json, idSuffix) {
+    loadJSON(json: Object, idSuffix: string) {
         const graph = Graph.fromJSON(json.graph);
         for (const [, node] of graph.vertices()) {
             if (node.kind === 'block') {
                 this.newNode(node.type, node.options, node.id + idSuffix);
             } else if (node.kind === 'pipeline') {
                 const pipeline = this.env.newPipeline(node.id + idSuffix);
-                pipeline.loadJSON(node);
+                pipeline.loadJSON(node, idSuffix);
                 this.addNode(pipeline);
             } else {
                 throw new Error('unimplemented load JSON for ' + node.kind);
@@ -346,12 +346,15 @@ export default class Pipeline extends Node {
         for (const [fromId, toId, edgeValue] of graph.edges()) {
             const fromNode = this.findNode(fromId + idSuffix);
             const toNode = this.findNode(toId + idSuffix);
+            if (!fromNode || !toNode) {
+                throw new Error('unreachable');
+            }
             const split = edgeValue[0].split(':').map((x) => x.split('_'));
             this.connect(fromNode.output(split[0][2]), toNode.input(split[1][2]));
         }
     }
 
-    resetChildren(node) {
+    resetChildren(node: Node) {
         for (const [, otherNode] of this.graph.verticesFrom(node.id)) {
             otherNode.reset();
         }

@@ -7,6 +7,7 @@ describe('Pipeline low level tests', function () {
         const pipeline = env.newPipeline();
         const node = pipeline.newNode('number');
         const otherNode = new Node();
+        Object.defineProperty(otherNode, 'kind', {value: 'node'}); // required because addNode will read the kind
         pipeline.addNode(otherNode);
         let spy = sinon.spy();
         pipeline.on('child-status', spy);
