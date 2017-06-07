@@ -55,6 +55,10 @@ export default class Pipeline extends Node {
         const outputNode: Node = nodeOutput.node;
         const inputNode: Node = nodeInput.node;
 
+        if (nodeInput.type && nodeOutput.type && nodeInput.type !== nodeOutput.type) {
+            throw new Error(`node types are not compatible: ${nodeOutput.type} - ${nodeInput.type}`);
+        }
+
         if (!this.nodes.has(outputNode)) {
             throw new Error(`output node ${outputNode.id} not found in pipeline`);
         }

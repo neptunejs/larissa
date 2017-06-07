@@ -6,12 +6,14 @@ export default class Port {
     name: string;
     node: Node;
     value: any;
+    type: ?string;
 
     constructor(node: Node, options: Object) {
         this.id = `${node.id}_${this.getDirection()}_${options.name}`;
         this.name = options.name;
         this.node = node;
         this.value = undefined;
+        this.type = options.type || null;
     }
 
     getValue() {
@@ -26,6 +28,10 @@ export default class Port {
         return this.value !== undefined;
     }
 
+    getType(): ?string {
+        return this.type;
+    }
+
     getDirection(): string {
         throw new Error('implement me!');
     }
@@ -34,7 +40,8 @@ export default class Port {
         // Don't return node to avoid circularity
         return {
             id: this.id,
-            name: this.name
+            name: this.name,
+            type: this.type
         };
     }
 
