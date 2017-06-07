@@ -1,10 +1,10 @@
 export default {
     name: 'greyscale',
     inputs: [
-        {name: 'image'}
+        {name: 'image', type: 'image'}
     ],
     outputs: [
-        {name: 'image'}
+        {name: 'image', type: 'image'}
     ],
     options: null,
     executor: greyscale

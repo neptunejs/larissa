@@ -2,7 +2,7 @@ export default {
     name: 'load',
     inputs: [],
     outputs: [
-        {name: 'loaded', label: 'Loaded image'}
+        {name: 'loaded', label: 'Loaded image', type: 'image'}
     ],
     options: {
         type: 'object',
