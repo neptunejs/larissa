@@ -4,7 +4,7 @@ import type Context from '../../BlockContext';
 export default {
     name: 'number',
     outputs: [
-        {name: 'number'}
+        {name: 'number', type: 'number'}
     ],
     options: {
         type: 'object',

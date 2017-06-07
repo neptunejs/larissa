@@ -1,11 +1,11 @@
 export default {
     name: 'AND',
     inputs: [
-        {name: 'boolean1'},
-        {name: 'boolean2'}
+        {name: 'boolean1', type: 'boolean'},
+        {name: 'boolean2', type: 'boolean'}
     ],
     outputs: [
-        {name: 'boolean'}
+        {name: 'boolean', type: 'boolean'}
     ],
     options: null,
     executor: and

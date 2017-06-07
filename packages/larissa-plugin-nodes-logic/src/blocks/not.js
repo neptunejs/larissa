@@ -1,10 +1,10 @@
 export default {
     name: 'NOT',
     inputs: [
-        {name: 'boolean'}
+        {name: 'boolean', type: 'boolean'}
     ],
     outputs: [
-        {name: 'boolean'}
+        {name: 'boolean', type: 'boolean'}
     ],
     options: null,
     executor: not

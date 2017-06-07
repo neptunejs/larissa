@@ -5,7 +5,7 @@ import type Context from '../../BlockContext';
 export default {
     name: 'rng',
     outputs: [
-        {name: 'number'}
+        {name: 'number', type: 'number'}
     ],
     executor: (ctx: Context) => {
         ctx.setOutput('number', Math.random());
