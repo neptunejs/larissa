@@ -29,6 +29,7 @@ export default class Node extends EventEmitter {
 
     setTitle(title: string): void {
         this.title = title;
+        this.emit('change');
     }
 
     output(name?: string): OutputPort {
