@@ -17,9 +17,9 @@ test('pipeline toJSON and new from JSON', async () => {
     const newPipeline = env.pipelineFromJSON(JSON.parse(json));
     await newPipeline.run();
 
-    const newNumber1 = newPipeline.findNode(number1.id);
-    const newNumber2 = newPipeline.findNode(number2.id);
-    const newSum = newPipeline.findNode(sum.id);
+    const newNumber1 = newPipeline.findNode(number1.id + '$1');
+    const newNumber2 = newPipeline.findNode(number2.id + '$1');
+    const newSum = newPipeline.findNode(sum.id + '$1');
     expect(newNumber1.output().getValue()).toBe(5);
     expect(newNumber2.output().getValue()).toBe(10);
     expect(newSum.output().getValue()).toBe(15);

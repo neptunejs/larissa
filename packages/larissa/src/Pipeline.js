@@ -327,13 +327,13 @@ export default class Pipeline extends Node {
         };
     }
 
-    loadJSON(json) {
+    loadJSON(json, idSuffix) {
         const graph = Graph.fromJSON(json.graph);
         for (const [, node] of graph.vertices()) {
             if (node.kind === 'block') {
-                this.newNode(node.type, node.options, node.id);
+                this.newNode(node.type, node.options, node.id + idSuffix);
             } else if (node.kind === 'pipeline') {
-                const pipeline = this.env.newPipeline(node.id);
+                const pipeline = this.env.newPipeline(node.id + idSuffix);
                 pipeline.loadJSON(node);
                 this.addNode(pipeline);
             } else {
@@ -341,8 +341,8 @@ export default class Pipeline extends Node {
             }
         }
         for (const [fromId, toId, edgeValue] of graph.edges()) {
-            const fromNode = this.findNode(fromId);
-            const toNode = this.findNode(toId);
+            const fromNode = this.findNode(fromId + idSuffix);
+            const toNode = this.findNode(toId + idSuffix);
             const split = edgeValue[0].split(':').map((x) => x.split('_'));
             this.connect(fromNode.output(split[0][2]), toNode.input(split[1][2]));
         }
