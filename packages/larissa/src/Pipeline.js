@@ -15,7 +15,7 @@ import type Environment from './Environment';
 export default class Pipeline extends Node {
     env: Environment;
     graph: Graph;
-    nodes: Set<Node>;
+    _nodes: Set<Node>;
     linkedInputs: Map<string, LinkedPort>;
     linkedOutputs: Map<string, LinkedPort>;
 
@@ -23,7 +23,7 @@ export default class Pipeline extends Node {
         super(id);
         this.env = env;
         this.graph = new Graph();
-        this.nodes = new Set();
+        this._nodes = new Set();
         this.title = 'Pipeline';
         this.linkedInputs = new Map();
         this.linkedOutputs = new Map();
@@ -34,15 +34,23 @@ export default class Pipeline extends Node {
     }
 
     findNode(nodeId: string) {
-        if (this.id === nodeId) return this;
-        for (let node of this.nodes) {
-            if (node.id === nodeId) return node;
-            if (node instanceof Pipeline) {
-                const subNode = node.findNode(nodeId);
-                if (subNode) return subNode;
+        for (const node of this.nodes()) {
+            if (node.id === nodeId) {
+                return node;
             }
         }
         return null;
+    }
+
+    *nodes(): Iterator<Node> {
+        yield this;
+        for (const node of this._nodes) {
+            if (node instanceof Pipeline) {
+                yield* node.nodes();
+            } else {
+                yield node;
+            }
+        }
     }
 
     connect(nodeOutput: Node | OutputPort, nodeInput: Node | InputPort) {
@@ -59,10 +67,10 @@ export default class Pipeline extends Node {
             throw new Error(`node types are not compatible: ${nodeOutput.type} - ${nodeInput.type}`);
         }
 
-        if (!this.nodes.has(outputNode)) {
+        if (!this._nodes.has(outputNode)) {
             throw new Error(`output node ${outputNode.id} not found in pipeline`);
         }
-        if (!this.nodes.has(inputNode)) {
+        if (!this._nodes.has(inputNode)) {
             throw new Error(`input node ${inputNode.id} not found in pipeline`);
         }
         // TODO: find single type match between node1 outputs and node2 inputs ?
@@ -83,7 +91,7 @@ export default class Pipeline extends Node {
     }
 
     getNode(id: string): Node | null {
-        for (let node of this.nodes) {
+        for (let node of this._nodes) {
             if (node.id === id) {
                 return node;
             }
@@ -101,7 +109,7 @@ export default class Pipeline extends Node {
 
     getInputCandidates() {
         const inputs = [];
-        for (let node of this.nodes.values()) {
+        for (let node of this._nodes.values()) {
             const nodeData = node.toJSON();
             for (let input of node.inputs.values()) {
                 inputs.push({
@@ -115,7 +123,7 @@ export default class Pipeline extends Node {
 
     getOutputCandidates() {
         const outputs = [];
-        for (let node of this.nodes.values()) {
+        for (let node of this._nodes.values()) {
             const nodeData = node.toJSON();
             for (let output of node.outputs.values()) {
                 outputs.push({
@@ -128,7 +136,7 @@ export default class Pipeline extends Node {
     }
 
     addNode(node: Node): void {
-        if (this.nodes.has(node)) {
+        if (this._nodes.has(node)) {
             throw new Error('node is already in pipeline');
         }
         addNodeToGraph(node, this);
@@ -159,10 +167,10 @@ export default class Pipeline extends Node {
     }
 
     deleteNode(node: Node): void {
-        if (!this.nodes.has(node)) {
+        if (!this._nodes.has(node)) {
             throw new Error('node not found in pipeline');
         }
-        this.nodes.delete(node);
+        this._nodes.delete(node);
         this.graph.destroyExistingVertex(node.id);
         this.emit('change');
     }
@@ -189,7 +197,7 @@ export default class Pipeline extends Node {
 
     reset(): void {
         super.reset();
-        for (let node of this.nodes) {
+        for (let node of this._nodes) {
             node.reset();
         }
         // todo implement pipeline reset
@@ -387,7 +395,7 @@ function addNodeToGraph(node: Node, self: Pipeline) {
         });
     }
 
-    self.nodes.add(node);
+    self._nodes.add(node);
     self.graph.addNewVertex(node.id, node);
 }
 
