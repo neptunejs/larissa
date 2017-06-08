@@ -30,7 +30,17 @@ export default {
                 required: false,
                 default: '' // autodetect
             },
-            header: {
+            dynamicTyping: {
+                type: 'boolean',
+                required: false,
+                default: false
+            },
+            hasHeader: {
+                type: 'boolean',
+                required: false,
+                default: false
+            },
+            skipEmptyLines: {
                 type: 'boolean',
                 required: false,
                 default: false
@@ -41,6 +51,15 @@ export default {
 };
 
 async function setOutput(ctx: Context) {
-    const parsed = PapaParse.parse(ctx.getInput('csv'), ctx.getOptions());
-    ctx.setOutput('parsed', parsed);
+    let options = ctx.getOptions();
+    const parsed = PapaParse.parse(ctx.getInput('csv'), options);
+    let data = parsed.data;
+    let header;
+    if (options.hasHeader) {
+        header = parsed.data[0];
+        data.splice(0, 1);
+    } else {
+        header = data[0].map((val, idx) => `Row ${idx + 1}`);
+    }
+    ctx.setOutput('parsed', {data, header});
 }
