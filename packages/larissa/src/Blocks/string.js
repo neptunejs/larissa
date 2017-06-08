@@ -11,7 +11,8 @@ export default {
         properties: {
             value: {
                 type: 'string',
-                required: true
+                required: true,
+                multiLine: true
             }
         }
     },
