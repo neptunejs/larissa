@@ -9,6 +9,7 @@ import identity from './identity';
 import jsonParse from './json-parse';
 import request from './request';
 import csvParse from './csv-parse';
+import tableFilter from './table-filter';
 
 blockTypes.addBlock(boolean);
 blockTypes.addBlock(string);
@@ -16,6 +17,7 @@ blockTypes.addBlock(identity);
 blockTypes.addBlock(jsonParse);
 blockTypes.addBlock(request);
 blockTypes.addBlock(csvParse);
+blockTypes.addBlock(tableFilter);
 
 import number from './math/number';
 import rng from './math/rng';

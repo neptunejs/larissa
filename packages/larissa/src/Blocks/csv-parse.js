@@ -43,7 +43,7 @@ export default {
             skipEmptyLines: {
                 type: 'boolean',
                 required: false,
-                default: false
+                default: true
             }
         }
     },
@@ -54,12 +54,12 @@ async function setOutput(ctx: Context) {
     let options = ctx.getOptions();
     const parsed = PapaParse.parse(ctx.getInput('csv'), options);
     let data = parsed.data;
-    let header;
+    let headers;
     if (options.hasHeader) {
-        header = parsed.data[0];
+        headers = parsed.data[0];
         data.splice(0, 1);
     } else {
-        header = data[0].map((val, idx) => `Row ${idx + 1}`);
+        headers = data[0].map((val, idx) => `col${idx + 1}`);
     }
-    ctx.setOutput('parsed', {data, header});
+    ctx.setOutput('parsed', {data, headers: headers});
 }
