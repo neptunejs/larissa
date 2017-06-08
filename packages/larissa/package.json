@@ -18,5 +18,8 @@
   },
   "devDependencies": {
     "larissa-plugin-nodes-image-js": "^0.0.6"
+  },
+  "browser": {
+    "./src/Blocks/executors/request.js": "./src/Blocks/executors/browser/request.js"
   }
 }
