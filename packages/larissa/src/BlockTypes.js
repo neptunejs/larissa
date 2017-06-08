@@ -37,7 +37,6 @@ export class BlockType {
     inputs: Array<Object>;
     outputs: Array<Object>;
     schema: ?Object;
-    uiSchema: ?Object;
     validator: ?(Object) => boolean;
     executor: (Object) => Promise<mixed>;
 
@@ -49,7 +48,6 @@ export class BlockType {
         this.outputs = [];
         this.schema = null;
         this.validator = null;
-        this.uiSchema = null;
 
         if (typeof definition.executor !== 'function') {
             throw new TypeError('block executor must be a function');
@@ -73,10 +71,6 @@ export class BlockType {
         if (definition.options) {
             this.schema = definition.options;
             this.validator = schemaValidator(definition.options);
-        }
-
-        if (definition.uiOptions) {
-            this.uiSchema = definition.uiOptions;
         }
     }
 }
