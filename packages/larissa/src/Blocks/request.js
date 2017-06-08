@@ -9,7 +9,7 @@ export default {
     ],
     outputs: [
         {name: 'data', type: 'string'}
-    ]
+    ],
     executor: setOutput
 };
 
