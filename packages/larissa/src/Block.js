@@ -54,7 +54,7 @@ export default class Block extends Node {
         return {
             kind: this.kind,
             id: this.id,
-            type: this.blockType.name,
+            type: this.blockType.identifier,
             blockType: this.blockType,
             options: this.options,
             status: this.status,
