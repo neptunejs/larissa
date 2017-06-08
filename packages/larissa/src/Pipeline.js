@@ -199,7 +199,7 @@ export default class Pipeline extends Node {
     }
 
     async schedule(nodeList: Array<Node>) {
-        const erroredNodes: Set<string> = new Set();
+        const erroredNodes: Map<string, Error> = new Map();
         main: for (const node of nodeList) {
             for (const errored of erroredNodes) {
                 if (this.graph.hasPath(errored, node.id)) {
@@ -230,11 +230,15 @@ export default class Pipeline extends Node {
                 }
             } catch (e) {
                 this.emit('runError', e);
-                erroredNodes.add(node.id);
+                erroredNodes.set(node.id, e);
             }
         }
         if (erroredNodes.size > 0) {
-            throw new Error('Error occured in pipeline');
+            const errors = [];
+            for (const error of erroredNodes.values()) {
+                errors.push(error.message);
+            }
+            throw new Error(`Errors occured in pipeline: [${errors.join(', ')}]`);
         }
     }
 
