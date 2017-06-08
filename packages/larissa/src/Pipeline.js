@@ -335,10 +335,12 @@ export default class Pipeline extends Node {
     }
 
     loadJSON(json: Object, idSuffix: string) {
+        this.title = json.title;
         const graph = Graph.fromJSON(json.graph);
         for (const [, node] of graph.vertices()) {
             if (node.kind === 'block') {
-                this.newNode(node.type, node.options, node.id + idSuffix);
+                const newNode = this.newNode(node.type, node.options, node.id + idSuffix);
+                newNode.title = node.title;
             } else if (node.kind === 'pipeline') {
                 const pipeline = this.env.newPipeline(node.id + idSuffix);
                 pipeline.loadJSON(node, idSuffix);
