@@ -7,10 +7,13 @@ import boolean from './boolean';
 import identity from './identity';
 import string from './string';
 import jsonParse from './json-parse';
+import csvParse from './csv-parse';
+
 blockTypes.addBlock(boolean);
 blockTypes.addBlock(identity);
 blockTypes.addBlock(string);
 blockTypes.addBlock(jsonParse);
+blockTypes.addBlock(csvParse);
 
 import number from './math/number';
 import rng from './math/rng';
