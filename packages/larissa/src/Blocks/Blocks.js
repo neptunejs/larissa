@@ -4,15 +4,17 @@ const blockTypes = new BlockTypes('');
 export default blockTypes;
 
 import boolean from './boolean';
-import identity from './identity';
 import string from './string';
+import identity from './identity';
 import jsonParse from './json-parse';
+import request from './request';
 import csvParse from './csv-parse';
 
 blockTypes.addBlock(boolean);
-blockTypes.addBlock(identity);
 blockTypes.addBlock(string);
+blockTypes.addBlock(identity);
 blockTypes.addBlock(jsonParse);
+blockTypes.addBlock(request);
 blockTypes.addBlock(csvParse);
 
 import number from './math/number';
