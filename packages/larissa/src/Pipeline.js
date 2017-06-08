@@ -186,6 +186,25 @@ export default class Pipeline extends Node {
         }
     }
 
+    async runNode(nodeId: string) {
+        const node = this.getNode(nodeId);
+        if (!node) return;
+        const self = this;
+        const nodesToRun: Array<Node> = [node];
+        const addParents = (node) => {
+            for (const [, parent] of self.graph.verticesTo(node.id)) {
+                if (parent instanceof Node) {
+                    if (nodesToRun.includes(parent)) nodesToRun.splice(nodesToRun.indexOf(parent), 1);
+                    nodesToRun.unshift(parent);
+                }
+                addParents(parent);
+            }
+        };
+
+        addParents(node);
+        await this.schedule(nodesToRun);
+    }
+
     _canRun() {
         return true;
     }
