@@ -10,6 +10,7 @@ import jsonParse from './json-parse';
 import request from './request';
 import csvParse from './csv-parse';
 import tableFilter from './table-filter';
+import tableMerge from './table-merge';
 
 blockTypes.addBlock(boolean);
 blockTypes.addBlock(string);
@@ -18,6 +19,7 @@ blockTypes.addBlock(jsonParse);
 blockTypes.addBlock(request);
 blockTypes.addBlock(csvParse);
 blockTypes.addBlock(tableFilter);
+blockTypes.addBlock(tableMerge);
 
 import number from './math/number';
 import rng from './math/rng';
