@@ -1,6 +1,7 @@
 import loadImage from './nodes/loadImage';
 import greyscale from './nodes/greyscale';
 import mask from './nodes/mask';
+import roi from './nodes/roi';
 
 export default function () {
     return {
@@ -8,7 +9,8 @@ export default function () {
         blocks: [
             loadImage,
             greyscale,
-            mask
+            mask,
+            roi
         ]
     };
 }
