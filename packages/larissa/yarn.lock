@@ -194,9 +194,9 @@ jsonpointer@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/jsonpointer/-/jsonpointer-4.0.1.tgz#4fd92cb34e0e9db3c89c8622ecf51f9b978c6cb9"
 
-larissa-plugin-nodes-image-js@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/larissa-plugin-nodes-image-js/-/larissa-plugin-nodes-image-js-0.0.6.tgz#d94a0b181c112995ff22d162d01e9359f02fd0a6"
+larissa-plugin-nodes-image-js@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/larissa-plugin-nodes-image-js/-/larissa-plugin-nodes-image-js-0.0.7.tgz#bcf43f430386a8d036b708af6845902273736869"
   dependencies:
     image-js "^0.9.13"
 
@@ -305,6 +305,10 @@ number-is-nan@^1.0.0:
 pako@^1.0.0:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.5.tgz#d2205dfe5b9da8af797e7c163db4d1f84e4600bc"
+
+papaparse@^4.3.3:
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/papaparse/-/papaparse-4.3.3.tgz#716ecd5b876d0e4f274b24d948fa0f8eda2f72be"
 
 parse-css-font@^2.0.2:
   version "2.0.2"

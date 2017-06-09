@@ -41,7 +41,5 @@
       "^test/(.*)$": "<rootDir>/packages/larissa/test/$1.js"
     }
   },
-  "dependencies": {
-    "papaparse": "^4.3.3"
-  }
+  "dependencies": {}
 }

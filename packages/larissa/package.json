@@ -14,6 +14,7 @@
   "dependencies": {
     "graph.js": "^1.21.1",
     "is-my-json-valid": "^2.16.0",
+    "papaparse": "^4.3.3",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
