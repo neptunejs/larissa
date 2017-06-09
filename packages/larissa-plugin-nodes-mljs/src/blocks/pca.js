@@ -22,6 +22,5 @@ async function pca(ctx) {
         headers: projection[0].map((v, i) => `PC${i + 1}`),
         data: projection
     };
-    debugger;
     ctx.setOutput('projection', output);
 }
