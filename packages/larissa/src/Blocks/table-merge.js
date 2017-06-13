@@ -26,8 +26,8 @@ async function merge(ctx: Context) {
                 newTable.data.push([]);
             }
         }
-        for (var j = 0; j < table.data.length; j++) {
-            newTable.data[j].push(...table.data[j]);
+        for (var k = 0; k < table.data.length; k++) {
+            newTable.data[k].push(...table.data[k]);
         }
     }
     ctx.setOutput('merged', newTable);
