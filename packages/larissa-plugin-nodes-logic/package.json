@@ -1,6 +1,6 @@
 {
   "name": "larissa-plugin-nodes-logic",
-  "version": "0.0.6",
+  "version": "0.2.0",
   "description": "",
   "main": "lib/index.js",
   "module": "lib-module/index.js",
