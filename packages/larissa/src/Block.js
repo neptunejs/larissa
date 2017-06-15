@@ -45,6 +45,7 @@ export default class Block extends Node {
     inspect() {
         return {
             node: this.toJSON(),
+            status: this.status,
             inputs: this.inputs,
             outputs: this.outputs
         };
@@ -55,9 +56,7 @@ export default class Block extends Node {
             kind: this.kind,
             id: this.id,
             type: this.blockType.identifier,
-            blockType: this.blockType,
             options: this.options,
-            status: this.status,
             title: this.title
         };
     }

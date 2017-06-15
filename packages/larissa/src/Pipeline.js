@@ -102,6 +102,7 @@ export default class Pipeline extends Node {
     inspect() {
         return {
             node: this.toJSON(),
+            status: this.status,
             inputCandidates: this.getInputCandidates(),
             outputCandidates: this.getOutputCandidates()
         };
@@ -344,10 +345,9 @@ export default class Pipeline extends Node {
     toJSON() {
         return {
             kind: this.kind,
-            status: this.status,
             id: this.id,
-            inputs: inputsToArray(this.inputs),
-            outputs: outputsToArray(this.outputs),
+            inputs: inputsToArray(this.inputs), // todo missing internal wiring
+            outputs: outputsToArray(this.outputs), // todo missing internal wiring
             graph: this.graph.toJSON(),
             title: this.title
         };
