@@ -1,5 +1,5 @@
 import Environment from '../Environment';
-import {INSTANTIATED, FINISHED} from '../Node';
+import {INSTANTIATED, READY, FINISHED} from '../Node';
 
 describe('reset method of nodes', () => {
     it('reset individual blocks', async () => {
@@ -33,8 +33,8 @@ describe('reset method of nodes', () => {
         const pipeline = env.newPipeline();
         const node1 = pipeline.newNode('number', {value: 42});
         const node1Output = node1.output();
-        expect(node1.status).toEqual(INSTANTIATED);
-        expect(pipeline.status).toEqual(INSTANTIATED);
+        expect(node1.status).toEqual(READY);
+        expect(pipeline.status).toEqual(READY);
 
         await pipeline.run();
         expect(node1Output.hasValue()).toEqual(true);
@@ -44,8 +44,20 @@ describe('reset method of nodes', () => {
 
         node1.reset();
         expect(node1Output.hasValue()).toEqual(false);
-        expect(node1.status).toEqual(INSTANTIATED);
-        expect(pipeline.status).toEqual(INSTANTIATED);
+        expect(node1.status).toEqual(READY);
+        expect(pipeline.status).toEqual(READY);
+    });
+
+    it.only('block status after options are added', async () => {
+        const env = new Environment();
+        const pipeline = env.newPipeline();
+        const node = pipeline.newNode('number');
+
+        expect(node.status).toEqual(INSTANTIATED);
+        node.setOptions({value: 42});
+        expect(node.status).toEqual(READY);
+        await pipeline.runNode(node);
+        expect(node.status).toEqual(FINISHED);
     });
 });
 

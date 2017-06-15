@@ -68,8 +68,16 @@ export default class Node extends EventEmitter {
         return this._status;
     }
 
+    computeStatus(): void {
+        this.status = this._computeStatus();
+    }
+
+    _computeStatus(): NodeStatus {
+        throw new Error('implement _computeStatus');
+    }
+
     reset(): void {
-        this.status = INSTANTIATED;
+        this.computeStatus();
         for (const input of this.inputs.values()) {
             input.reset();
         }

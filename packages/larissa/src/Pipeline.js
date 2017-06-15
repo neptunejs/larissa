@@ -4,13 +4,14 @@ import Graph from 'graph.js/dist/graph.full';
 import Block from './Block';
 import GraphEdge from './GraphEdge';
 import MapLoop from './MapLoop';
-import Node, {INSTANTIATED} from './Node';
+import Node, {INSTANTIATED, READY} from './Node';
 import LinkedPort from './LinkedPort';
 
 import InputPort from './InputPort';
 import OutputPort from './OutputPort';
 
 import type Environment from './Environment';
+import type {NodeStatus} from './Node';
 
 export default class Pipeline extends Node {
     env: Environment;
@@ -27,6 +28,7 @@ export default class Pipeline extends Node {
         this.title = 'Pipeline';
         this.linkedInputs = new Map();
         this.linkedOutputs = new Map();
+        this.computeStatus();
     }
 
     get kind(): string {
@@ -187,13 +189,12 @@ export default class Pipeline extends Node {
         }
     }
 
-    async runNode(nodeId: string) {
-        const node = this.getNode(nodeId);
-        if (!node) return;
-        const self = this;
+    async runNode(node: string|Node) {
+        if (typeof node === 'string') node = this.getNode(node);
+        if (!node) throw new Error(`node not found: ${node}`);
         const nodesToRun: Array<Node> = [node];
         const addParents = (node) => {
-            for (const [, parent] of self.graph.verticesTo(node.id)) {
+            for (const [, parent] of this.graph.verticesTo(node.id)) {
                 if (parent instanceof Node) {
                     if (nodesToRun.includes(parent)) nodesToRun.splice(nodesToRun.indexOf(parent), 1);
                     nodesToRun.unshift(parent);
@@ -208,6 +209,10 @@ export default class Pipeline extends Node {
 
     _canRun() {
         return true;
+    }
+
+    _computeStatus(): NodeStatus {
+        return READY;
     }
 
     reset(): void {
@@ -414,8 +419,8 @@ function getConfig(configOrName: string | Object): Object {
 
 function addNodeToGraph(node: Node, self: Pipeline) {
     node.on('status', status => {
-        if (status === INSTANTIATED) {
-            self.status = INSTANTIATED;
+        if (status === INSTANTIATED || status === READY) {
+            self.computeStatus();
             self.resetChildren(node);
         }
         self.emit('child-status', status, node);

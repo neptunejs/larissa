@@ -1,12 +1,13 @@
 // @flow
 import jsonSchemaDefaults from 'json-schema-defaults';
 
-import Node from './Node';
+import Node, {INSTANTIATED, READY} from './Node';
 import Input from './InputPort';
 import Output from './OutputPort';
 import Context from './BlockContext';
 
 import type {BlockType} from './BlockTypes';
+import type {NodeStatus} from './Node';
 
 export default class Block extends Node {
     blockType: BlockType;
@@ -25,6 +26,7 @@ export default class Block extends Node {
 
         createAllPorts(this);
         this.title = this.blockType.name;
+        this.computeStatus();
     }
 
     get kind(): string {
@@ -36,6 +38,13 @@ export default class Block extends Node {
             return this.blockType.validator(this.options);
         }
         return true;
+    }
+
+    _computeStatus(): NodeStatus {
+        if (!this._canRun()) {
+            return INSTANTIATED;
+        }
+        return READY;
     }
 
     async _run() {
