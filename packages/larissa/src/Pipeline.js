@@ -189,9 +189,12 @@ export default class Pipeline extends Node {
         }
     }
 
-    async runNode(node: string|Node) {
-        if (typeof node === 'string') node = this.getNode(node);
-        if (!node) throw new Error(`node not found: ${node}`);
+    async runNode(node: string | Node) {
+        if (typeof node === 'string') {
+            let nodeId = node;
+            node = this.getNode(node);
+            if (!node) throw new Error(`node not found: ${nodeId}`);
+        }
         const nodesToRun: Array<Node> = [node];
         const addParents = (node) => {
             for (const [, parent] of this.graph.verticesTo(node.id)) {
@@ -386,12 +389,14 @@ export default class Pipeline extends Node {
         if (json.inputs) {
             for (const input of json.inputs) {
                 const node = this.findNode(input.link.id + idSuffix);
+                if (!node) throw new Error('node not found');
                 this.linkInput(node.input(input.link.name), input);
             }
         }
         if (json.outputs) {
             for (const output of json.outputs) {
                 const node = this.findNode(output.link.id + idSuffix);
+                if (!node) throw new Error('node not found');
                 this.linkOutput(node.output(output.link.name), output);
             }
         }
@@ -454,15 +459,14 @@ function inputsToArray(ports: Map<string, InputPort>, linkedInputs: Map<string, 
             id: port.id,
             name: port.name,
             multiple: port.multiple,
-            required: port.required
+            required: port.required,
+            link: {}
         };
         for (let [linkId, linkValue] of linkedInputs) {
             if (linkValue.input.id === port.id) {
                 const split = linkId.split('_');
-                obj.link = {
-                    id: split[0],
-                    name: split[2]
-                };
+                obj.link.id = split[0];
+                obj.link.name = split[2];
             }
         }
         arr.push(obj);
@@ -476,14 +480,13 @@ function outputsToArray(ports: Map<string, OutputPort>, linkedOutputs: Map<strin
         const obj = {
             id: port.id,
             name: port.name,
+            link: {}
         };
         for (let [linkId, linkValue] of linkedOutputs) {
             if (linkValue.output.id === port.id) {
                 const split = linkId.split('_');
-                obj.link = {
-                    id: split[0],
-                    name: split[2]
-                };
+                obj.link.id = split[0];
+                obj.link.name = split[2];
             }
         }
         arr.push(obj);

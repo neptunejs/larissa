@@ -141,4 +141,4 @@ export const ERRORED: 'ERRORED' = 'ERRORED';
 export const RUNNING: 'RUNNING' = 'RUNNING';
 export const FINISHED: 'FINISHED' = 'FINISHED';
 
-type NodeStatus = typeof INSTANTIATED | typeof READY | typeof ERRORED | typeof RUNNING | typeof FINISHED;
+export type NodeStatus = typeof INSTANTIATED | typeof READY | typeof ERRORED | typeof RUNNING | typeof FINISHED;

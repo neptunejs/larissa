@@ -48,7 +48,7 @@ describe('reset method of nodes', () => {
         expect(pipeline.status).toBe(READY);
     });
 
-    it.only('block status after options are added', async () => {
+    it('block status after options are added', async () => {
         const env = new Environment();
         const pipeline = env.newPipeline();
         const node = pipeline.newNode('number');
