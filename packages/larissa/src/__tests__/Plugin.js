@@ -25,7 +25,7 @@ describe('Plugin', () => {
             }]
         });
         expect(plugin.blockTypes.getBlock('testblock')).toBeDefined();
-        expect(plugin.blockTypes.getBlock('notexist')).toEqual(undefined);
+        expect(plugin.blockTypes.getBlock('notexist')).toBe(undefined);
         const blockList = plugin.getBlockList();
         expect(blockList).toBeInstanceOf(Array);
         expect(blockList.length).toBe(1);

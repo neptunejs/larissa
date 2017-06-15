@@ -24,7 +24,7 @@ describe('Environment', () => {
         const env = new Environment();
         env.loadPlugin({name: 'test1'});
         env.loadPlugin({name: 'test2'});
-        expect(env.plugins.has('test1')).toEqual(true);
-        expect(env.plugins.has('test2')).toEqual(true);
+        expect(env.plugins.has('test1')).toBe(true);
+        expect(env.plugins.has('test2')).toBe(true);
     });
 });

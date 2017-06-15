@@ -12,8 +12,8 @@ test('pipeline - add two numbers', async () => {
     pipeline.connect(rng, sum);
     // console.log(JSON.stringify(pipeline.graph));
     await pipeline.run();
-    expect(number1.output().getValue()).toEqual(5);
-    expect(number2.output().getValue()).toEqual(10);
+    expect(number1.output().getValue()).toBe(5);
+    expect(number2.output().getValue()).toBe(10);
     const out = sum.output().getValue();
     expect(out).toBeGreaterThanOrEqual(15);
     expect(out).toBeLessThan(16);

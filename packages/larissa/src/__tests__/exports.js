@@ -4,6 +4,6 @@ import Env from '../Environment';
 
 describe('module exports', () => {
     it('correct values should be exported', () => {
-        expect(Environment).toEqual(Env);
+        expect(Environment).toBe(Env);
     });
 });

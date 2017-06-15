@@ -11,21 +11,21 @@ describe('reset method of nodes', () => {
         const node1 = pipeline.newNode('number', {value: 10});
         const node2 = pipeline.newNode('test/identity');
         pipeline.connect(node1, node2);
-        expect(plugin.stats.executed).toEqual(0);
+        expect(plugin.stats.executed).toBe(0);
 
         await pipeline.run();
-        expect(node2.output().getValue()).toEqual(10);
-        expect(plugin.stats.executed).toEqual(1);
+        expect(node2.output().getValue()).toBe(10);
+        expect(plugin.stats.executed).toBe(1);
 
         await pipeline.run();
-        expect(node2.output().getValue()).toEqual(10);
-        expect(plugin.stats.executed).toEqual(1);
+        expect(node2.output().getValue()).toBe(10);
+        expect(plugin.stats.executed).toBe(1);
 
         node2.reset();
 
         await pipeline.run();
-        expect(node2.output().getValue()).toEqual(10);
-        expect(plugin.stats.executed).toEqual(2);
+        expect(node2.output().getValue()).toBe(10);
+        expect(plugin.stats.executed).toBe(2);
     });
 
     it('reset a block should change its parent status', async () => {
@@ -33,19 +33,19 @@ describe('reset method of nodes', () => {
         const pipeline = env.newPipeline();
         const node1 = pipeline.newNode('number', {value: 42});
         const node1Output = node1.output();
-        expect(node1.status).toEqual(READY);
-        expect(pipeline.status).toEqual(READY);
+        expect(node1.status).toBe(READY);
+        expect(pipeline.status).toBe(READY);
 
         await pipeline.run();
-        expect(node1Output.hasValue()).toEqual(true);
-        expect(node1Output.getValue()).toEqual(42);
-        expect(node1.status).toEqual(FINISHED);
-        expect(pipeline.status).toEqual(FINISHED);
+        expect(node1Output.hasValue()).toBe(true);
+        expect(node1Output.getValue()).toBe(42);
+        expect(node1.status).toBe(FINISHED);
+        expect(pipeline.status).toBe(FINISHED);
 
         node1.reset();
-        expect(node1Output.hasValue()).toEqual(false);
-        expect(node1.status).toEqual(READY);
-        expect(pipeline.status).toEqual(READY);
+        expect(node1Output.hasValue()).toBe(false);
+        expect(node1.status).toBe(READY);
+        expect(pipeline.status).toBe(READY);
     });
 
     it.only('block status after options are added', async () => {
@@ -53,11 +53,11 @@ describe('reset method of nodes', () => {
         const pipeline = env.newPipeline();
         const node = pipeline.newNode('number');
 
-        expect(node.status).toEqual(INSTANTIATED);
+        expect(node.status).toBe(INSTANTIATED);
         node.setOptions({value: 42});
-        expect(node.status).toEqual(READY);
+        expect(node.status).toBe(READY);
         await pipeline.runNode(node);
-        expect(node.status).toEqual(FINISHED);
+        expect(node.status).toBe(FINISHED);
     });
 });
 

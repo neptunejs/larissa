@@ -20,7 +20,7 @@ describe('pipeline inceptions', function () {
         pOut.connect(two, div.input('divisor'));
 
         await pOut.run();
-        expect(div.output().getValue()).toEqual(25);
+        expect(div.output().getValue()).toBe(25);
     });
 
     it('toJSON pipeline in a pipeline', function () {

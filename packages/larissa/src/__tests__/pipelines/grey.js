@@ -12,5 +12,5 @@ test('pipeline - image load and apply grayscale filter', async () => {
     pipeline.connect(node1, node2);
     await pipeline.run();
     const result = node2.output().getValue();
-    expect(result.channels).toEqual(1);
+    expect(result.channels).toBe(1);
 });
