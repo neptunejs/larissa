@@ -346,8 +346,8 @@ export default class Pipeline extends Node {
         return {
             kind: this.kind,
             id: this.id,
-            inputs: inputsToArray(this.inputs), // todo missing internal wiring
-            outputs: outputsToArray(this.outputs), // todo missing internal wiring
+            inputs: inputsToArray(this.inputs, this.linkedInputs),
+            outputs: outputsToArray(this.outputs, this.linkedOutputs),
             graph: this.graph.toJSON(),
             title: this.title
         };
@@ -429,27 +429,45 @@ function mapId([id]) {
     return id;
 }
 
-function inputsToArray(ports: Map<string, InputPort>): Array<Object> {
+function inputsToArray(ports: Map<string, InputPort>, linkedInputs: Map<string, LinkedPort>): Array<Object> {
     const arr = [];
     for (let port of ports.values()) {
-        var obj = {
+        const obj = {
             id: port.id,
             name: port.name,
             multiple: port.multiple,
             required: port.required
         };
+        for (let [linkId, linkValue] of linkedInputs) {
+            if (linkValue.input.id === port.id) {
+                const split = linkId.split('_');
+                obj.link = {
+                    id: split[0],
+                    name: split[2]
+                };
+            }
+        }
         arr.push(obj);
     }
     return arr;
 }
 
-function outputsToArray(ports: Map<string, OutputPort>): Array<Object> {
+function outputsToArray(ports: Map<string, OutputPort>, linkedOutputs: Map<string, LinkedPort>): Array<Object> {
     const arr = [];
     for (let port of ports.values()) {
-        var obj = {
+        const obj = {
             id: port.id,
             name: port.name,
         };
+        for (let [linkId, linkValue] of linkedOutputs) {
+            if (linkValue.output.id === port.id) {
+                const split = linkId.split('_');
+                obj.link = {
+                    id: split[0],
+                    name: split[2]
+                };
+            }
+        }
         arr.push(obj);
     }
     return arr;
