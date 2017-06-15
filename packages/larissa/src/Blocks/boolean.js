@@ -11,7 +11,8 @@ export default {
         properties: {
             value: {
                 type: 'boolean',
-                required: true
+                required: true,
+                default: false
             }
         }
     },

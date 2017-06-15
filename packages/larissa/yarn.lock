@@ -190,6 +190,10 @@ js-priority-queue@^0.1.5:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/js-priority-queue/-/js-priority-queue-0.1.5.tgz#f71e9b2120c91e8a1ddab3b7d347dac01d81e837"
 
+json-schema-defaults@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/json-schema-defaults/-/json-schema-defaults-0.3.0.tgz#8dafda34c6b1a6627d856b7eafad764c0f39db6b"
+
 jsonpointer@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/jsonpointer/-/jsonpointer-4.0.1.tgz#4fd92cb34e0e9db3c89c8622ecf51f9b978c6cb9"

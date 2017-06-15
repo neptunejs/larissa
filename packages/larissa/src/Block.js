@@ -1,4 +1,6 @@
 // @flow
+import jsonSchemaDefaults from 'json-schema-defaults';
+
 import Node from './Node';
 import Input from './InputPort';
 import Output from './OutputPort';
@@ -13,7 +15,14 @@ export default class Block extends Node {
     constructor(blockType: BlockType, options: ?Object, id: ?string) {
         super(id);
         this.blockType = blockType;
-        this.options = options || {};
+        if (options) {
+            this.options = options;
+        } else if (blockType.schema) {
+            this.options = jsonSchemaDefaults(blockType.schema);
+        } else {
+            this.options = {};
+        }
+
         createAllPorts(this);
         this.title = this.blockType.name;
     }
