@@ -18,5 +18,5 @@ async function fourBitsNumber(ctx) {
     const bit2 = ctx.getInput('bit2');
     const bit3 = ctx.getInput('bit3');
     const bit4 = ctx.getInput('bit4');
-    ctx.setOutput('number', bit1|bit2<<1|bit3<<2|bit4<<3);
+    ctx.setOutput('number', bit1 | bit2 << 1 | bit3 << 2 | bit4 << 3);
 }

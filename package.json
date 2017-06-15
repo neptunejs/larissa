@@ -31,6 +31,7 @@
     "flow": "flow",
     "prepare": "npm run bootstrap",
     "prepublish": "npm run build",
+    "publish": "git pull --rebase && npm run test && lerna publish",
     "test": "run-s build test-only flow eslint",
     "test-only": "jest",
     "test-watch": "jest --watch",
