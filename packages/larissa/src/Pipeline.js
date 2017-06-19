@@ -393,12 +393,13 @@ export default class Pipeline extends Node {
     }
 
     linkOptions(name: string, node: Node, schema: ?Object) {
-        // If no schema, deep copy of the node's schema
+        if (!this._nodes.has(node)) {
+            throw new Error(`node ${node.id} not found in pipeline`);
+        }
         if (!schema) {
             if (node instanceof Block) {
                 schema = cloneDeep(node.blockType.schema);
             } else if (node instanceof Pipeline) {
-                // create new schema from linkedOptions of pipeline
                 schema = {
                     type: 'object',
                     properties: {}

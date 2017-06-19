@@ -49,5 +49,15 @@ describe('link options', function () {
         expect(number2.output().getValue()).toBe(2);
         expect(sum.output().getValue()).toBe(3);
     });
+
+    it('should throw if node is not in pipeline', function () {
+        const env = new Environment();
+        const pipeline1 = env.newPipeline();
+        const pipeline2 = env.newPipeline();
+        const number = pipeline2.newNode('number', {value: 5});
+
+        pipeline1.addNode(pipeline2);
+        expect(() => pipeline1.linkOptions('option', number)).toThrow(/not found in pipeline/);
+    });
 });
 
