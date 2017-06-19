@@ -13,7 +13,7 @@ import OutputPort from './OutputPort';
 import type Environment from './Environment';
 import type {NodeStatus} from './Node';
 
-import {cloneDeep} from 'lodash';
+import cloneDeep from 'lodash.clonedeep';
 
 export default class Pipeline extends Node {
     env: Environment;
