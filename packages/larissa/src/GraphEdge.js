@@ -18,7 +18,7 @@ export default class GraphEdge {
     addConnection(output: Output, input: Input) {
         const connectionId = output.id + ':' + input.id;
         if (this.connections.has(connectionId)) {
-            throw new Error(`There is already a connection between ${output.id} and ${input.id}`);
+            throw new Error(`there is already a connection between ${output.id} and ${input.id}`);
         }
         this.connections.add(connectionId);
     }
