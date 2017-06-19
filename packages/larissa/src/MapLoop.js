@@ -1,5 +1,5 @@
 // @flow
-import Node from './Node';
+import Node, {READY} from './Node';
 import Input from './InputPort';
 import Output from './OutputPort';
 
@@ -55,6 +55,10 @@ class MapLoop extends Node {
         }
         const output: any = this.outputs.get(outKey);
         output.setValue(result);
+    }
+
+    _computeStatus() {
+        return READY;
     }
 }
 

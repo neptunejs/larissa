@@ -1,20 +1,27 @@
 import Environment from '../../Environment';
 
-test('pipeline - add two numbers', async () => {
+test('pipeline - disconnect nodes', async () => {
     const env = new Environment();
     const pipeline = env.newPipeline();
     const number1 = pipeline.newNode('number', {value: 5});
     const number2 = pipeline.newNode('number', {value: 10});
-    const rng = pipeline.newNode('rng');
     const sum = pipeline.newNode('sum');
     pipeline.connect(number1, sum);
     pipeline.connect(number2, sum);
-    pipeline.connect(rng, sum);
 
     await pipeline.run();
     expect(number1.output().getValue()).toBe(5);
     expect(number2.output().getValue()).toBe(10);
     const out = sum.output().getValue();
-    expect(out).toBeGreaterThanOrEqual(15);
-    expect(out).toBeLessThan(16);
+    expect(out).toBe(15);
+
+    expect(() => pipeline.connect(number2, sum)).toThrow(/^There is already a connection between/);
+
+    pipeline.disconnect(number2, sum);
+    await pipeline.run();
+    expect(sum.output().getValue()).toBe(5);
+
+    pipeline.connect(number2, sum);
+    await pipeline.run();
+    expect(sum.output().getValue()).toBe(15);
 });

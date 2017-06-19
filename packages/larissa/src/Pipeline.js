@@ -76,8 +76,7 @@ export default class Pipeline extends Node {
         if (!this._nodes.has(inputNode)) {
             throw new Error(`input node ${inputNode.id} not found in pipeline`);
         }
-        // TODO: find single type match between node1 outputs and node2 inputs ?
-        // TODO: check that the types of node1's output is compatible with node2's input
+
         let edge: GraphEdge;
         if (this.graph.hasEdge(outputNode.id, inputNode.id)) {
             edge = this.graph.edgeValue(outputNode.id, inputNode.id);
@@ -90,6 +89,37 @@ export default class Pipeline extends Node {
             }
         }
         edge.addConnection(nodeOutput, nodeInput);
+        inputNode.reset();
+        this.emit('change');
+    }
+
+    disconnect(nodeOutput: Node | OutputPort, nodeInput: Node | InputPort) {
+        if (nodeOutput instanceof Node) {
+            nodeOutput = nodeOutput.output();
+        }
+        if (nodeInput instanceof Node) {
+            nodeInput = nodeInput.input();
+        }
+        const outputNode: Node = nodeOutput.node;
+        const inputNode: Node = nodeInput.node;
+
+        if (!this._nodes.has(outputNode)) {
+            throw new Error(`output node ${outputNode.id} not found in pipeline`);
+        }
+        if (!this._nodes.has(inputNode)) {
+            throw new Error(`input node ${inputNode.id} not found in pipeline`);
+        }
+
+        if (this.graph.hasEdge(outputNode.id, inputNode.id)) {
+            const edge = this.graph.edgeValue(outputNode.id, inputNode.id);
+            edge.removeConnection(nodeOutput, nodeInput);
+            if (!edge.hasConnections()) {
+                this.graph.removeExistingEdge(outputNode.id, inputNode.id);
+            }
+        } else {
+            throw new Error(`no connection found between nodes ${outputNode.id} and ${inputNode.id}`);
+        }
+        inputNode.reset();
         this.emit('change');
     }
 

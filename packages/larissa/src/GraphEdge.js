@@ -22,6 +22,19 @@ export default class GraphEdge {
         }
         this.connections.add(connectionId);
     }
+
+    removeConnection(output: Output, input: Input) {
+        const connectionId = output.id + ':' + input.id;
+        if (!this.connections.has(connectionId)) {
+            throw new Error(`no connection found between ${output.id} and ${input.id}`);
+        }
+        this.connections.delete(connectionId);
+    }
+
+    hasConnections(): boolean {
+        return this.connections.size > 0;
+    }
+
     toJSON() {
         return Array.from(this.connections);
     }
