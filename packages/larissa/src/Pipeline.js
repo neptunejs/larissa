@@ -409,10 +409,6 @@ export default class Pipeline extends Node {
                 }
             }
         }
-        // What if no schema and node is a pipeline?
-        if (this.findNode(node.id) === null) {
-            throw new Error('Cannot link options, node is not a child');
-        }
         this.linkedOptions.set(name, {
             node: node.id,
             schema
@@ -426,7 +422,7 @@ export default class Pipeline extends Node {
     setOptions(options: Object) {
         for (let key in options) {
             const linkedOption = this.linkedOptions.get(key);
-            if (!linkedOption) throw new Error(`linked options ${key} does not exist`);
+            if (!linkedOption) throw new Error(`linked option ${key} does not exist`);
             const node = this.findExistingNode(linkedOption.node);
             if (!node) continue;
             // merge options

@@ -59,5 +59,16 @@ describe('link options', function () {
         pipeline1.addNode(pipeline2);
         expect(() => pipeline1.linkOptions('option', number)).toThrow(/not found in pipeline/);
     });
+
+    it('should throw when setOptions is passed invalid options', function () {
+        const env = new Environment();
+        const pipeline = env.newPipeline();
+        const number = pipeline.newNode('number', {value: 10});
+        pipeline.linkOptions('Number', number);
+        expect(() => pipeline.setOptions({
+            Number: {value: 1},
+            Other: {value: 2}
+        })).toThrow(/linked option Other does not exist/);
+    });
 });
 
