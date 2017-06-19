@@ -35,7 +35,8 @@ export default class Pipeline extends Node {
         return 'pipeline';
     }
 
-    findNode(nodeId: string) {
+    findNode(nodeId: ?string) {
+        if (nodeId === undefined) return null;
         for (const node of this.nodes()) {
             if (node.id === nodeId) {
                 return node;
@@ -361,24 +362,27 @@ export default class Pipeline extends Node {
         };
     }
 
-    loadJSON(json: Object, idSuffix: string) {
+    loadJSON(json: Object) {
         this.title = json.title;
         const graph = Graph.fromJSON(json.graph);
+        const ids: Map<string, string> = new Map();
         for (const [, node] of graph.vertices()) {
             if (node.kind === 'block') {
-                const newNode = this.newNode(node.type, node.options, node.id + idSuffix);
+                const newNode = this.newNode(node.type, node.options);
+                ids.set(node.id, newNode.id);
                 newNode.title = node.title;
             } else if (node.kind === 'pipeline') {
-                const pipeline = this.env.newPipeline(node.id + idSuffix);
-                pipeline.loadJSON(node, idSuffix);
+                const pipeline = this.env.newPipeline();
+                ids.set(node.id, pipeline.id);
+                pipeline.loadJSON(node);
                 this.addNode(pipeline);
             } else {
                 throw new Error('unimplemented load JSON for ' + node.kind);
             }
         }
         for (const [fromId, toId, edgeValue] of graph.edges()) {
-            const fromNode = this.findNode(fromId + idSuffix);
-            const toNode = this.findNode(toId + idSuffix);
+            const fromNode = this.findNode(ids.get(fromId));
+            const toNode = this.findNode(ids.get(toId));
             if (!fromNode || !toNode) {
                 throw new Error('unreachable');
             }
@@ -388,14 +392,14 @@ export default class Pipeline extends Node {
 
         if (json.inputs) {
             for (const input of json.inputs) {
-                const node = this.findNode(input.link.id + idSuffix);
+                const node = this.findNode(ids.get(input.link.id));
                 if (!node) throw new Error('node not found');
                 this.linkInput(node.input(input.link.name), input);
             }
         }
         if (json.outputs) {
             for (const output of json.outputs) {
-                const node = this.findNode(output.link.id + idSuffix);
+                const node = this.findNode(ids.get(output.link.id));
                 if (!node) throw new Error('node not found');
                 this.linkOutput(node.output(output.link.name), output);
             }

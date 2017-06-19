@@ -3,7 +3,6 @@ import Pipeline from './Pipeline';
 import Plugin from './Plugin';
 import builtinBlockTypes from './Blocks/Blocks';
 
-let idSuffix = 1;
 
 export default class Environment {
     plugins: Map<string, Plugin>;
@@ -36,9 +35,8 @@ export default class Environment {
         if (!json || json.kind !== 'pipeline') {
             throw new Error('This does not seem to be a pipeline');
         }
-        const newIdSuffix = '$' + idSuffix++;
-        const pipeline = new Pipeline(this, json.id + newIdSuffix);
-        pipeline.loadJSON(json, newIdSuffix);
+        const pipeline = new Pipeline(this);
+        pipeline.loadJSON(json);
         return pipeline;
     }
 
