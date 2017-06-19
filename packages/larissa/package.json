@@ -15,6 +15,7 @@
     "graph.js": "^1.21.1",
     "is-my-json-valid": "^2.16.0",
     "json-schema-defaults": "^0.3.0",
+    "lodash": "^4.17.4",
     "papaparse": "^4.3.3",
     "uuid": "^3.0.1"
   },

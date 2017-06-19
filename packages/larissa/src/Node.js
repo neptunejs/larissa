@@ -27,6 +27,10 @@ export default class Node extends EventEmitter {
         throw new Error('Node.kind: implement me');
     }
 
+    setOptions(options: Object): void { // eslint-disable-line no-unused-vars
+        throw new Error('Node.setOptions: implement me');
+    }
+
     setTitle(title: string): void {
         this.title = title;
         this.emit('change');

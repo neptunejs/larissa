@@ -55,8 +55,12 @@ export default class Block extends Node {
         return this.blockType.executor(context);
     }
 
-    setOptions(options: Object) {
-        this.options = options;
+    setOptions(options: Object, merge: boolean = true) {
+        if (merge) {
+            this.options = Object.assign({}, this.options, options);
+        } else {
+            this.options = Object.assign({}, options);
+        }
         this.reset();
     }
 

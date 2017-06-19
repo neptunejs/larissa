@@ -13,12 +13,15 @@ import OutputPort from './OutputPort';
 import type Environment from './Environment';
 import type {NodeStatus} from './Node';
 
+import {cloneDeep} from 'lodash';
+
 export default class Pipeline extends Node {
     env: Environment;
     graph: Graph;
     _nodes: Set<Node>;
     linkedInputs: Map<string, LinkedPort>;
     linkedOutputs: Map<string, LinkedPort>;
+    linkedOptions: Map<string, { node: string, schema: ?Object }>;
 
     constructor(env: Environment, id: ?string) {
         super(id);
@@ -28,6 +31,7 @@ export default class Pipeline extends Node {
         this.title = 'Pipeline';
         this.linkedInputs = new Map();
         this.linkedOutputs = new Map();
+        this.linkedOptions = new Map();
         this.computeStatus();
     }
 
@@ -36,13 +40,20 @@ export default class Pipeline extends Node {
     }
 
     findNode(nodeId: ?string) {
-        if (nodeId === undefined) return null;
         for (const node of this.nodes()) {
             if (node.id === nodeId) {
                 return node;
             }
         }
         return null;
+    }
+
+    findExistingNode(nodeId: string) {
+        const node = this.findNode(nodeId);
+        if (node === null) {
+            throw new Error(`node ${nodeId} does not exist`);
+        }
+        return node;
     }
 
     * nodes(): Iterator<Node> {
@@ -379,6 +390,47 @@ export default class Pipeline extends Node {
             this.defaultOutput = newOutput;
         }
         this.emit('change');
+    }
+
+    linkOptions(name: string, node: Node, schema: ?Object) {
+        // If no schema, deep copy of the node's schema
+        if (!schema) {
+            if (node instanceof Block) {
+                schema = cloneDeep(node.blockType.schema);
+            } else if (node instanceof Pipeline) {
+                // create new schema from linkedOptions of pipeline
+                schema = {
+                    type: 'object',
+                    properties: {}
+                };
+                for (let [name, linkedOption] of node.linkedOptions) {
+                    schema.properties[name] = cloneDeep(linkedOption.schema);
+                }
+            }
+        }
+        // What if no schema and node is a pipeline?
+        if (this.findNode(node.id) === null) {
+            throw new Error('Cannot link options, node is not a child');
+        }
+        this.linkedOptions.set(name, {
+            node: node.id,
+            schema
+        });
+    }
+
+    unlinkOptions(name: string) {
+        this.linkedOptions.delete(name);
+    }
+
+    setOptions(options: Object) {
+        for (let key in options) {
+            const linkedOption = this.linkedOptions.get(key);
+            if (!linkedOption) throw new Error(`linked options ${key} does not exist`);
+            const node = this.findExistingNode(linkedOption.node);
+            if (!node) continue;
+            // merge options
+            node.setOptions(options[key]);
+        }
     }
 
     toJSON() {
