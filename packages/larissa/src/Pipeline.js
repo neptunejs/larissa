@@ -39,6 +39,16 @@ export default class Pipeline extends Node {
         return 'pipeline';
     }
 
+    hasNode(node: Node | string) {
+        const id = getNodeId(node);
+        for (const node of this._nodes) {
+            if (node.id === id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     findNode(nodeId: ?string) {
         for (const node of this.nodes()) {
             if (node.id === nodeId) {
@@ -51,7 +61,7 @@ export default class Pipeline extends Node {
     findExistingNode(nodeId: string): Node {
         const node = this.findNode(nodeId);
         if (node === null) {
-            throw new Error(`node ${nodeId} does not exist`);
+            throw new Error(`node ${nodeId} not found`);
         }
         return node;
     }
@@ -215,8 +225,12 @@ export default class Pipeline extends Node {
         if (!this._nodes.has(node)) {
             throw new Error('node not found in pipeline');
         }
+        const nodesFrom = this.getNodesFrom(node);
         this._nodes.delete(node);
         this.graph.destroyExistingVertex(node.id);
+        for (const nodeFrom of nodesFrom) {
+            nodeFrom.reset();
+        }
         this.emit('change');
     }
 
@@ -310,6 +324,26 @@ export default class Pipeline extends Node {
             }
             throw new Error(`Errors occured in pipeline: [${errors.join(', ')}]`);
         }
+    }
+
+    getNodesFrom(node: Node): Array<Node> {
+        assertHasNode(this, node);
+        const nodeId = node.id;
+        const result = [];
+        for (const [, otherNode] of this.graph.verticesFrom(nodeId)) {
+            result.push(otherNode);
+        }
+        return result;
+    }
+
+    getNodesTo(node: Node): Array<Node> {
+        assertHasNode(this, node);
+        const nodeId = node.id;
+        const result = [];
+        for (const [, otherNode] of this.graph.verticesTo(nodeId)) {
+            result.push(otherNode);
+        }
+        return result;
     }
 
     getConnectedOutputs(input: InputPort): Array<OutputPort> {
@@ -587,4 +621,18 @@ function outputsToArray(ports: Map<string, OutputPort>, linkedOutputs: Map<strin
         arr.push(obj);
     }
     return arr;
+}
+
+function assertHasNode(pipeline: Pipeline, node: Node): void {
+    if (!pipeline.hasNode(node)) {
+        throw new Error(`node ${node.id} not found`);
+    }
+}
+
+function getNodeId(node: Node | string) {
+    if (typeof node === 'string') {
+        return node;
+    } else {
+        return node.id;
+    }
 }
