@@ -77,7 +77,7 @@ export default class Pipeline extends Node {
         }
     }
 
-    connect(nodeOutput: Node | OutputPort, nodeInput: Node | InputPort) {
+    connect(nodeOutput: Node | OutputPort, nodeInput: Node | InputPort, options: { replace: boolean } = {replace: false}) {
         if (nodeOutput instanceof Node) {
             nodeOutput = nodeOutput.output();
         }
@@ -99,8 +99,39 @@ export default class Pipeline extends Node {
         }
 
         let edge: GraphEdge;
-        if (this.graph.hasEdge(outputNode.id, inputNode.id)) {
+
+        const edgeExists = this.graph.hasEdge(outputNode.id, inputNode.id);
+
+        if (!nodeInput.isMultiple()) {
+            let toInputEdges: Array<GraphEdge> = [];
+            const vertices = this.graph.verticesTo(inputNode.id);
+            for (let vertice of vertices) {
+                if (this.graph.hasEdge(vertice[0], inputNode.id)) {
+                    toInputEdges.push(this.graph.edgeValue(vertice[0], inputNode.id));
+                }
+            }
+
+            for (let inputEdge of toInputEdges) {
+                if (!options.replace && inputEdge.hasConnectionsTo(nodeInput)) {
+                    throw new Error('input does not allow multiple connections');
+                }
+                inputEdge.removeConnectionsTo(nodeInput);
+                if (!inputEdge.hasConnections()) {
+                    this.graph.removeExistingEdge(inputEdge.from.id, inputEdge.to.id);
+                }
+            }
+        }
+
+        if (edgeExists) {
             edge = this.graph.edgeValue(outputNode.id, inputNode.id);
+            if (!options.replace) {
+                if (edge.hasConnection(nodeOutput, nodeInput)) {
+                    throw new Error('the connection already exists');
+                }
+                if (edge.hasConnectionsTo(nodeInput)) {
+                    throw new Error('input does not allow multiple connections');
+                }
+            }
         } else {
             edge = new GraphEdge(outputNode, inputNode);
             this.graph.addNewEdge(outputNode.id, inputNode.id, edge);
@@ -109,6 +140,8 @@ export default class Pipeline extends Node {
                 throw new Error(`cannot connect nodes ${outputNode.id} and ${inputNode.id} because of cycle`);
             }
         }
+
+
         edge.addConnection(nodeOutput, nodeInput);
         inputNode.reset();
         this.emit('change');

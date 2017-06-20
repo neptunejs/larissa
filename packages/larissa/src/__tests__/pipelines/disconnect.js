@@ -15,7 +15,7 @@ test('pipeline - disconnect nodes', async () => {
     const out = sum.output().getValue();
     expect(out).toBe(15);
 
-    expect(() => pipeline.connect(number2, sum)).toThrow(/^there is already a connection between/);
+    expect(() => pipeline.connect(number2, sum)).toThrow(/the connection already exists/);
 
     pipeline.disconnect(number2, sum);
     await pipeline.run();
