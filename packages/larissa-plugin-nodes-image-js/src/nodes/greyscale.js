@@ -22,6 +22,5 @@ export default {
 
 async function greyscale(ctx) {
     const image = ctx.getInput('image');
-    const options = ctx.getOptions();
-    ctx.setOutput('image', image.grey({algorithm: options.algorithm}));
+    ctx.setOutput('image', image.grey(ctx.getOptions()));
 }
