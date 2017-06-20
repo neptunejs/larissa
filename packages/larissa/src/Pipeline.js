@@ -48,7 +48,7 @@ export default class Pipeline extends Node {
         return null;
     }
 
-    findExistingNode(nodeId: string) {
+    findExistingNode(nodeId: string): Node {
         const node = this.findNode(nodeId);
         if (node === null) {
             throw new Error(`node ${nodeId} does not exist`);
@@ -436,6 +436,7 @@ export default class Pipeline extends Node {
             id: this.id,
             inputs: inputsToArray(this.inputs, this.linkedInputs),
             outputs: outputsToArray(this.outputs, this.linkedOutputs),
+            linkedOptions: Array.from(this.linkedOptions),
             graph: this.graph.toJSON(),
             title: this.title
         };
@@ -460,27 +461,38 @@ export default class Pipeline extends Node {
             }
         }
         for (const [fromId, toId, edgeValue] of graph.edges()) {
-            const fromNode = this.findNode(ids.get(fromId));
-            const toNode = this.findNode(ids.get(toId));
-            if (!fromNode || !toNode) {
-                throw new Error('unreachable');
-            }
+            const newFromId = ids.get(fromId);
+            const newToId = ids.get(toId);
+            if (!newFromId || !newToId) throw new Error('unreachable');
+            const fromNode = this.findExistingNode(newFromId);
+            const toNode = this.findExistingNode(newToId);
             const split = edgeValue[0].split(':').map((x) => x.split('_'));
             this.connect(fromNode.output(split[0][2]), toNode.input(split[1][2]));
         }
 
         if (json.inputs) {
             for (const input of json.inputs) {
-                const node = this.findNode(ids.get(input.link.id));
-                if (!node) throw new Error('node not found');
+                const newInputLinkId = ids.get(input.link.id);
+                if (!newInputLinkId) throw new Error('unreachable');
+                const node = this.findExistingNode(newInputLinkId);
                 this.linkInput(node.input(input.link.name), input);
             }
         }
         if (json.outputs) {
             for (const output of json.outputs) {
-                const node = this.findNode(ids.get(output.link.id));
-                if (!node) throw new Error('node not found');
+                const newOutputLinkId = ids.get(output.link.id);
+                if (!newOutputLinkId) throw new Error('unreachable');
+                const node = this.findExistingNode(newOutputLinkId);
                 this.linkOutput(node.output(output.link.name), output);
+            }
+        }
+
+        if (json.linkedOptions) {
+            for (let [name, linkedOption] of json.linkedOptions) {
+                const newLinkedNodeId = ids.get(linkedOption.node);
+                if (!newLinkedNodeId) throw new Error('unreachable');
+                const node = this.findExistingNode(newLinkedNodeId);
+                this.linkOptions(name, node, linkedOption.schema);
             }
         }
     }
