@@ -162,28 +162,28 @@ export default class Pipeline extends Node {
         };
     }
 
-    getInputCandidates() {
+    getInputCandidates(): Array<PortCandidate> {
         const inputs = [];
         for (let node of this._nodes.values()) {
-            const nodeData = node.toJSON();
-            for (let input of node.inputs.values()) {
+            const nodeId = node.id;
+            for (const input of node.inputs.values()) {
                 inputs.push({
-                    info: input.toJSON(),
-                    node: nodeData
+                    node: nodeId,
+                    port: input.name
                 });
             }
         }
         return inputs;
     }
 
-    getOutputCandidates() {
+    getOutputCandidates(): Array<PortCandidate> {
         const outputs = [];
         for (let node of this._nodes.values()) {
-            const nodeData = node.toJSON();
-            for (let output of node.outputs.values()) {
+            const nodeId = node.id;
+            for (const output of node.outputs.values()) {
                 outputs.push({
-                    info: output.toJSON(),
-                    node: nodeData
+                    node: nodeId,
+                    port: output.name
                 });
             }
         }
@@ -635,4 +635,9 @@ function getNodeId(node: Node | string) {
     } else {
         return node.id;
     }
+}
+
+type PortCandidate = {
+    node: string,
+    port: string
 }
