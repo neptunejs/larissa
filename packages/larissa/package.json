@@ -20,7 +20,8 @@
     "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "larissa-plugin-nodes-image-js": "^0.0.7"
+    "larissa-plugin-nodes-image-js": "^0.0.7",
+    "larissa-plugin-nodes-logic": "^0.2.0"
   },
   "browser": {
     "./lib-module/Blocks/executors/request.js": "./lib-module/Blocks/executors/browser/request.js"

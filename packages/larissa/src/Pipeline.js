@@ -101,6 +101,11 @@ export default class Pipeline extends Node {
         let edge: GraphEdge;
 
         const edgeExists = this.graph.hasEdge(outputNode.id, inputNode.id);
+        if (edgeExists) {
+            edge = this.graph.edgeValue(outputNode.id, inputNode.id);
+        } else {
+            edge = new GraphEdge(outputNode, inputNode);
+        }
 
         if (!nodeInput.isMultiple()) {
             let toInputEdges: Array<GraphEdge> = [];
@@ -116,14 +121,13 @@ export default class Pipeline extends Node {
                     throw new Error('input does not allow multiple connections');
                 }
                 inputEdge.removeConnectionsTo(nodeInput);
-                if (!inputEdge.hasConnections()) {
+                if (!inputEdge.hasConnections() && edge !== inputEdge) {
                     this.graph.removeExistingEdge(inputEdge.from.id, inputEdge.to.id);
                 }
             }
         }
 
         if (edgeExists) {
-            edge = this.graph.edgeValue(outputNode.id, inputNode.id);
             if (!options.replace) {
                 if (edge.hasConnection(nodeOutput, nodeInput)) {
                     throw new Error('the connection already exists');
@@ -133,7 +137,6 @@ export default class Pipeline extends Node {
                 }
             }
         } else {
-            edge = new GraphEdge(outputNode, inputNode);
             this.graph.addNewEdge(outputNode.id, inputNode.id, edge);
             if (this.graph.hasCycle()) {
                 this.graph.removeExistingEdge(outputNode.id, inputNode.id);

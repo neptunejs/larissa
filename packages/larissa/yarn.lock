@@ -204,6 +204,10 @@ larissa-plugin-nodes-image-js@^0.0.7:
   dependencies:
     image-js "^0.9.13"
 
+larissa-plugin-nodes-logic@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/larissa-plugin-nodes-logic/-/larissa-plugin-nodes-logic-0.2.0.tgz#ea92dd1e95b8881d39cb1094a03cde6fd0585bc8"
+
 lie@*:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/lie/-/lie-3.1.1.tgz#9a436b2cc7746ca59de7a41fa469b3efb76bd87e"
