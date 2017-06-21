@@ -145,11 +145,11 @@ export default class Node extends EventEmitter {
         throw new Error('Node.run: implement me');
     }
 
-    inspect() {
+    inspect(): Object {
         return this.toJSON();
     }
 
-    toJSON() {
+    toJSON(): Object {
         return {
             kind: 'node'
         };

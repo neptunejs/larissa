@@ -1,3 +1,4 @@
+// @flow
 import type InputPort from './InputPort';
 import type OutputPort from './OutputPort';
 import type LinkedPort from './LinkedPort';

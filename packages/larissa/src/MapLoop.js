@@ -86,7 +86,7 @@ class MapLoop extends Node {
         return {
             status: this.status,
             node: this.toJSON(),
-        }
+        };
     }
 
     toJSON() {
@@ -97,7 +97,7 @@ class MapLoop extends Node {
             inputs: inputsToArray(this.inputs),
             outputs: outputsToArray(this.outputs),
             loopNode: this.loopNode.toJSON()
-        }
+        };
     }
 }
 

@@ -71,9 +71,11 @@ export default class Pipeline extends Node {
         for (const node of this._nodes) {
             if (node instanceof Pipeline) {
                 yield* node.nodes();
-            } else if (node instanceof MapLoop && node.loopNode instanceof Pipeline) {
+            } else if (node instanceof MapLoop) {
                 yield node;
-                yield* node.loopNode.nodes();
+                if (node.loopNode instanceof Pipeline) {
+                    yield* node.loopNode.nodes();
+                }
             } else {
                 yield node;
             }
