@@ -189,6 +189,12 @@ export default class Pipeline extends Node {
         return null;
     }
 
+    getExistingNode(id: string): Node {
+        const node = this.getNode(id);
+        if (!node) throw new Error(`node ${id} not found`);
+        return node;
+    }
+
     inspect() {
         return {
             node: this.toJSON(),
