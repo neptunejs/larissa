@@ -1,19 +1,19 @@
 // @flow
 import Graph from 'graph.js/dist/graph';
+import cloneDeep from 'lodash.clonedeep';
 
 import Block from './Block';
 import GraphEdge from './GraphEdge';
 import MapLoop from './MapLoop';
 import Node, {INSTANTIATED, READY} from './Node';
 import LinkedPort from './LinkedPort';
-
 import InputPort from './InputPort';
 import OutputPort from './OutputPort';
+import {inputsToArray, outputsToArray} from './pipelineUtils';
 
 import type Environment from './Environment';
 import type {NodeStatus} from './Node';
 
-import cloneDeep from 'lodash.clonedeep';
 
 export default class Pipeline extends Node {
     env: Environment;
@@ -71,6 +71,9 @@ export default class Pipeline extends Node {
         for (const node of this._nodes) {
             if (node instanceof Pipeline) {
                 yield* node.nodes();
+            } else if (node instanceof MapLoop && node.loopNode instanceof Pipeline) {
+                yield node;
+                yield* node.loopNode.nodes();
             } else {
                 yield node;
             }
@@ -637,48 +640,6 @@ function mapNode([, node]) {
 
 function mapId([id]) {
     return id;
-}
-
-function inputsToArray(ports: Map<string, InputPort>, linkedInputs: Map<string, LinkedPort>): Array<Object> {
-    const arr = [];
-    for (let port of ports.values()) {
-        const obj = {
-            id: port.id,
-            name: port.name,
-            multiple: port.multiple,
-            required: port.required,
-            link: {}
-        };
-        for (let [linkId, linkValue] of linkedInputs) {
-            if (linkValue.input.id === port.id) {
-                const split = linkId.split('_');
-                obj.link.id = split[0];
-                obj.link.name = split[2];
-            }
-        }
-        arr.push(obj);
-    }
-    return arr;
-}
-
-function outputsToArray(ports: Map<string, OutputPort>, linkedOutputs: Map<string, LinkedPort>): Array<Object> {
-    const arr = [];
-    for (let port of ports.values()) {
-        const obj = {
-            id: port.id,
-            name: port.name,
-            link: {}
-        };
-        for (let [linkId, linkValue] of linkedOutputs) {
-            if (linkValue.output.id === port.id) {
-                const split = linkId.split('_');
-                obj.link.id = split[0];
-                obj.link.name = split[2];
-            }
-        }
-        arr.push(obj);
-    }
-    return arr;
 }
 
 function assertHasNode(pipeline: Pipeline, node: Node): void {

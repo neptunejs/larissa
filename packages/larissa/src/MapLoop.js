@@ -2,6 +2,7 @@
 import Node, {READY} from './Node';
 import Input from './InputPort';
 import Output from './OutputPort';
+import {inputsToArray, outputsToArray} from './pipelineUtils';
 
 class MapLoop extends Node {
     loopNode: Node;
@@ -71,6 +72,24 @@ class MapLoop extends Node {
 
     _computeStatus() {
         return READY;
+    }
+
+    inspect() {
+        return {
+            status: this.status,
+            node: this.toJSON(),
+        }
+    }
+
+    toJSON() {
+        return {
+            kind: 'map-loop',
+            id: this.id,
+            title: this.title,
+            inputs: inputsToArray(this.inputs),
+            outputs: outputsToArray(this.outputs),
+            loopNode: this.loopNode.toJSON()
+        }
     }
 }
 
