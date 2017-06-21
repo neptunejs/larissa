@@ -273,6 +273,11 @@ export default class Pipeline extends Node {
         for (const nodeFrom of nodesFrom) {
             nodeFrom.reset();
         }
+        for (const [name, info] of this.linkedOptions) {
+            if (info.node === node.id) {
+                this.unlinkOptions(name);
+            }
+        }
         this.emit('change');
     }
 
