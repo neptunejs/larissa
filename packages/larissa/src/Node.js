@@ -23,6 +23,14 @@ export default class Node extends EventEmitter {
         this._status = INSTANTIATED;
     }
 
+    hasDefaultInput(): boolean {
+        return !!this.defaultInput;
+    }
+
+    hasDefaultOutput(): boolean {
+        return !!this.defaultOutput;
+    }
+
     get kind(): string {
         throw new Error('Node.kind: implement me');
     }
@@ -89,6 +97,11 @@ export default class Node extends EventEmitter {
             output.reset();
         }
         this.emit('change');
+    }
+
+    resetInput(input: InputPort): void {
+        input.reset();
+        this.computeStatus();
     }
 
     _canRun(): boolean {

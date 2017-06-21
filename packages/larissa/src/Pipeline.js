@@ -329,6 +329,17 @@ export default class Pipeline extends Node {
         // todo implement pipeline reset
     }
 
+    resetInput(input: InputPort): void {
+        for (const [inputId, link] of this.linkedInputs) {
+            if (link.input === input) {
+                const split = inputId.split('_');
+                const inputNode = this.getExistingNode(split[0]);
+                inputNode.reset();
+            }
+        }
+        super.resetInput(input);
+    }
+
     async schedule(nodeList: Array<Node>) {
         const erroredNodes: Map<string, Error> = new Map();
         main: for (const node of nodeList) {

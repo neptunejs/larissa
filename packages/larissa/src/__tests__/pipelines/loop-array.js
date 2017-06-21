@@ -11,14 +11,14 @@ test('loop over an array to double the values', async () => {
     const two = inner.newNode('number', {value: 2});
     const product = inner.newNode('product');
     inner.connect(two, product);
-    inner.linkInput(product.input(), 'number');
-    inner.linkOutput(product.output(), 'result');
+    inner.linkInput(product.input(), {name: 'LINKED_NUMBER', default: true});
+    inner.linkOutput(product.output(), {name: 'LINKED_RESULT', default: true});
 
     const loop = p.newLoop(inner, {
         type: 'map'
     });
-    p.connect(json, loop.input('number'));
+    p.connect(json, loop);
 
     await p.run();
-    expect(loop.output('result').getValue()).toEqual([0, 10, 20, 2]);
+    expect(loop.output().getValue()).toEqual([0, 10, 20, 2]);
 });

@@ -8,22 +8,30 @@ class MapLoop extends Node {
 
     constructor(node: Node) {
         super();
-        this.loopNode = node;
-        this.title = 'MapLoop';
-        for (let [key, val] of node.inputs.entries()) {
-            const input = new Input(this, {
-                name: val.name,
-                type: 'array'
-            });
-            this.inputs.set(key, input);
+
+        if (!node.hasDefaultInput()) {
+            throw new Error(`node ${node.id} has no default input`);
+        }
+        if (!node.hasDefaultOutput()) {
+            throw new Error(`node ${node.id} has no default output`);
         }
 
-        for (let [key, val] of node.outputs.entries()) {
-            const output = new Output(this, {
-                name: val.name,
-                type: 'array'
-            });
-            this.outputs.set(key, output);
+        this.loopNode = node;
+        this.title = 'MapLoop';
+
+        const input = new Input(this, {name: '@@input', type: 'array', required: true});
+        this.inputs.set('@@input', input);
+        this.defaultInput = input;
+
+        const output = new Output(this, {name: '@@output', type: 'array', required: true});
+        this.outputs.set('@@output', output);
+        this.defaultOutput = output;
+
+        for (let [key, val] of node.inputs.entries()) {
+            if (val !== node.defaultInput) {
+                const input = new Input(this, val);
+                this.inputs.set(key, input);
+            }
         }
     }
 
@@ -36,25 +44,29 @@ class MapLoop extends Node {
     }
 
     async run() {
-        const key = this.inputs.keys().next().value;
-        const outKey = this.outputs.keys().next().value;
-
-        if (!key || !outKey) {
-            throw new Error('Undefined input or output');
-        }
-        const input: any = this.inputs.get(key);
-        const value = input.getValue();
+        const thisOutput = this.defaultOutput;
+        const thisInput = this.defaultInput;
+        const loopNodeOutput = this.loopNode.defaultOutput;
+        const loopNodeInput = this.loopNode.defaultInput;
+        if (!thisOutput || !thisInput || !loopNodeOutput || !loopNodeInput) throw new Error('default ports should exist');
+        const values = thisInput.getValue();
         const result = [];
-        for (let val of value) {
-            this.loopNode.reset();
-            const loopInput: any = this.loopNode.inputs.get(key);
-            loopInput.setValue(val);
-            await this.loopNode.run();
-            const loopOutput: any = this.loopNode.outputs.get(outKey);
-            result.push(loopOutput.getValue());
+        for (const input of this.inputs.values()) {
+            if (input !== thisInput) {
+                const innerInput = this.loopNode.inputs.get(input.name);
+                if (!innerInput) throw new Error('unreachable');
+                innerInput.setValue(input.getValue());
+            }
         }
-        const output: any = this.outputs.get(outKey);
-        output.setValue(result);
+
+        for (const val of values) {
+            this.loopNode.resetInput(loopNodeInput);
+            loopNodeInput.setValue(val);
+            await this.loopNode.run();
+            result.push(loopNodeOutput.getValue());
+        }
+
+        thisOutput.setValue(result);
     }
 
     _computeStatus() {
