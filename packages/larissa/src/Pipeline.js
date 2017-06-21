@@ -624,11 +624,9 @@ function addNodeToGraph(node: Node, self: Pipeline) {
         self.emit('child-change', node);
         self.emit('deep-child-change', node);
     });
-    if (node.kind === 'pipeline') {
-        node.on('deep-child-change', (node) => {
-            self.emit('deep-child-change', node);
-        });
-    }
+    node.on('deep-child-change', (node) => {
+        self.emit('deep-child-change', node);
+    });
 
     self._nodes.add(node);
     self.graph.addNewVertex(node.id, node);

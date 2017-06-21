@@ -34,6 +34,14 @@ class MapLoop extends Node {
                 this.inputs.set(key, input);
             }
         }
+
+        node.on('change', () => {
+            this.emit('child-change', node);
+            this.emit('deep-child-change', node);
+        });
+        node.on('deep-child-change', (node) => {
+            this.emit('deep-child-change', node);
+        });
     }
 
     get kind(): string {
@@ -44,7 +52,7 @@ class MapLoop extends Node {
         return true;
     }
 
-    async run() {
+    async _run() {
         const thisOutput = this.defaultOutput;
         const thisInput = this.defaultInput;
         const loopNodeOutput = this.loopNode.defaultOutput;
