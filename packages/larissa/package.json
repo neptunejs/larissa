@@ -1,6 +1,6 @@
 {
   "name": "larissa",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "JavaScript engine for dataflow programming",
   "main": "lib/index.js",
   "module": "lib-module/index.js",
@@ -20,7 +20,7 @@
     "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "larissa-plugin-nodes-image-js": "^0.0.7",
+    "larissa-plugin-nodes-image-js": "^0.3.0",
     "larissa-plugin-nodes-logic": "^0.2.0"
   },
   "browser": {
