@@ -615,19 +615,18 @@ function getConfig(configOrName: string | Object): Object {
 }
 
 function addNodeToGraph(node: Node, self: Pipeline) {
-    node.on('status', status => {
-        if (status === INSTANTIATED || status === READY) {
-            self.computeStatus();
-            self.resetChildren(node);
+    node.on('change', (type, value) => {
+        if (type === 'status') {
+            if (value === INSTANTIATED || value === READY) {
+                self.computeStatus();
+                self.resetChildren(node);
+            }
         }
-        self.emit('child-status', status, node);
+        self.emit('child-change', node, type, value);
+        self.emit('deep-child-change', node, type, value);
     });
-    node.on('change', () => {
-        self.emit('child-change', node);
-        self.emit('deep-child-change', node);
-    });
-    node.on('deep-child-change', (node) => {
-        self.emit('deep-child-change', node);
+    node.on('deep-child-change', (node, type, value) => {
+        self.emit('deep-child-change', node, type, value);
     });
 
     self._nodes.add(node);

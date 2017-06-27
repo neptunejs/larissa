@@ -71,8 +71,7 @@ export default class Node extends EventEmitter {
     set status(status: NodeStatus) {
         if (this._status !== status) {
             this._status = status;
-            this.emit('change');
-            this.emit('status', status);
+            this.emit('change', 'status', status);
         }
     }
 

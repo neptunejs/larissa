@@ -12,18 +12,18 @@ describe('Pipeline low level tests', function () {
 
         {
             const cb = jest.fn();
-            pipeline.on('child-status', cb);
+            pipeline.on('child-change', cb);
             node.status = ERRORED;
             expect(cb.mock.calls.length).toBe(1);
-            expect(cb.mock.calls[0][0]).toBe(ERRORED);
+            expect(cb.mock.calls[0]).toEqual([node, 'status', ERRORED]);
         }
 
         {
             const cb = jest.fn();
-            pipeline.on('child-status', cb);
+            pipeline.on('child-change', cb);
             otherNode.status = FINISHED;
             expect(cb.mock.calls.length).toBe(1);
-            expect(cb.mock.calls[0][0]).toBe(FINISHED);
+            expect(cb.mock.calls[0]).toEqual([otherNode, 'status', FINISHED]);
         }
     });
 });

@@ -8,15 +8,15 @@ test('check that status events are correctly emitted from pipeline when running 
 
     const status = jest.fn();
     const childStatus = jest.fn();
-    pipeline.on('status', status);
-    pipeline.on('child-status', childStatus);
+    pipeline.on('change', status);
+    pipeline.on('child-change', childStatus);
     await pipeline.run();
 
     expect(status.mock.calls.length).toBe(2);
-    expect(status.mock.calls[0][0]).toBe(RUNNING);
-    expect(status.mock.calls[1][0]).toBe(FINISHED);
+    expect(status.mock.calls[0]).toEqual(['status', RUNNING]);
+    expect(status.mock.calls[1]).toEqual(['status', FINISHED]);
 
     expect(childStatus.mock.calls.length).toBe(2);
-    expect(childStatus.mock.calls[0]).toEqual([RUNNING, node]);
-    expect(childStatus.mock.calls[1]).toEqual([FINISHED, node]);
+    expect(childStatus.mock.calls[0]).toEqual([node, 'status', RUNNING]);
+    expect(childStatus.mock.calls[1]).toEqual([node, 'status', FINISHED]);
 });
