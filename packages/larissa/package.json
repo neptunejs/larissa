@@ -17,7 +17,7 @@
     "json-schema-defaults": "^0.3.0",
     "lodash.clonedeep": "^4.5.0",
     "papaparse": "^4.3.3",
-    "uuid": "^3.0.1"
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "larissa-plugin-nodes-image-js": "^0.3.0",

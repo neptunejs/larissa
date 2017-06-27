@@ -198,9 +198,9 @@ jsonpointer@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/jsonpointer/-/jsonpointer-4.0.1.tgz#4fd92cb34e0e9db3c89c8622ecf51f9b978c6cb9"
 
-larissa-plugin-nodes-image-js@^0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/larissa-plugin-nodes-image-js/-/larissa-plugin-nodes-image-js-0.0.7.tgz#bcf43f430386a8d036b708af6845902273736869"
+larissa-plugin-nodes-image-js@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/larissa-plugin-nodes-image-js/-/larissa-plugin-nodes-image-js-0.3.0.tgz#616877c538b7527825d8c6e7e6e6af871069a7e4"
   dependencies:
     image-js "^0.9.13"
 
@@ -361,9 +361,9 @@ utf8@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/utf8/-/utf8-2.1.2.tgz#1fa0d9270e9be850d9b05027f63519bf46457d96"
 
-uuid@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.0.1.tgz#6544bba2dfda8c1cf17e629a3a305e2bb1fee6c1"
+uuid@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.1.0.tgz#3dd3d3e790abc24d7b0d3a034ffababe28ebbc04"
 
 viewport-dimensions@^0.2.0:
   version "0.2.0"

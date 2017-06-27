@@ -83,17 +83,21 @@ fast-png@^1.1.0:
     iobuffer "^2.0.0"
     pako "^1.0.0"
 
+fft.js@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/fft.js/-/fft.js-4.0.3.tgz#b0084efa94188febdd1cffe68691f4c85a0fb8cb"
+
 file-type@^4.1.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/file-type/-/file-type-4.2.0.tgz#3971643aa8fbe4145bdbaefe4d714d8b81ae1849"
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/file-type/-/file-type-4.4.0.tgz#1b600e5fca1fbdc6e80c0a70c71c8dba5f7906c5"
 
 has-own@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/has-own/-/has-own-1.0.0.tgz#3062246e31cfd887a9a61ee6d38ca57289378cd1"
 
-image-js@^0.9.13:
-  version "0.9.13"
-  resolved "https://registry.yarnpkg.com/image-js/-/image-js-0.9.13.tgz#ab0c49edd78d9a2ea7a4d61f378786991057df14"
+image-js@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/image-js/-/image-js-0.11.0.tgz#1aac3714e8979b10ad70fbfcfd91eb786768d267"
   dependencies:
     blob-util "^1.2.1"
     color-functions "^1.1.0"
@@ -107,6 +111,7 @@ image-js@^0.9.13:
     is-array-type "^1.0.0"
     is-integer "^1.0.6"
     js-priority-queue "^0.1.5"
+    ml-convolution "^0.2.0"
     ml-disjoint-set "^1.0.0"
     ml-matrix "3.0.0"
     ml-matrix-convolution "0.4.3"
@@ -114,6 +119,7 @@ image-js@^0.9.13:
     monotone-chain-convex-hull "^1.0.0"
     new-array "^1.0.0"
     num-sort "^1.0.0"
+    robust-point-in-polygon "^1.0.3"
     tiff "^2.1.0"
     web-worker-manager "^0.2.0"
   optionalDependencies:
@@ -150,8 +156,8 @@ is-finite@^1.0.0:
     number-is-nan "^1.0.0"
 
 is-integer@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/is-integer/-/is-integer-1.0.6.tgz#5273819fada880d123e1ac00a938e7172dd8d95e"
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/is-integer/-/is-integer-1.0.7.tgz#6bde81aacddf78b659b6629d629cadc51a886d5c"
   dependencies:
     is-finite "^1.0.0"
 
@@ -174,6 +180,13 @@ ml-array-utils@^0.3.0:
   resolved "https://registry.yarnpkg.com/ml-array-utils/-/ml-array-utils-0.3.0.tgz#c0cc5afdc1cb051f5a83b1ce71641c243672f649"
   dependencies:
     ml-stat "^1.0.1"
+
+ml-convolution@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/ml-convolution/-/ml-convolution-0.2.0.tgz#374659a6f75c98324ef7d61766c1e6209caff594"
+  dependencies:
+    fft.js "^4.0.3"
+    next-power-of-two "^1.0.0"
 
 ml-disjoint-set@^1.0.0:
   version "1.0.0"
@@ -224,13 +237,64 @@ ml-matrix@3.0.0, ml-matrix@^3.0.0:
   dependencies:
     ml-array-utils "^0.3.0"
 
+ml-regression-base@^1.0.0, ml-regression-base@^1.1.1, ml-regression-base@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/ml-regression-base/-/ml-regression-base-1.2.0.tgz#e8c58c12b649d845ecb13e0c246ad1be6e57cc1c"
+
+ml-regression-exponential@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/ml-regression-exponential/-/ml-regression-exponential-1.0.1.tgz#f5eedba31a3e0bcfbbb92c26c590f9d02970e7d0"
+  dependencies:
+    ml-regression-base "^1.1.1"
+    ml-regression-simple-linear "^1.0.1"
+
+ml-regression-polynomial@^1.0.0:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/ml-regression-polynomial/-/ml-regression-polynomial-1.0.2.tgz#10fde6550d4a9a887e5628628a5027323e0ff7ee"
+  dependencies:
+    ml-matrix "^3.0.0"
+    ml-regression-base "^1.1.1"
+
+ml-regression-power@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ml-regression-power/-/ml-regression-power-1.0.0.tgz#eb934fc3c0531a15d8772f46a7ca9551785e481f"
+  dependencies:
+    ml-regression-base "^1.2.0"
+    ml-regression-simple-linear "^1.0.2"
+
+ml-regression-robust-polynomial@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ml-regression-robust-polynomial/-/ml-regression-robust-polynomial-1.0.0.tgz#35566cdda308725da7c23ebbcf6c088be3f4ae05"
+  dependencies:
+    ml-matrix "^3.0.0"
+    ml-regression-base "^1.2.0"
+
+ml-regression-simple-linear@^1.0.0, ml-regression-simple-linear@^1.0.1, ml-regression-simple-linear@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/ml-regression-simple-linear/-/ml-regression-simple-linear-1.0.2.tgz#d99fe95be9178c3bf045cc58490b1e62851336af"
+  dependencies:
+    ml-regression-base "^1.0.0"
+
+ml-regression-theil-sen@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ml-regression-theil-sen/-/ml-regression-theil-sen-1.0.0.tgz#fb33c67ca88cd182c9eee999cecccd7aad5c2bc8"
+  dependencies:
+    ml-regression-base "^1.2.0"
+    ml-stat "^1.3.3"
+
 ml-regression@^4.0.0:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/ml-regression/-/ml-regression-4.2.1.tgz#061a70c18f2297ead74db2c1f99992f1329886f2"
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/ml-regression/-/ml-regression-4.3.0.tgz#64685712b935cd0373ee9c51d3b6ef181fe94dd9"
   dependencies:
     is-integer "^1.0.6"
     ml-kernel "^2.0.0"
     ml-matrix "^3.0.0"
+    ml-regression-exponential "^1.0.0"
+    ml-regression-polynomial "^1.0.0"
+    ml-regression-power "^1.0.0"
+    ml-regression-robust-polynomial "^1.0.0"
+    ml-regression-simple-linear "^1.0.0"
+    ml-regression-theil-sen "^1.0.0"
     ml-stat "^1.3.3"
 
 ml-stat@^1.0.1, ml-stat@^1.2.0, ml-stat@^1.3.3:
@@ -254,6 +318,10 @@ native-or-lie@1.0.0:
 new-array@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/new-array/-/new-array-1.0.0.tgz#5dbc639d961eac7f1a9fbc1a7146ec12f2924fbf"
+
+next-power-of-two@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/next-power-of-two/-/next-power-of-two-1.0.0.tgz#cbc1f2f62b586fc501bd3ab2fb9962ac4e4e9359"
 
 num-sort@^1.0.0:
   version "1.0.0"
@@ -283,6 +351,36 @@ parse-css-font@^2.0.2:
     tcomb "^2.5.0"
     unquote "^1.1.0"
 
+robust-orientation@^1.0.2:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/robust-orientation/-/robust-orientation-1.1.3.tgz#daff5b00d3be4e60722f0e9c0156ef967f1c2049"
+  dependencies:
+    robust-scale "^1.0.2"
+    robust-subtract "^1.0.0"
+    robust-sum "^1.0.0"
+    two-product "^1.0.2"
+
+robust-point-in-polygon@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/robust-point-in-polygon/-/robust-point-in-polygon-1.0.3.tgz#ea68f025a44dfe6aede80f0863788705cf547ec4"
+  dependencies:
+    robust-orientation "^1.0.2"
+
+robust-scale@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/robust-scale/-/robust-scale-1.0.2.tgz#775132ed09542d028e58b2cc79c06290bcf78c32"
+  dependencies:
+    two-product "^1.0.2"
+    two-sum "^1.0.0"
+
+robust-subtract@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/robust-subtract/-/robust-subtract-1.0.0.tgz#e0b164e1ed8ba4e3a5dda45a12038348dbed3e9a"
+
+robust-sum@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/robust-sum/-/robust-sum-1.0.0.tgz#16646e525292b4d25d82757a286955e0bbfa53d9"
+
 tcomb@^2.5.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/tcomb/-/tcomb-2.7.0.tgz#10d62958041669a5d53567b9a4ee8cde22b1c2b0"
@@ -292,6 +390,14 @@ tiff@^2.0.0, tiff@^2.1.0:
   resolved "https://registry.yarnpkg.com/tiff/-/tiff-2.1.0.tgz#b3f41c519bd66835267f14cb31a04acb1f7860ca"
   dependencies:
     iobuffer "^2.1.0"
+
+two-product@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/two-product/-/two-product-1.0.2.tgz#67d95d4b257a921e2cb4bd7af9511f9088522eaa"
+
+two-sum@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/two-sum/-/two-sum-1.0.0.tgz#31d3f32239e4f731eca9df9155e2b297f008ab64"
 
 units-css@^0.4.0:
   version "0.4.0"

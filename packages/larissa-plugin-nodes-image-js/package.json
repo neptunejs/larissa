@@ -11,6 +11,6 @@
   "author": "Michaël Zasso",
   "license": "MIT",
   "dependencies": {
-    "image-js": "^0.9.13"
+    "image-js": "^0.11.0"
   }
 }
