@@ -518,6 +518,9 @@ export default class Pipeline extends Node {
                 }
             }
             this.inputs.delete(name);
+            this.emit('change', 'linkInput');
+        } else {
+            throw new Error(`input ${name} not found in pipeline`);
         }
     }
 
@@ -530,6 +533,9 @@ export default class Pipeline extends Node {
                 }
             }
             this.outputs.delete(name);
+            this.emit('change', 'linkOutput');
+        } else {
+            throw new Error(`output ${name} not found in pipeline`);
         }
     }
 
@@ -554,10 +560,13 @@ export default class Pipeline extends Node {
             node: node.id,
             schema
         });
+
+        this.emit('change', 'linkedOptions');
     }
 
     unlinkOptions(name: string) {
         this.linkedOptions.delete(name);
+        this.emit('change', 'linkOptions');
     }
 
     setOptions(options: Object) {
