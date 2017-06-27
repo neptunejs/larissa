@@ -1,5 +1,4 @@
 import Environment from '../../Environment';
-import sinon from 'sinon';
 import {RUNNING, FINISHED} from '../../Node';
 
 test('check that status events are correctly emitted from pipeline when running it', async () => {
@@ -7,17 +6,17 @@ test('check that status events are correctly emitted from pipeline when running 
     const pipeline = env.newPipeline();
     const node = pipeline.newNode('number', {value: 5});
 
-    const status = sinon.spy();
-    const childStatus = sinon.spy();
+    const status = jest.fn();
+    const childStatus = jest.fn();
     pipeline.on('status', status);
     pipeline.on('child-status', childStatus);
     await pipeline.run();
 
-    expect(status.callCount).toBe(2);
-    expect(status.getCall(0).args).toEqual([RUNNING]);
-    expect(status.getCall(1).args).toEqual([FINISHED]);
+    expect(status.mock.calls.length).toBe(2);
+    expect(status.mock.calls[0][0]).toBe(RUNNING);
+    expect(status.mock.calls[1][0]).toBe(FINISHED);
 
-    expect(childStatus.callCount).toBe(2);
-    expect(childStatus.getCall(0).args).toEqual([RUNNING, node]);
-    expect(childStatus.getCall(1).args).toEqual([FINISHED, node]);
+    expect(childStatus.mock.calls.length).toBe(2);
+    expect(childStatus.mock.calls[0]).toEqual([RUNNING, node]);
+    expect(childStatus.mock.calls[1]).toEqual([FINISHED, node]);
 });

@@ -1,6 +1,6 @@
 import Environment from '../Environment';
 import Node, {ERRORED, FINISHED} from '../Node';
-import sinon from 'sinon';
+
 describe('Pipeline low level tests', function () {
     it('should detect updated status on nodes that the pipeline owns', function () {
         const env = new Environment();
@@ -9,16 +9,21 @@ describe('Pipeline low level tests', function () {
         const otherNode = new Node();
         Object.defineProperty(otherNode, 'kind', {value: 'node'}); // required because addNode will read the kind
         pipeline.addNode(otherNode);
-        let spy = sinon.spy();
-        pipeline.on('child-status', spy);
-        node.status = ERRORED;
-        sinon.assert.calledOnce(spy);
-        sinon.assert.calledWith(spy, ERRORED, node);
 
-        spy = sinon.spy();
-        pipeline.on('child-status', spy);
-        otherNode.status = FINISHED;
-        sinon.assert.calledOnce(spy);
-        sinon.assert.calledWith(spy, FINISHED, otherNode);
+        {
+            const cb = jest.fn();
+            pipeline.on('child-status', cb);
+            node.status = ERRORED;
+            expect(cb.mock.calls.length).toBe(1);
+            expect(cb.mock.calls[0][0]).toBe(ERRORED);
+        }
+
+        {
+            const cb = jest.fn();
+            pipeline.on('child-status', cb);
+            otherNode.status = FINISHED;
+            expect(cb.mock.calls.length).toBe(1);
+            expect(cb.mock.calls[0][0]).toBe(FINISHED);
+        }
     });
 });

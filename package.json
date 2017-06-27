@@ -19,7 +19,6 @@
     "lerna": "^2.0.0-rc.4",
     "npm-run-all": "^4.0.2",
     "rimraf": "^2.6.1",
-    "sinon": "^2.3.4",
     "through2": "^2.0.3"
   },
   "scripts": {
