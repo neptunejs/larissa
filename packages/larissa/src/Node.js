@@ -41,7 +41,7 @@ export default class Node extends EventEmitter {
 
     setTitle(title: string): void {
         this.title = title;
-        this.emit('change');
+        this.emit('change', 'title', title);
     }
 
     output(name?: string): OutputPort {
@@ -95,7 +95,6 @@ export default class Node extends EventEmitter {
         for (const output of this.outputs.values()) {
             output.reset();
         }
-        this.emit('change');
     }
 
     resetInput(input: InputPort): void {

@@ -152,7 +152,7 @@ export default class Pipeline extends Node {
 
         edge.addConnection(nodeOutput, nodeInput);
         inputNode.reset();
-        this.emit('change');
+        this.emit('change', 'connect', nodeOutput, nodeInput);
     }
 
     disconnect(nodeOutput: Node | OutputPort, nodeInput: Node | InputPort) {
@@ -182,7 +182,7 @@ export default class Pipeline extends Node {
             throw new Error(`no connection found between nodes ${outputNode.id} and ${inputNode.id}`);
         }
         inputNode.reset();
-        this.emit('change');
+        this.emit('change', 'disconnect', nodeOutput, nodeInput);
     }
 
     getNode(id: string): Node | null {
@@ -242,14 +242,14 @@ export default class Pipeline extends Node {
             throw new Error('node is already in pipeline');
         }
         addNodeToGraph(node, this);
-        this.emit('change');
+        this.emit('change', 'addNode', node);
     }
 
     newNode(identifier: string, options?: Object, id: ?string): Node {
         const blockType = this.env.getBlock(identifier);
         const node = new Block(blockType, options, id);
         addNodeToGraph(node, this);
-        this.emit('change');
+        this.emit('change', 'newNode', node);
         return node;
     }
 
@@ -264,7 +264,7 @@ export default class Pipeline extends Node {
                 throw new Error(`Unknow loop type ${options.type}`);
         }
         addNodeToGraph(loopNode, this);
-        this.emit('change');
+        this.emit('change', 'newLoop', loopNode);
         return loopNode;
     }
 
@@ -283,7 +283,7 @@ export default class Pipeline extends Node {
                 this.unlinkOptions(name);
             }
         }
-        this.emit('change');
+        this.emit('change', 'deleteNode', node);
     }
 
     async _run() {
@@ -468,7 +468,7 @@ export default class Pipeline extends Node {
         if (config.default) {
             this.defaultInput = newInput;
         }
-        this.emit('change');
+        this.emit('change', 'linkInput');
     }
 
     linkOutput(output: OutputPort, configOrName: string) {
@@ -486,7 +486,7 @@ export default class Pipeline extends Node {
         if (config.default) {
             this.defaultOutput = newOutput;
         }
-        this.emit('change');
+        this.emit('change', 'linkOutput');
     }
 
     linkOptions(name: string, node: Node, schema: ?Object) {
