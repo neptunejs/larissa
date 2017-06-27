@@ -278,6 +278,26 @@ export default class Pipeline extends Node {
         for (const nodeFrom of nodesFrom) {
             nodeFrom.reset();
         }
+
+        // Remove linkedInputs and inputs
+        for (let input of node.inputs.values()) {
+            const link = this.linkedInputs.get(input.id);
+            if (link) {
+                this.inputs.delete(link.name);
+                this.linkedInputs.delete(input.id);
+            }
+        }
+
+        // Remove linkedOutputs and outputs
+        for (let output of node.outputs.values()) {
+            const link = this.linkedOutputs.get(output.id);
+            if (link) {
+                this.outputs.delete(link.name);
+                this.linkedOutputs.delete(output.id);
+            }
+        }
+
+        // Remove any link to options in the deleted node
         for (const [name, info] of this.linkedOptions) {
             if (info.node === node.id) {
                 this.unlinkOptions(name);
