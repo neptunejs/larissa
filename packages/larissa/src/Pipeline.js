@@ -509,6 +509,30 @@ export default class Pipeline extends Node {
         this.emit('change', 'linkOutput');
     }
 
+    unlinkInput(name: string): void {
+        const input = this.inputs.get(name);
+        if (input) {
+            for (let [inputId, link] of this.linkedInputs) {
+                if (link.name === name) {
+                    this.linkedInputs.delete(inputId);
+                }
+            }
+            this.inputs.delete(name);
+        }
+    }
+
+    unlinkOutput(name: string): void {
+        const output = this.outputs.get(name);
+        if (output) {
+            for (let [outputId, link] of this.linkedOutputs) {
+                if (link.name === name) {
+                    this.linkedOutputs.delete(outputId);
+                }
+            }
+            this.outputs.delete(name);
+        }
+    }
+
     linkOptions(name: string, node: Node, schema: ?Object) {
         if (!this._nodes.has(node)) {
             throw new Error(`node ${node.id} not found in pipeline`);
